@@ -2,17 +2,33 @@
 
 namespace Prezly\Slate;
 
+use Prezly\Slate\Node\LeafNode;
 use stdClass;
 
 class NodeFactory
 {
     public function create(stdClass $object): Node
     {
-        $node = new Node($object->kind);
+        $node = $this->createNode($object);
+
         foreach ($this->getChildObjects($object) as $child_object) {
             $node->addChild($this->create($child_object));
         }
         return $node;
+    }
+
+    private function createNode(stdClass $object): Node
+    {
+        switch ($object->kind) {
+            case Node::KIND_LEAF:
+                $node = new LeafNode($object->kind);
+                if (! empty($object->text)) {
+                    $node->setText($object->text);
+                }
+                return $node;
+            default:
+                return new Node($object->kind);
+        }
     }
 
     /**

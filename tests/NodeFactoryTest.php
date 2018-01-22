@@ -3,6 +3,7 @@
 namespace Prezly\Slate\Tests;
 
 use Prezly\Slate\Node;
+use Prezly\Slate\Node\LeafNode;
 use Prezly\Slate\NodeFactory;
 
 class NodeFactoryTest extends TestCase
@@ -47,5 +48,29 @@ class NodeFactoryTest extends TestCase
         $this->assertEquals(4, count($nodes[0]->getChidren()));
         $this->assertEquals(3, count($nodes[1]->getChidren()));
         $this->assertEquals(2, count($nodes[2]->getChidren()));
+    }
+
+    /**
+     * Nodes with specific behavior should be implemented as subclasses of Node. For example, unlike other node types,
+     * the leaf node has a text
+     */
+    public function it_should_create_leaf_instances()
+    {
+        $fixtures = [
+            $this->loadFixture("04_leaf_without_text.json"),
+            $this->loadFixture("05_leaf_with_text.json"),
+        ];
+
+        /** @var LeafNode[] $nodes */
+        $nodes = [];
+        foreach ($fixtures as $json) {
+            $nodes[] = $this->factory->create(json_decode($json, false));
+        }
+
+        $this->assertInstanceOf(LeafNode::class, $nodes[0]);
+        $this->assertInstanceOf(LeafNode::class, $nodes[1]);
+
+        $this->assertNull($nodes[0]->getText());
+        $this->assertEquals("Foo bar baz", $nodes[1]->getText());
     }
 }
