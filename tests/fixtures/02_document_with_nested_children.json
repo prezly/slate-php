@@ -1,0 +1,29 @@
+{
+    "kind": "value",
+    "document": {
+        "kind": "document",
+        "nodes": [
+            {
+                "kind": "block",
+                "nodes": [
+                    {
+                        "kind": "inline",
+                        "nodes": [
+                            {"kind": "text"},
+                            {"kind": "text"}
+                        ]
+                    },
+                    {"kind": "text"}
+                ]
+            },
+            {"kind": "inline"},
+            {
+                "kind": "text",
+                "leaves": [
+                    {"kind": "leaf"},
+                    {"kind": "leaf"}
+                ]
+            }
+        ]
+    }
+}

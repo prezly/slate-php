@@ -9,6 +9,7 @@ class Node
     const KIND_BLOCK = "block";
     const KIND_INLINE = "inline";
     const KIND_TEXT = "text";
+    const KIND_LEAF = "leaf";
 
     /** @var string */
     private $kind;

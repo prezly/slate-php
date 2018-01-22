@@ -2,6 +2,7 @@
 
 namespace Prezly\Slate;
 
+use stdClass;
 use InvalidArgumentException;
 
 class Unserializer
@@ -13,12 +14,15 @@ class Unserializer
             throw new InvalidArgumentException("Root node must be a Slate document");
         }
 
-        $document = new Node(Node::KIND_DOCUMENT);
-        $children = $data->document->nodes ?? [];
-        foreach ($children as $child) {
-            $document->addChild(new Node($child->kind));
-        }
+        return $this->createNode($data->document);
+    }
 
-        return $document;
+    private function createNode(stdClass $object): Node
+    {
+        $node = new Node($object->kind);
+        foreach ($object->nodes ?? $object->leaves ?? [] as $child_object) {
+            $node->addChild($this->createNode($child_object));
+        }
+        return $node;
     }
 }

@@ -58,4 +58,28 @@ class UnserializerTest extends TestCase
         $this->assertEquals(Node::KIND_INLINE, $children[1]->getKind());
         $this->assertEquals(Node::KIND_TEXT, $children[2]->getKind());
     }
+
+    /**
+     * @test
+     */
+    public function it_should_nest_children()
+    {
+        $fixture = $this->loadFixture("02_document_with_nested_children.json");
+        $document = $this->unserializer->fromJSON($fixture);
+        $children = $document->getChidren();
+
+        // Second-level children
+        $this->assertEquals(2, count($children[0]->getChidren()));
+        $this->assertEquals(0, count($children[1]->getChidren()));
+        $this->assertEquals(2, count($children[2]->getChidren()));
+
+        // Third-level children
+        $block_children = $children[0]->getChidren();
+        $this->assertEquals(Node::KIND_INLINE, $block_children[0]->getKind());
+        $this->assertEquals(Node::KIND_TEXT, $block_children[1]->getKind());
+
+        $text_children = $children[2]->getChidren();
+        $this->assertEquals(Node::KIND_LEAF, $text_children[0]->getKind());
+        $this->assertEquals(Node::KIND_LEAF, $text_children[1]->getKind());
+    }
 }
