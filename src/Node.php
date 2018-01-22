@@ -4,8 +4,29 @@ namespace Prezly\Slate;
 
 class Node
 {
+    const KIND_VALUE = "value";
+    const KIND_DOCUMENT = "document";
+
+    /** @var string */
+    private $kind;
+
     /** @var Node[] */
     private $chidren = [];
+
+    /**
+     * All Slate nodes have a `kind` property, so we enforce this by requiring it in the constructor
+     *
+     * @param string $kind
+     */
+    public function __construct(string $kind)
+    {
+        $this->kind = $kind;
+    }
+
+    public function getKind(): string
+    {
+        return $this->kind;
+    }
 
     public function addChild(Node $node): Node
     {
