@@ -22,7 +22,6 @@ class NodeFactoryTest extends TestCase
      *
      * - `block` nodes have the `nodes` property
      * - `text` nodes have the `leaves` property
-     * - `leaf` nodes have the `marks` property
      *
      * Despite the properties being named differently, all these, in essence, represent a node's children, so we should
      * treat them the same
@@ -42,10 +41,8 @@ class NodeFactoryTest extends TestCase
 
         $this->assertEquals(Node::KIND_BLOCK, $nodes[0]->getKind());
         $this->assertEquals(Node::KIND_TEXT, $nodes[1]->getKind());
-        $this->assertEquals(Node::KIND_LEAF, $nodes[2]->getKind());
 
         $this->assertEquals(4, count($nodes[0]->getChidren()));
         $this->assertEquals(3, count($nodes[1]->getChidren()));
-        $this->assertEquals(2, count($nodes[2]->getChidren()));
     }
 }
