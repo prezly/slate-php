@@ -15,5 +15,12 @@
             {"kind": "leaf"},
             {"kind": "leaf"}
         ]
+    },
+    {
+        "kind": "leaf",
+        "marks": [
+            {"kind": "mark"},
+            {"kind": "mark"}
+        ]
     }
 ]

@@ -22,6 +22,8 @@ class NodeFactory
     private function getChildObjects(stdClass $object): array
     {
         switch ($object->kind) {
+            case Node::KIND_LEAF:
+                return $object->marks ?? [];
             case Node::KIND_TEXT:
                 return $object->leaves ?? [];
             default:
