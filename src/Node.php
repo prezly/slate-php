@@ -6,6 +6,9 @@ class Node
 {
     const KIND_VALUE = "value";
     const KIND_DOCUMENT = "document";
+    const KIND_BLOCK = "block";
+    const KIND_INLINE = "inline";
+    const KIND_TEXT = "text";
 
     /** @var string */
     private $kind;

@@ -12,6 +12,13 @@ class Unserializer
         if (! isset($data->kind) || $data->kind !== Node::KIND_VALUE || ! isset($data->document) || ! is_object($data->document) || $data->document->kind !== Node::KIND_DOCUMENT) {
             throw new InvalidArgumentException("Root node must be a Slate document");
         }
-        return new Node(Node::KIND_DOCUMENT);
+
+        $document = new Node(Node::KIND_DOCUMENT);
+        $children = $data->document->nodes ?? [];
+        foreach ($children as $child) {
+            $document->addChild(new Node($child->kind));
+        }
+
+        return $document;
     }
 }

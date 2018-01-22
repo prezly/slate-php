@@ -41,5 +41,21 @@ class UnserializerTest extends TestCase
         $fixture = $this->loadFixture("00_empty_document.json");
         $node = $this->unserializer->fromJSON($fixture);
         $this->assertEquals(Node::KIND_DOCUMENT, $node->getKind());
+        $this->assertEmpty($node->getChidren());
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_add_children_to_document()
+    {
+        $fixture = $this->loadFixture("01_document_with_flat_children.json");
+        $document = $this->unserializer->fromJSON($fixture);
+        $children = $document->getChidren();
+
+        $this->assertEquals(3, count($children));
+        $this->assertEquals(Node::KIND_BLOCK, $children[0]->getKind());
+        $this->assertEquals(Node::KIND_INLINE, $children[1]->getKind());
+        $this->assertEquals(Node::KIND_TEXT, $children[2]->getKind());
     }
 }
