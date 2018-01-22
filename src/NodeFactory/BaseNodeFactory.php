@@ -21,7 +21,7 @@ class BaseNodeFactory implements NodeFactory
 
     private function createNode(stdClass $object): Node
     {
-        switch ($object->kind) {
+        switch ($object->object) {
             case Node::KIND_LEAF:
                 $node = new LeafNode();
                 if (! empty($object->text)) {
@@ -30,7 +30,7 @@ class BaseNodeFactory implements NodeFactory
                 break;
             default:
                 $node = new Node();
-                $node->setKind($object->kind);
+                $node->setKind($object->object);
                 break;
         }
         return $node;
@@ -42,7 +42,7 @@ class BaseNodeFactory implements NodeFactory
      */
     private function getChildObjects(stdClass $object): array
     {
-        switch ($object->kind) {
+        switch ($object->object) {
             case Node::KIND_LEAF:
                 return $object->marks ?? [];
             case Node::KIND_TEXT:

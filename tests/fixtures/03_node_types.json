@@ -1,26 +1,26 @@
 [
     {
-        "kind": "block",
+        "object": "block",
         "nodes": [
-            {"kind": "inline"},
-            {"kind": "inline"},
-            {"kind": "inline"},
-            {"kind": "inline"}
+            {"object": "inline"},
+            {"object": "inline"},
+            {"object": "inline"},
+            {"object": "inline"}
         ]
     },
     {
-        "kind": "text",
+        "object": "text",
         "leaves": [
-            {"kind": "leaf"},
-            {"kind": "leaf"},
-            {"kind": "leaf"}
+            {"object": "leaf"},
+            {"object": "leaf"},
+            {"object": "leaf"}
         ]
     },
     {
-        "kind": "leaf",
+        "object": "leaf",
         "marks": [
-            {"kind": "mark"},
-            {"kind": "mark"}
+            {"object": "mark"},
+            {"object": "mark"}
         ]
     }
 ]

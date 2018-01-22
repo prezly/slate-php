@@ -1,27 +1,27 @@
 {
-    "kind": "value",
+    "object": "value",
     "document": {
-        "kind": "document",
+        "object": "document",
         "nodes": [
             {
-                "kind": "block",
+                "object": "block",
                 "nodes": [
                     {
-                        "kind": "inline",
+                        "object": "inline",
                         "nodes": [
-                            {"kind": "text"},
-                            {"kind": "text"}
+                            {"object": "text"},
+                            {"object": "text"}
                         ]
                     },
-                    {"kind": "text"}
+                    {"object": "text"}
                 ]
             },
-            {"kind": "inline"},
+            {"object": "inline"},
             {
-                "kind": "text",
+                "object": "text",
                 "leaves": [
-                    {"kind": "leaf"},
-                    {"kind": "leaf"}
+                    {"object": "leaf"},
+                    {"object": "leaf"}
                 ]
             }
         ]

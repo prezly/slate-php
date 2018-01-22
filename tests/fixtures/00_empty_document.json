@@ -1,6 +1,6 @@
 {
-    "kind": "value",
+    "object": "value",
     "document": {
-        "kind": "document"
+        "object": "document"
     }
 }

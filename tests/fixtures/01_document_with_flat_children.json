@@ -1,11 +1,11 @@
 {
-    "kind": "value",
+    "object": "value",
     "document": {
-        "kind": "document",
+        "object": "document",
         "nodes": [
-            {"kind": "block"},
-            {"kind": "inline"},
-            {"kind": "text"}
+            {"object": "block"},
+            {"object": "inline"},
+            {"object": "text"}
         ]
     }
 }
