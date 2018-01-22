@@ -10,11 +10,11 @@ use stdClass;
 
 class BaseNodeFactory implements NodeFactory
 {
-    public function create(stdClass $object): Node
+    public function create(stdClass $object, NodeFactoryStack $stack): Node
     {
         $node = $this->createNode($object);
         foreach ($this->getChildObjects($object) as $child_object) {
-            $node->addChild($this->create($child_object));
+            $node->addChild($stack->createNode($child_object));
         }
         return $node;
     }

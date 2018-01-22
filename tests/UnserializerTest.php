@@ -3,8 +3,13 @@
 namespace Prezly\Slate\Tests;
 
 use Prezly\Slate\Node;
+use Prezly\Slate\NodeFactory;
+use Prezly\Slate\NodeFactory\BaseNodeFactory;
+use Prezly\Slate\NodeFactory\NodeFactoryStack;
 use Prezly\Slate\Unserializer;
+
 use InvalidArgumentException;
+use stdClass;
 
 class UnserializerTest extends TestCase
 {
@@ -81,5 +86,44 @@ class UnserializerTest extends TestCase
         $text_children = $children[2]->getChidren();
         $this->assertEquals(Node::KIND_LEAF, $text_children[0]->getKind());
         $this->assertEquals(Node::KIND_LEAF, $text_children[1]->getKind());
+    }
+
+    /**
+     * The user should be able to use custom node factories with unserializer, to support custom node types
+     *
+     * @test
+     */
+    public function it_should_use_custom_factory_stack()
+    {
+        $fixture = $this->loadFixture("01_document_with_flat_children.json");
+        $node = $this->createMock(Node::class);
+
+        $i = 0;
+        $node_kinds = ["document", "block", "inline", "text"];
+
+        $factory = $this->createMock(NodeFactory::class);
+        $factory->expects($this->exactly(4))
+            ->method("create")
+            ->withConsecutive(
+                $this->callback(function (stdClass $object) use (&$i, $node_kinds) {
+                    $this->assertEquals($node_kinds[$i++], $object->kind);
+                    return true;
+                })
+            )
+            ->willReturnOnConsecutiveCalls(
+                null, null, $node, null
+            );
+
+        $factory_stack = new NodeFactoryStack([
+            $factory,
+            new BaseNodeFactory()
+        ]);
+
+        $unserializer = new Unserializer($factory_stack);
+
+        $document = $unserializer->fromJSON($fixture);
+        $children = $document->getChidren();
+        $this->assertEquals(3, count($children));
+        $this->assertSame($node, $children[1]);
     }
 }

@@ -5,6 +5,7 @@ namespace Prezly\Slate\Tests\NodeFactory;
 use Prezly\Slate\Node;
 use Prezly\Slate\Node\LeafNode;
 use Prezly\Slate\NodeFactory\BaseNodeFactory;
+use Prezly\Slate\NodeFactory\NodeFactoryStack;
 use Prezly\Slate\Tests\TestCase;
 
 class BaseNodeFactoryTest extends TestCase
@@ -12,10 +13,14 @@ class BaseNodeFactoryTest extends TestCase
     /** @var BaseNodeFactory */
     private $factory;
 
+    /** @var NodeFactoryStack */
+    private $factory_stack;
+
     protected function setUp()
     {
         parent::setUp();
         $this->factory = new BaseNodeFactory();
+        $this->factory_stack = new NodeFactoryStack([$this->factory]);
     }
 
     /**
@@ -39,7 +44,7 @@ class BaseNodeFactoryTest extends TestCase
         /** @var Node[] $nodes */
         $nodes = [];
         foreach ($data as $object) {
-            $nodes[] = $this->factory->create($object);
+            $nodes[] = $this->factory->create($object, $this->factory_stack);
         }
 
         $this->assertEquals(Node::KIND_BLOCK, $nodes[0]->getKind());
@@ -67,7 +72,7 @@ class BaseNodeFactoryTest extends TestCase
         /** @var LeafNode[] $nodes */
         $nodes = [];
         foreach ($fixtures as $json) {
-            $nodes[] = $this->factory->create(json_decode($json, false));
+            $nodes[] = $this->factory->create(json_decode($json, false), $this->factory_stack);
         }
 
         $this->assertInstanceOf(LeafNode::class, $nodes[0]);

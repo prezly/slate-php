@@ -2,13 +2,25 @@
 
 namespace Prezly\Slate;
 
-use InvalidArgumentException;
 use Prezly\Slate\NodeFactory\BaseNodeFactory;
+use Prezly\Slate\NodeFactory\NodeFactoryStack;
+
+use InvalidArgumentException;
 
 class Unserializer
 {
-    /** @var BaseNodeFactory */
-    private $factory;
+    /** @var NodeFactoryStack[] */
+    private $factory_stack;
+
+    public function __construct(NodeFactoryStack $node_factory_stack = null)
+    {
+        if (is_null($node_factory_stack)) {
+            $node_factory_stack = new NodeFactoryStack([
+                new BaseNodeFactory(),
+            ]);
+        }
+        $this->factory_stack = $node_factory_stack;
+    }
 
     public function fromJSON(string $json): Node
     {
@@ -16,15 +28,6 @@ class Unserializer
         if (! isset($data->kind) || $data->kind !== Node::KIND_VALUE || ! isset($data->document) || ! is_object($data->document) || $data->document->kind !== Node::KIND_DOCUMENT) {
             throw new InvalidArgumentException("Root node must be a Slate document");
         }
-
-        return $this->getFactory()->create($data->document);
-    }
-
-    private function getFactory(): BaseNodeFactory
-    {
-        if (is_null($this->factory)) {
-            $this->factory = new BaseNodeFactory();
-        }
-        return $this->factory;
+        return $this->factory_stack->createNode($data->document);
     }
 }
