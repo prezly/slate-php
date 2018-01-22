@@ -2,11 +2,13 @@
 
 namespace Prezly\Slate;
 
-use stdClass;
 use InvalidArgumentException;
 
 class Unserializer
 {
+    /** @var NodeFactory */
+    private $factory;
+
     public function fromJSON(string $json): Node
     {
         $data = json_decode($json, false);
@@ -14,15 +16,14 @@ class Unserializer
             throw new InvalidArgumentException("Root node must be a Slate document");
         }
 
-        return $this->createNode($data->document);
+        return $this->getFactory()->create($data->document);
     }
 
-    private function createNode(stdClass $object): Node
+    private function getFactory(): NodeFactory
     {
-        $node = new Node($object->kind);
-        foreach ($object->nodes ?? $object->leaves ?? [] as $child_object) {
-            $node->addChild($this->createNode($child_object));
+        if (is_null($this->factory)) {
+            $this->factory = new NodeFactory();
         }
-        return $node;
+        return $this->factory;
     }
 }
