@@ -1,0 +1,26 @@
+[
+    {
+        "kind": "block",
+        "nodes": [
+            {"kind": "inline"},
+            {"kind": "inline"},
+            {"kind": "inline"},
+            {"kind": "inline"}
+        ]
+    },
+    {
+        "kind": "text",
+        "leaves": [
+            {"kind": "leaf"},
+            {"kind": "leaf"},
+            {"kind": "leaf"}
+        ]
+    },
+    {
+        "kind": "leaf",
+        "marks": [
+            {"kind": "mark"},
+            {"kind": "mark"}
+        ]
+    }
+]
