@@ -53,6 +53,8 @@ class NodeFactoryTest extends TestCase
     /**
      * Nodes with specific behavior should be implemented as subclasses of Node. For example, unlike other node types,
      * the leaf node has a text
+     *
+     * @test
      */
     public function it_should_create_leaf_instances()
     {
