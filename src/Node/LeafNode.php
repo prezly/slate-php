@@ -14,7 +14,7 @@ class LeafNode extends Node
 
     public function getMarks(): array
     {
-        return $this->getChidren();
+        return $this->getChildren();
     }
 
     public function getText(): ?string

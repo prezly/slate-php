@@ -51,9 +51,9 @@ class BaseNodeFactoryTest extends TestCase
         $this->assertEquals(Node::KIND_TEXT, $nodes[1]->getKind());
         $this->assertEquals(Node::KIND_LEAF, $nodes[2]->getKind());
 
-        $this->assertEquals(4, count($nodes[0]->getChidren()));
-        $this->assertEquals(3, count($nodes[1]->getChidren()));
-        $this->assertEquals(2, count($nodes[2]->getChidren()));
+        $this->assertEquals(4, count($nodes[0]->getChildren()));
+        $this->assertEquals(3, count($nodes[1]->getChildren()));
+        $this->assertEquals(2, count($nodes[2]->getChildren()));
     }
 
     /**

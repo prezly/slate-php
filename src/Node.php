@@ -15,7 +15,7 @@ class Node
     protected $kind;
 
     /** @var Node[] */
-    private $chidren = [];
+    private $children = [];
 
     public function getKind(): string
     {
@@ -30,15 +30,15 @@ class Node
 
     public function addChild(Node $node): Node
     {
-        $this->chidren[] = $node;
+        $this->children[] = $node;
         return $this;
     }
 
     /**
      * @return Node[]
      */
-    public function getChidren(): array
+    public function getChildren(): array
     {
-        return $this->chidren;
+        return $this->children;
     }
 }

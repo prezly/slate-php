@@ -46,7 +46,7 @@ class UnserializerTest extends TestCase
         $fixture = $this->loadFixture("00_empty_document.json");
         $node = $this->unserializer->fromJSON($fixture);
         $this->assertEquals(Node::KIND_DOCUMENT, $node->getKind());
-        $this->assertEmpty($node->getChidren());
+        $this->assertEmpty($node->getChildren());
     }
 
     /**
@@ -56,7 +56,7 @@ class UnserializerTest extends TestCase
     {
         $fixture = $this->loadFixture("01_document_with_flat_children.json");
         $document = $this->unserializer->fromJSON($fixture);
-        $children = $document->getChidren();
+        $children = $document->getChildren();
 
         $this->assertEquals(3, count($children));
         $this->assertEquals(Node::KIND_BLOCK, $children[0]->getKind());
@@ -71,19 +71,19 @@ class UnserializerTest extends TestCase
     {
         $fixture = $this->loadFixture("02_document_with_nested_children.json");
         $document = $this->unserializer->fromJSON($fixture);
-        $children = $document->getChidren();
+        $children = $document->getChildren();
 
         // Second-level children
-        $this->assertEquals(2, count($children[0]->getChidren()));
-        $this->assertEquals(0, count($children[1]->getChidren()));
-        $this->assertEquals(2, count($children[2]->getChidren()));
+        $this->assertEquals(2, count($children[0]->getChildren()));
+        $this->assertEquals(0, count($children[1]->getChildren()));
+        $this->assertEquals(2, count($children[2]->getChildren()));
 
         // Third-level children
-        $block_children = $children[0]->getChidren();
+        $block_children = $children[0]->getChildren();
         $this->assertEquals(Node::KIND_INLINE, $block_children[0]->getKind());
         $this->assertEquals(Node::KIND_TEXT, $block_children[1]->getKind());
 
-        $text_children = $children[2]->getChidren();
+        $text_children = $children[2]->getChildren();
         $this->assertEquals(Node::KIND_LEAF, $text_children[0]->getKind());
         $this->assertEquals(Node::KIND_LEAF, $text_children[1]->getKind());
     }
@@ -122,7 +122,7 @@ class UnserializerTest extends TestCase
         $unserializer = new Unserializer($factory_stack);
 
         $document = $unserializer->fromJSON($fixture);
-        $children = $document->getChidren();
+        $children = $document->getChildren();
         $this->assertEquals(3, count($children));
         $this->assertSame($node, $children[1]);
     }
