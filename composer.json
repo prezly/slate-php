@@ -1,0 +1,24 @@
+{
+    "name": "prezly/slate-php",
+    "description": "Slate model implementation in PHP.",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Prezly",
+            "email": "dev@prezly.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Prezly\\Slate\\": "src/",
+            "Prezly\\Slate\\Tests\\": "tests/"
+        }
+    }
+}
