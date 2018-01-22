@@ -7,6 +7,9 @@ use Prezly\Slate\Node;
 class LeafNode extends Node
 {
     /** @var string */
+    protected $kind = Node::KIND_LEAF;
+
+    /** @var string */
     private $text;
 
     public function getMarks(): array

@@ -10,7 +10,6 @@ class NodeFactory
     public function create(stdClass $object): Node
     {
         $node = $this->createNode($object);
-
         foreach ($this->getChildObjects($object) as $child_object) {
             $node->addChild($this->create($child_object));
         }
@@ -21,14 +20,17 @@ class NodeFactory
     {
         switch ($object->kind) {
             case Node::KIND_LEAF:
-                $node = new LeafNode($object->kind);
+                $node = new LeafNode();
                 if (! empty($object->text)) {
                     $node->setText($object->text);
                 }
-                return $node;
+                break;
             default:
-                return new Node($object->kind);
+                $node = new Node();
+                $node->setKind($object->kind);
+                break;
         }
+        return $node;
     }
 
     /**

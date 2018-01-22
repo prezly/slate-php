@@ -12,24 +12,20 @@ class Node
     const KIND_LEAF = "leaf";
 
     /** @var string */
-    private $kind;
+    protected $kind;
 
     /** @var Node[] */
     private $chidren = [];
 
-    /**
-     * All Slate nodes have a `kind` property, so we enforce this by requiring it in the constructor
-     *
-     * @param string $kind
-     */
-    public function __construct(string $kind)
-    {
-        $this->kind = $kind;
-    }
-
     public function getKind(): string
     {
         return $this->kind;
+    }
+
+    public function setKind(string $kind): Node
+    {
+        $this->kind = $kind;
+        return $this;
     }
 
     public function addChild(Node $node): Node
