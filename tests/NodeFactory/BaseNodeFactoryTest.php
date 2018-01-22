@@ -1,20 +1,21 @@
 <?php
 
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\NodeFactory;
 
 use Prezly\Slate\Node;
 use Prezly\Slate\Node\LeafNode;
-use Prezly\Slate\NodeFactory;
+use Prezly\Slate\NodeFactory\BaseNodeFactory;
+use Prezly\Slate\Tests\TestCase;
 
-class NodeFactoryTest extends TestCase
+class BaseNodeFactoryTest extends TestCase
 {
-    /** @var NodeFactory */
+    /** @var BaseNodeFactory */
     private $factory;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->factory = new NodeFactory();
+        $this->factory = new BaseNodeFactory();
     }
 
     /**

@@ -3,10 +3,11 @@
 namespace Prezly\Slate;
 
 use InvalidArgumentException;
+use Prezly\Slate\NodeFactory\BaseNodeFactory;
 
 class Unserializer
 {
-    /** @var NodeFactory */
+    /** @var BaseNodeFactory */
     private $factory;
 
     public function fromJSON(string $json): Node
@@ -19,10 +20,10 @@ class Unserializer
         return $this->getFactory()->create($data->document);
     }
 
-    private function getFactory(): NodeFactory
+    private function getFactory(): BaseNodeFactory
     {
         if (is_null($this->factory)) {
-            $this->factory = new NodeFactory();
+            $this->factory = new BaseNodeFactory();
         }
         return $this->factory;
     }
