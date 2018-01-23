@@ -1,0 +1,20 @@
+{
+    "object": "value",
+    "document": {
+        "object": "document",
+        "nodes": [
+            {
+                "object": "block",
+                "type": "paragraph"
+            },
+            {
+                "object": "block",
+                "type": "blockquote"
+            },
+            {
+                "object": "block",
+                "type": "list"
+            }
+        ]
+    }
+}

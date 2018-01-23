@@ -5,9 +5,11 @@
         "nodes": [
             {
                 "object": "block",
+                "type": "paragraph",
                 "nodes": [
                     {
                         "object": "inline",
+                        "type": "span",
                         "nodes": [
                             {"object": "text"},
                             {"object": "text"}
@@ -16,12 +18,22 @@
                     {"object": "text"}
                 ]
             },
-            {"object": "inline"},
             {
-                "object": "text",
-                "leaves": [
-                    {"object": "leaf"},
-                    {"object": "leaf"}
+                "object": "block",
+                "type": "paragraph"
+            },
+            {
+                "object": "block",
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "object": "inline",
+                        "type": "span"
+                    },
+                    {
+                        "object": "inline",
+                        "type": "span"
+                    }
                 ]
             }
         ]

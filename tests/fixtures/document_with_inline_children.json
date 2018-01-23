@@ -1,0 +1,16 @@
+{
+    "object": "value",
+    "document": {
+        "object": "document",
+        "nodes": [
+            {
+                "object": "inline",
+                "type": "link"
+            },
+            {
+                "object": "inline",
+                "type": "hashtag"
+            }
+        ]
+    }
+}
