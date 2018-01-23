@@ -7,14 +7,34 @@ use Prezly\Slate\Object;
 
 class Inline implements Node
 {
-    /** @var Node[] */
-    private $nodes = [];
+    /** @var string */
+    private $type;
 
     /** @var array */
     private $data = [];
 
-    /** @var string */
-    private $type;
+    /** @var Node[] */
+    private $nodes = [];
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
 
     /**
      * @return Node[]
@@ -28,25 +48,5 @@ class Inline implements Node
     {
         $this->nodes[] = $node;
         return $this;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function setData(array $data)
-    {
-        $this->data = $data;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type)
-    {
-        $this->type = $type;
     }
 }
