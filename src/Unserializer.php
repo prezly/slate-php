@@ -16,7 +16,6 @@ class Unserializer
     {
         $data = json_decode($json, false);
 
-        // TODO: Switch to JSON schema for validation
         if (! isset($data->object) || $data->object !== Object::VALUE || ! isset($data->document) || ! is_object($data->document) || $data->document->object !== Object::DOCUMENT) {
             throw new InvalidArgumentException("Root node must be a Slate document");
         }
