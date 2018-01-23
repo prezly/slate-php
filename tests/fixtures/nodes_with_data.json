@@ -16,7 +16,8 @@
                         "data": {
                             "name": "John Doe",
                             "id": 1234
-                        }
+                        },
+                        "nodes": []
                     }
                 ]
             }

@@ -1,6 +1,7 @@
 {
     "object": "value",
     "document": {
-        "object": "document"
+        "object": "document",
+        "nodes": []
     }
 }

@@ -6,12 +6,14 @@
             {
                 "object": "inline",
                 "type": "link",
-                "data": {}
+                "data": {},
+                "nodes": []
             },
             {
                 "object": "inline",
                 "type": "hashtag",
-                "data": {}
+                "data": {},
+                "nodes": []
             }
         ]
     }

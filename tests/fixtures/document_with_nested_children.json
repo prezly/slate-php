@@ -13,17 +13,27 @@
                         "type": "span",
                         "data": {},
                         "nodes": [
-                            {"object": "text"},
-                            {"object": "text"}
+                            {
+                                "object": "text",
+                                "leaves": []
+                            },
+                            {
+                                "object": "text",
+                                "leaves": []
+                            }
                         ]
                     },
-                    {"object": "text"}
+                    {
+                        "object": "text",
+                        "leaves": []
+                    }
                 ]
             },
             {
                 "object": "block",
                 "type": "paragraph",
-                "data": {}
+                "data": {},
+                "nodes": []
             },
             {
                 "object": "block",
@@ -33,12 +43,14 @@
                     {
                         "object": "inline",
                         "type": "span",
-                        "data": {}
+                        "data": {},
+                        "nodes": []
                     },
                     {
                         "object": "inline",
                         "type": "span",
-                        "data": {}
+                        "data": {},
+                        "nodes": []
                     }
                 ]
             }

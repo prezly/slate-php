@@ -6,17 +6,20 @@
             {
                 "object": "block",
                 "type": "paragraph",
-                "data": {}
+                "data": {},
+                "nodes": []
             },
             {
                 "object": "block",
                 "type": "blockquote",
-                "data": {}
+                "data": {},
+                "nodes": []
             },
             {
                 "object": "block",
                 "type": "list",
-                "data": {}
+                "data": {},
+                "nodes": []
             }
         ]
     }

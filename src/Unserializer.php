@@ -15,7 +15,6 @@ class Unserializer
     public function fromJSON(string $json): Value
     {
         $data = json_decode($json, false);
-
         if (! isset($data->object) || $data->object !== Object::VALUE || ! isset($data->document) || ! is_object($data->document) || $data->document->object !== Object::DOCUMENT) {
             throw new InvalidArgumentException("Root node must be a Slate document");
         }
@@ -33,7 +32,7 @@ class Unserializer
     private function createDocument(stdClass $object): Document
     {
         $document = new Document();
-        foreach ($object->nodes ?? [] as $child) {
+        foreach ((array) $object->nodes as $child) {
             if ($child->object !== Object::BLOCK) {
                 throw new InvalidArgumentException("Document node only supports Block child nodes");
             }
@@ -47,7 +46,7 @@ class Unserializer
         $block = new Block();
         $block->setType($object->type);
         $block->setData((array) $object->data);
-        foreach ($object->nodes ?? [] as $child) {
+        foreach ((array) $object->nodes as $child) {
             $block->addNode($this->createObject($child));
         }
         return $block;
@@ -58,7 +57,7 @@ class Unserializer
         $inline = new Inline();
         $inline->setType($object->type);
         $inline->setData((array) $object->data);
-        foreach ($object->nodes ?? [] as $child) {
+        foreach ((array) $object->nodes as $child) {
             $inline->addNode($this->createObject($child));
         }
         return $inline;
@@ -67,7 +66,7 @@ class Unserializer
     private function createText(stdClass $object): Text
     {
         $text = new Text();
-        foreach ($object->leaves ?? [] as $child) {
+        foreach ($object->leaves as $child) {
             $text->addLeaf($this->createLeaf($child));
         }
         return $text;
@@ -76,7 +75,7 @@ class Unserializer
     private function createLeaf(stdClass $object): Leaf
     {
         $leaf = new Leaf();
-        foreach ($object->marks ?? [] as $child) {
+        foreach ($object->marks as $child) {
             $leaf->addMark($this->createMark($child));
         }
         return $leaf;
