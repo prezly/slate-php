@@ -47,6 +47,7 @@ class Unserializer
     {
         $block = new Block();
         $block->setType($object->type);
+        $block->setData((array) $object->data);
         foreach ($object->nodes ?? [] as $child) {
             $block->addNode($this->createObject($child));
         }
@@ -57,6 +58,7 @@ class Unserializer
     {
         $inline = new Inline();
         $inline->setType($object->type);
+        $inline->setData((array) $object->data);
         foreach ($object->nodes ?? [] as $child) {
             $inline->addNode($this->createObject($child));
         }

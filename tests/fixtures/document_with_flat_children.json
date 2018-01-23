@@ -5,15 +5,18 @@
         "nodes": [
             {
                 "object": "block",
-                "type": "paragraph"
+                "type": "paragraph",
+                "data": {}
             },
             {
                 "object": "block",
-                "type": "blockquote"
+                "type": "blockquote",
+                "data": {}
             },
             {
                 "object": "block",
-                "type": "list"
+                "type": "list",
+                "data": {}
             }
         ]
     }

@@ -5,11 +5,13 @@
         "nodes": [
             {
                 "object": "inline",
-                "type": "link"
+                "type": "link",
+                "data": {}
             },
             {
                 "object": "inline",
-                "type": "hashtag"
+                "type": "hashtag",
+                "data": {}
             }
         ]
     }

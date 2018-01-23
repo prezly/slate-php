@@ -6,10 +6,12 @@
             {
                 "object": "block",
                 "type": "paragraph",
+                "data": {},
                 "nodes": [
                     {
                         "object": "inline",
                         "type": "span",
+                        "data": {},
                         "nodes": [
                             {"object": "text"},
                             {"object": "text"}
@@ -20,19 +22,23 @@
             },
             {
                 "object": "block",
-                "type": "paragraph"
+                "type": "paragraph",
+                "data": {}
             },
             {
                 "object": "block",
                 "type": "paragraph",
+                "data": {},
                 "nodes": [
                     {
                         "object": "inline",
-                        "type": "span"
+                        "type": "span",
+                        "data": {}
                     },
                     {
                         "object": "inline",
-                        "type": "span"
+                        "type": "span",
+                        "data": {}
                     }
                 ]
             }

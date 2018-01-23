@@ -1,0 +1,25 @@
+{
+    "object": "value",
+    "document": {
+        "object": "document",
+        "nodes": [
+            {
+                "object": "block",
+                "type": "paragraph",
+                "data": {
+                    "foo": "bar"
+                },
+                "nodes": [
+                    {
+                        "object": "inline",
+                        "type": "mention",
+                        "data": {
+                            "name": "John Doe",
+                            "id": 1234
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
