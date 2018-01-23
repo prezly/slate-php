@@ -2,11 +2,16 @@
 
 namespace Prezly\Slate;
 
-use Prezly\Slate\Node\Block;
-use Prezly\Slate\Node\Document;
-use Prezly\Slate\Node\Inline;
+use Prezly\Slate\Model\Block;
+use Prezly\Slate\Model\Document;
+use Prezly\Slate\Model\Inline;
 
 use InvalidArgumentException;
+use Prezly\Slate\Model\Leaf;
+use Prezly\Slate\Model\Mark;
+use Prezly\Slate\Model\Object;
+use Prezly\Slate\Model\Text;
+use Prezly\Slate\Model\Value;
 use RuntimeException;
 use stdClass;
 

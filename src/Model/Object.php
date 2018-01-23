@@ -1,6 +1,6 @@
 <?php
 
-namespace Prezly\Slate;
+namespace Prezly\Slate\Model;
 
 interface Object
 {

@@ -1,9 +1,6 @@
 <?php
 
-namespace Prezly\Slate\Node;
-
-use Prezly\Slate\Node;
-use Prezly\Slate\Object;
+namespace Prezly\Slate\Model;
 
 class Inline implements Node
 {

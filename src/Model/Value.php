@@ -1,8 +1,6 @@
 <?php
 
-namespace Prezly\Slate;
-
-use Prezly\Slate\Node\Document;
+namespace Prezly\Slate\Model;
 
 class Value implements Object
 {

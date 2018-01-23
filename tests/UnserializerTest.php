@@ -2,9 +2,9 @@
 
 namespace Prezly\Slate\Tests;
 
-use Prezly\Slate\Node\Block;
-use Prezly\Slate\Node\Document;
-use Prezly\Slate\Node\Inline;
+use Prezly\Slate\Model\Block;
+use Prezly\Slate\Model\Document;
+use Prezly\Slate\Model\Inline;
 use Prezly\Slate\Unserializer;
 
 use InvalidArgumentException;

@@ -1,8 +1,6 @@
 <?php
 
-namespace Prezly\Slate\Node;
-
-use Prezly\Slate\Node;
+namespace Prezly\Slate\Model;
 
 class Document implements Node
 {
