@@ -8,6 +8,16 @@ class Text implements Object
     private $leaves = [];
 
     /**
+     * @param \Prezly\Slate\Model\Leaf[] $leaves
+     */
+    public function __construct(array $leaves = [])
+    {
+        foreach ($leaves as $leaf) {
+            $this->addLeaf($leaf);
+        }
+    }
+
+    /**
      * @return \Prezly\Slate\Model\Leaf[]
      */
     public function getLeaves(): array

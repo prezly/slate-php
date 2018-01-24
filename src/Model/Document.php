@@ -8,6 +8,16 @@ class Document implements Node
     private $nodes = [];
 
     /**
+     * @param \Prezly\Slate\Model\Block[] $nodes
+     */
+    public function __construct(array $nodes = [])
+    {
+        foreach ($nodes as $node) {
+            $this->addNode($node);
+        }
+    }
+
+    /**
      * The direct descendants of the Document node can only be Blocks
      *
      * @return Block[]

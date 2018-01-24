@@ -28,72 +28,67 @@ class Unserializer
 
     private function createValue(stdClass $object): Value
     {
-        $value = new Value();
-        $value->setDocument($this->createDocument($object->document));
-
-        return $value;
+        return new Value($this->createDocument($object->document));
     }
 
     private function createDocument(stdClass $object): Document
     {
-        $document = new Document();
-        foreach ((array) $object->nodes as $child) {
-            if ($child->object !== Object::BLOCK) {
-                throw new InvalidArgumentException("Document node only supports Block child nodes");
-            }
-            $document->addNode($this->createBlock($child));
+        $nodes = [];
+        foreach ($object->nodes as $node) {
+            $nodes[] = $this->createBlock($node);
         }
-        return $document;
+
+        return new Document($nodes);
     }
 
     private function createBlock(stdClass $object): Block
     {
-        $block = new Block();
-        $block->setType($object->type);
-        $block->setData((array) $object->data);
-        foreach ((array) $object->nodes as $child) {
-            $block->addNode($this->createObject($child));
+        $nodes = [];
+        foreach ((array) $object->nodes as $node) {
+            $nodes[] = $this->createObject($node);
         }
-        return $block;
+
+        return new Block($object->type, (array) $object->data, $nodes);
     }
 
     private function createInline(stdClass $object): Inline
     {
-        $inline = new Inline();
-        $inline->setType($object->type);
-        $inline->setData((array) $object->data);
-        foreach ((array) $object->nodes as $child) {
-            $inline->addNode($this->createObject($child));
+        $nodes = [];
+        foreach ((array) $object->nodes as $node) {
+            $nodes[] = $this->createObject($node);
         }
-        return $inline;
+
+        return new Inline($object->type, (array) $object->data, $nodes);
     }
 
     private function createText(stdClass $object): Text
     {
-        $text = new Text();
-        foreach ($object->leaves as $child) {
-            $text->addLeaf($this->createLeaf($child));
+        $leaves = [];
+        foreach ($object->leaves as $leaf) {
+            $leaves[] = $this->createLeaf($leaf);
         }
-        return $text;
+
+        return new Text($leaves);
     }
 
     private function createLeaf(stdClass $object): Leaf
     {
-        $leaf = new Leaf();
-        foreach ($object->marks as $child) {
-            $leaf->addMark($this->createMark($child));
+        $marks = [];
+        foreach ($object->marks as $mark) {
+            $marks[] = $this->createMark($mark);
         }
-        $leaf->setText($object->text);
-        return $leaf;
+        return new Leaf($object->text, $marks);
     }
 
     private function createMark(stdClass $object): Mark
     {
-        $mark = new Mark();
-        $mark->setType($object->type);
-        return $mark;
+        return new Mark($object->type);
     }
 
+    /**
+     * @param \stdClass $object
+     * @return Object|Block|Inline|Text
+     */
     private function createObject(stdClass $object): Object
     {
         switch ($object->object) {

@@ -10,6 +10,19 @@ class Leaf implements Object
     /** @var Mark[] */
     private $marks = [];
 
+    /**
+     * @param string $text
+     * @param \Prezly\Slate\Model\Mark[] $marks
+     */
+    public function __construct(string $text, array $marks = [])
+    {
+        $this->text = $text;
+        foreach ($marks as $mark) {
+            $this->addMark($mark);
+        }
+    }
+
+
     public function getText(): ?string
     {
         return $this->text;

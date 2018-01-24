@@ -13,6 +13,21 @@ class Block implements Node
     /** @var Node[] */
     private $nodes = [];
 
+    /**
+     * @param string $type
+     * @param array $data
+     * @param \Prezly\Slate\Model\Node[] $nodes
+     */
+    public function __construct(string $type, array $data = [], array $nodes = [])
+    {
+        $this->type = $type;
+        $this->data = $data;
+
+        foreach ($nodes as $node) {
+            $this->addNode($node);
+        }
+    }
+
     public function getType(): string
     {
         return $this->type;
