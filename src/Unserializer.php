@@ -20,9 +20,6 @@ class Unserializer
     public function fromJSON(string $json): Value
     {
         $data = json_decode($json, false);
-        if (! isset($data->object) || $data->object !== Object::VALUE || ! isset($data->document) || ! is_object($data->document) || $data->document->object !== Object::DOCUMENT) {
-            throw new InvalidArgumentException("Root node must be a Slate document");
-        }
 
         $this->validateIsSlateObject($data, Object::VALUE, ['document' => 'is_object']);
 
@@ -39,8 +36,10 @@ class Unserializer
         // Validate it's an stdClass
         if (! $object instanceof stdClass) {
             throw new InvalidArgumentException(sprintf(
-                'Unexpected JSON value given: %s. An object is expected.',
-                gettype($object)
+                'Unexpected JSON value given: %s. An object is expected to construct %s.',
+                gettype($object),
+                ucfirst($object_type),
+                ucfirst($object_type) ?: 'a Slate structure object'
             ));
         }
 
@@ -48,15 +47,15 @@ class Unserializer
         if (! property_exists($object, 'object')) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid JSON structure given to construct %s. It should have "object" property.',
-                $object_type
+                ucfirst($object_type)
             ));
         }
 
         // Validate "object" property value
         if ($object_type !== null &&  $object_type !== $object->object) {
             throw new InvalidArgumentException(sprintf(
-                'Invalid JSON structure given to construct %s. It should have "object" property set to (%s).',
-                $object_type,
+                'Invalid JSON structure given to construct %s. It should have "object" property set to "%s".',
+                ucfirst($object_type),
                 $object_type
             ));
         }
@@ -65,18 +64,18 @@ class Unserializer
         foreach ($shape as $property => $checker) {
             if (! property_exists($object, $property)) {
                 throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON structure given for %s. A %s should have %s property.',
-                    $object_type,
-                    $object_type,
+                    'Unexpected JSON structure given for %s. A %s should have "%s" property.',
+                    ucfirst($object_type),
+                    ucfirst($object_type),
                     $property
                 ));
             }
             if (! $checker($object->$property)) {
                 throw new InvalidArgumentException(sprintf(
-                    'Invalid JSON structure given for %s. The %s property should be %s()',
-                    $object_type,
-                    $object_type,
-                    $checker
+                    'Unexpected JSON structure given for %s. The "%s" property should be %s.',
+                    ucfirst($object_type),
+                    $property,
+                    substr($checker, 0, 3) === 'is_' ? substr($checker, 3) : $checker
                 ));
             }
         }
