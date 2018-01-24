@@ -61,4 +61,24 @@ class Block implements Node
         $this->nodes[] = $node;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getText(): string
+    {
+        $text = '';
+        foreach ($this->nodes as $node) {
+            if ($node instanceof Text) {
+                $text .= $node->getText();
+
+            } elseif ($node instanceof Node) {
+                $text .= $node->getText();
+
+            } else {
+                throw new \LogicException('WTF! This should never happen');
+            }
+        }
+        return $text;
+    }
 }

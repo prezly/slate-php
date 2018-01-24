@@ -30,4 +30,13 @@ class Text implements Object
         $this->leaves[] = $leaf;
         return $this;
     }
+
+    public function getText(): string
+    {
+        $text = '';
+        foreach ($this->leaves as $leaf) {
+            $text .= $leaf->getText();
+        }
+        return $text;
+    }
 }
