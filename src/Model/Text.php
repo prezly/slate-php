@@ -7,6 +7,9 @@ class Text implements Object
     /** @var Leaf[] */
     private $leaves = [];
 
+    /**
+     * @return \Prezly\Slate\Model\Leaf[]
+     */
     public function getLeaves(): array
     {
         return $this->leaves;
