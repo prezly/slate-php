@@ -2,16 +2,19 @@
     "object": "value",
     "document": {
         "object": "document",
+        "data": {},
         "nodes": [
             {
                 "object": "inline",
                 "type": "link",
+                "isVoid": false,
                 "data": {},
                 "nodes": []
             },
             {
                 "object": "inline",
                 "type": "hashtag",
+                "isVoid": false,
                 "data": {},
                 "nodes": []
             }
