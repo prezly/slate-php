@@ -62,9 +62,6 @@ class Block implements Node
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getText(): string
     {
         $text = '';
