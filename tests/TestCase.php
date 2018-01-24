@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Tests;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected function loadFixture(string $fixture): string
     {
