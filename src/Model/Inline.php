@@ -10,13 +10,13 @@ class Inline implements Node
     /** @var array */
     private $data = [];
 
-    /** @var Node[] */
+    /** @var Object[] */
     private $nodes = [];
 
     /**
      * @param string $type
      * @param array $data
-     * @param \Prezly\Slate\Model\Node[] $nodes
+     * @param \Prezly\Slate\Model\Object[] $nodes
      */
     public function __construct(string $type, array $data = [], array $nodes = [])
     {
