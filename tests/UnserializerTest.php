@@ -143,4 +143,34 @@ class UnserializerTest extends TestCase
         $inline = $block->getNodes()[0];
         $this->assertEquals(["name" => "John Doe", "id" => 1234], $inline->getData());
     }
+
+    /**
+     * @test
+     * @dataProvider invalid_documents_fixtures
+     *
+     * @param string $file
+     * @param string $expected_error
+     */
+    public function it_should_fail_deserializing_invalid_structure(string $file, string $expected_error)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expected_error);
+        $this->getDocumentFromFixture($file);
+    }
+
+    /**
+     * @see it_should_fail_deserializing_invalid_structure
+     */
+    public function invalid_documents_fixtures()
+    {
+        return [
+            ['invalid_document_01.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'],
+            ['invalid_document_02.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'],
+            ['invalid_document_03.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'],
+            ['invalid_document_04.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'],
+            ['invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
+            ['invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
+            ['invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
+        ];
+    }
 }
