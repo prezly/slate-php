@@ -17,7 +17,7 @@ class Mark implements Object
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }

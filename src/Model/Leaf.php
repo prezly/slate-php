@@ -28,7 +28,7 @@ class Leaf implements Object
         return $this->text;
     }
 
-    public function setText(string $text)
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
