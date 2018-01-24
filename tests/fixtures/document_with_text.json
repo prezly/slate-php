@@ -1,0 +1,75 @@
+{
+  "object": "value",
+  "document": {
+    "object": "document",
+    "data": {},
+    "nodes": [
+      {
+        "object": "block",
+        "type": "paragraph",
+        "isVoid": false,
+        "data": {},
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {
+                "object": "leaf",
+                "text": "I'd like to introduce ",
+                "marks": []
+              },
+              {
+                "object": "leaf",
+                "text": "you",
+                "marks": [
+                  {
+                    "object": "mark",
+                    "type": "underlined",
+                    "data": {}
+                  }
+                ]
+              },
+              {
+                "object": "leaf",
+                "text": " to a ",
+                "marks": []
+              },
+              {
+                "object": "leaf",
+                "text": "very important ",
+                "marks": [
+                  {
+                    "object": "mark",
+                    "type": "bold",
+                    "data": {}
+                  }
+                ]
+              },
+              {
+                "object": "leaf",
+                "text": "person",
+                "marks": [
+                  {
+                    "object": "mark",
+                    "type": "italic",
+                    "data": {}
+                  },
+                  {
+                    "object": "mark",
+                    "type": "bold",
+                    "data": {}
+                  }
+                ]
+              },
+              {
+                "object": "leaf",
+                "text": "!",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
