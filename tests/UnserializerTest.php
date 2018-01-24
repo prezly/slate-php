@@ -5,6 +5,8 @@ namespace Prezly\Slate\Tests;
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Inline;
+use Prezly\Slate\Model\Leaf;
+use Prezly\Slate\Model\Text;
 use Prezly\Slate\Unserializer;
 
 use InvalidArgumentException;
@@ -91,6 +93,41 @@ class UnserializerTest extends TestCase
         $this->assertEquals(2, count($children[0]->getNodes()));
         $this->assertEquals(0, count($children[1]->getNodes()));
         $this->assertEquals(2, count($children[2]->getNodes()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_load_document_with_leaves()
+    {
+        $document = $this->getDocumentFromFixture("document_with_text.json");
+
+        $this->assertCount(1, $document->getNodes());
+        $block = $document->getNodes()[0];
+
+        /** @var Block $block */
+        $this->assertInstanceOf(Block::class, $block);
+        $this->assertEquals('paragraph', $block->getType());
+        $this->assertCount(1, $block->getNodes());
+
+        /** @var Text $text */
+        $text = $block->getNodes()[0];
+        $this->assertInstanceOf(Text::class, $text);
+        $this->assertCount(6, $text->getLeaves());
+
+        $expected_texts = [
+            "I'd like to introduce ",
+            'you',
+            ' to a ',
+            'very important ',
+            'person',
+            '!',
+        ];
+
+        foreach ($text->getLeaves() as $i => $leaf) {
+            $this->assertInstanceOf(Leaf::class, $leaf);
+            $this->assertEquals($expected_texts[$i], $leaf->getText());
+        }
     }
 
     /**

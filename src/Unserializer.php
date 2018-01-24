@@ -83,6 +83,7 @@ class Unserializer
         foreach ($object->marks as $child) {
             $leaf->addMark($this->createMark($child));
         }
+        $leaf->setText($object->text);
         return $leaf;
     }
 
