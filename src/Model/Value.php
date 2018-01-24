@@ -7,6 +7,11 @@ class Value implements Object
     /** @var Document */
     private $document;
 
+    public function __construct(Document $document)
+    {
+        $this->document = $document;
+    }
+
     public function getDocument(): Document
     {
         return $this->document;
