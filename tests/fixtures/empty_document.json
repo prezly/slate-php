@@ -2,6 +2,7 @@
     "object": "value",
     "document": {
         "object": "document",
+        "data": {},
         "nodes": []
     }
 }

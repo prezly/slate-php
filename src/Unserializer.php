@@ -20,14 +20,74 @@ class Unserializer
     public function fromJSON(string $json): Value
     {
         $data = json_decode($json, false);
-        if (! isset($data->object) || $data->object !== Object::VALUE || ! isset($data->document) || ! is_object($data->document) || $data->document->object !== Object::DOCUMENT) {
-            throw new InvalidArgumentException("Root node must be a Slate document");
-        }
+
+        $this->validateIsSlateObject($data, Object::VALUE, ['document' => 'is_object']);
+
         return $this->createValue($data);
+    }
+
+    /**
+     * @param \stdClass|mixed $object
+     * @param string|null $object_type
+     * @param callable[] $shape [ $property_name => $checker, ... ]
+     */
+    private function validateIsSlateObject($object, string $object_type = null, array $shape = []): void
+    {
+        // Validate it's an stdClass
+        if (! $object instanceof stdClass) {
+            throw new InvalidArgumentException(sprintf(
+                'Unexpected JSON value given: %s. An object is expected to construct %s.',
+                gettype($object),
+                ucfirst($object_type),
+                ucfirst($object_type) ?: 'a Slate structure object'
+            ));
+        }
+
+        // Validate "object" property presence
+        if (! property_exists($object, 'object')) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid JSON structure given to construct %s. It should have "object" property.',
+                ucfirst($object_type)
+            ));
+        }
+
+        // Validate "object" property value
+        if ($object_type !== null &&  $object_type !== $object->object) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid JSON structure given to construct %s. It should have "object" property set to "%s".',
+                ucfirst($object_type),
+                $object_type
+            ));
+        }
+
+        // Validate Shape
+        foreach ($shape as $property => $checker) {
+            if (! property_exists($object, $property)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Unexpected JSON structure given for %s. A %s should have "%s" property.',
+                    ucfirst($object_type),
+                    ucfirst($object_type),
+                    $property
+                ));
+            }
+            if (! $checker($object->$property)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Unexpected JSON structure given for %s. The "%s" property should be %s.',
+                    ucfirst($object_type),
+                    $property,
+                    substr($checker, 0, 3) === 'is_' ? substr($checker, 3) : $checker
+                ));
+            }
+        }
     }
 
     private function createValue(stdClass $object): Value
     {
+        $this->validateIsSlateObject($object->document, Object::DOCUMENT, [
+            'data'  => 'is_object',
+            'nodes' => 'is_array',
+        ]);
+
         return new Value($this->createDocument($object->document));
     }
 
@@ -35,6 +95,12 @@ class Unserializer
     {
         $nodes = [];
         foreach ($object->nodes as $node) {
+            $this->validateIsSlateObject($node, Object::BLOCK, [
+                'isVoid' => 'is_bool',
+                'data'   => 'is_object',
+                'nodes'  => 'is_array',
+            ]);
+
             $nodes[] = $this->createBlock($node);
         }
 
@@ -45,6 +111,8 @@ class Unserializer
     {
         $nodes = [];
         foreach ((array) $object->nodes as $node) {
+            $this->validateIsSlateObject($node); // generic slate object check
+
             $nodes[] = $this->createObject($node);
         }
 
@@ -55,6 +123,8 @@ class Unserializer
     {
         $nodes = [];
         foreach ((array) $object->nodes as $node) {
+            $this->validateIsSlateObject($object); // generic slate object check
+
             $nodes[] = $this->createObject($node);
         }
 
@@ -75,6 +145,11 @@ class Unserializer
     {
         $marks = [];
         foreach ($object->marks as $mark) {
+            $this->validateIsSlateObject($mark, Object::MARK, [
+                'type' => 'is_string',
+                'data' => 'is_object',
+            ]);
+
             $marks[] = $this->createMark($mark);
         }
         return new Leaf($object->text, $marks);
@@ -93,12 +168,29 @@ class Unserializer
     {
         switch ($object->object) {
             case Object::BLOCK:
+                $this->validateIsSlateObject($object, Object::BLOCK, [
+                    'type'   => 'is_string',
+                    'data'   => 'is_object',
+                    'nodes'  => 'is_array',
+                    'isVoid' => 'is_bool',
+                ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createBlock($object);
+
             case Object::INLINE:
+                $this->validateIsSlateObject($object, Object::INLINE, [
+                    'type'   => 'is_string',
+                    'data'   => 'is_object',
+                    'nodes'  => 'is_array',
+                    'isVoid' => 'is_bool',
+                ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createInline($object);
+
             case Object::TEXT:
+                $this->validateIsSlateObject($object, Object::TEXT, [
+                    'leaves' => 'is_array',
+                ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createText($object);
         }

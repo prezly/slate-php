@@ -2,10 +2,12 @@
     "object": "value",
     "document": {
         "object": "document",
+        "data": {},
         "nodes": [
             {
                 "object": "block",
                 "type": "paragraph",
+                "isVoid": false,
                 "data": {
                     "foo": "bar"
                 },
@@ -13,6 +15,7 @@
                     {
                         "object": "inline",
                         "type": "mention",
+                        "isVoid": false,
                         "data": {
                             "name": "John Doe",
                             "id": 1234
