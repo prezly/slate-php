@@ -34,7 +34,7 @@ class Block implements Node
     }
 
     /**
-     * @return Node[]
+     * @return \Prezly\Slate\Model\Object[]
      */
     public function getNodes(): array
     {
