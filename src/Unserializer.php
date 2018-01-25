@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Entity;
-use Prezly\Slate\Model\ObjectType;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
 use RuntimeException;
@@ -105,7 +104,7 @@ class Unserializer
             $nodes[] = $this->createBlock($node);
         }
 
-        return new Document($nodes);
+        return new Document($nodes, (array) $object->data);
     }
 
     private function createBlock(stdClass $object): Block

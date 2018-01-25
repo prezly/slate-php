@@ -84,6 +84,7 @@ class Inline implements Node
         return (object)[
             'object' => Entity::INLINE,
             'type'   => $this->type,
+            'isVoid' => false,
             'data'   => (object)$this->data,
             'nodes'  => array_map(function (Entity $node) {
                 return $node->jsonSerialize();

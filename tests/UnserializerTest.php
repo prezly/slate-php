@@ -48,6 +48,15 @@ class UnserializerTest extends TestCase
         $this->assertEmpty($document->getNodes());
     }
 
+    /**
+     * @test
+     */
+    public function it_should_set_document_data()
+    {
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/document_with_data.json");
+        $this->assertEquals(["foo" => "bar"], $document->getData());
+    }
+
     public function it_should_only_accept_block_nodes_for_document()
     {
         $fixture = $this->loadFixture(__DIR__ . "/fixtures/document_with_inline_children.json");
@@ -121,7 +130,6 @@ class UnserializerTest extends TestCase
             $this->assertEquals($expected_texts[$i], $leaf->getText());
         }
     }
-
     /**
      * @test
      */

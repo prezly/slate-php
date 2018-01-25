@@ -7,14 +7,19 @@ class Document implements Node
     /** @var Block[] */
     private $nodes = [];
 
+    /** @var array */
+    private $data = [];
+
     /**
      * @param \Prezly\Slate\Model\Block[] $nodes
+     * @param array $data
      */
-    public function __construct(array $nodes = [])
+    public function __construct(array $nodes = [], array $data = [])
     {
         foreach ($nodes as $node) {
             $this->addNode($node);
         }
+        $this->data = $data;
     }
 
     /**
@@ -33,6 +38,22 @@ class Document implements Node
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setData(array $data): void
+    {
+        $this->data = $data;
+    }
+
     public function getText(): string
     {
         $text = '';
@@ -46,9 +67,10 @@ class Document implements Node
     {
         return (object)[
             'object' => Entity::DOCUMENT,
+            'data'   => (object)$this->data,
             'nodes'  => array_map(function (Entity $node) {
                 return $node->jsonSerialize();
-            }, $this->nodes)
+            }, $this->nodes),
         ];
     }
 }
