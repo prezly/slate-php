@@ -1,0 +1,31 @@
+{
+    "object": "value",
+    "document": {
+        "object": "document",
+        "data": {},
+        "nodes": [
+            {
+                "object": "block",
+                "type": "custom",
+                "isVoid": true,
+                "data": {},
+                "nodes": []
+            },
+            {
+                "object": "block",
+                "type": "paragraph",
+                "isVoid": false,
+                "data": {},
+                "nodes": [
+                    {
+                        "object": "inline",
+                        "type": "image",
+                        "isVoid": true,
+                        "data": {},
+                        "nodes": []
+                    }
+                ]
+            }
+        ]
+    }
+}
