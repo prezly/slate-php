@@ -10,13 +10,13 @@ class Inline implements Node
     /** @var array */
     private $data = [];
 
-    /** @var Object[] */
+    /** @var Node[]|Text[] */
     private $nodes = [];
 
     /**
      * @param string $type
      * @param array $data
-     * @param \Prezly\Slate\Model\Object[] $nodes
+     * @param Node[]|Text[] $nodes
      */
     public function __construct(string $type, array $data = [], array $nodes = [])
     {
@@ -49,16 +49,33 @@ class Inline implements Node
     }
 
     /**
-     * @return \Prezly\Slate\Model\Object[]
+     * @return Node[]|Text[]
      */
     public function getNodes(): array
     {
         return $this->nodes;
     }
 
+    /**
+     * @param Node|Text $node
+     * @return Inline
+     */
     public function addNode(Object $node): Inline
     {
-        $this->nodes[] = $node;
-        return $this;
+        if ($node instanceof Node || $node instanceof Text) {
+            $this->nodes[] = $node;
+            return $this;
+        }
+
+        throw new \InvalidArgumentException('Inline can only have Node and Text child nodes');
+    }
+
+    public function getText(): string
+    {
+        $text = '';
+        foreach ($this->nodes as $node) {
+            $text .= $node->getText();
+        }
+        return $text;
     }
 }

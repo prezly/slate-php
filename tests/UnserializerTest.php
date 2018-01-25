@@ -22,13 +22,6 @@ class UnserializerTest extends TestCase
         $this->unserializer = new Unserializer();
     }
 
-    private function getDocumentFromFixture(string $file_path): Document
-    {
-        $fixture = $this->loadFixture($file_path);
-        $value = $this->unserializer->fromJSON($fixture);
-        return $value->getDocument();
-    }
-
     /**
      * The top level node of the Slate model is the Value. Any JSON that doesn't
      * have a top-level document node is invalid
@@ -51,7 +44,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_return_document_node()
     {
-        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/empty_document.json");
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/empty_document.json");
         $this->assertEmpty($document->getNodes());
     }
 
@@ -67,7 +60,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_add_children_to_document()
     {
-        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/document_with_flat_children.json");
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/document_with_flat_children.json");
         $nodes = $document->getNodes();
 
         $this->assertEquals(3, count($nodes));
@@ -85,7 +78,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_nest_children()
     {
-        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/document_with_nested_children.json");
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/document_with_nested_children.json");
         $children = $document->getNodes();
 
         // Second-level children
@@ -99,7 +92,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_load_document_with_leaves()
     {
-        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/document_with_text.json");
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/document_with_text.json");
 
         $this->assertCount(1, $document->getNodes());
         $block = $document->getNodes()[0];
@@ -134,7 +127,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_set_node_data()
     {
-        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/nodes_with_data.json");
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/nodes_with_data.json");
         $block = $document->getNodes()[0];
         $this->assertEquals(["foo" => "bar"], $block->getData());
 
@@ -154,7 +147,7 @@ class UnserializerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expected_error);
-        $this->getDocumentFromFixture($file);
+        $this->loadDocumentFromFixture($file);
     }
 
     /**

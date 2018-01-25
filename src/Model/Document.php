@@ -32,4 +32,13 @@ class Document implements Node
         $this->nodes[] = $block;
         return $this;
     }
+
+    public function getText(): string
+    {
+        $text = '';
+        foreach ($this->nodes as $node) {
+            $text .= $node->getText();
+        }
+        return $text;
+    }
 }
