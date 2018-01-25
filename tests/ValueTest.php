@@ -6,11 +6,14 @@ class ValueTest extends TestCase
 {
     /**
      * @test
+     * @dataProvider fixtures
+     *
+     * @param string $file_path
      */
-    public function it_should_serialize_to_json()
+    public function it_should_serialize_to_json(string $file_path)
     {
-        $json = $this->loadFixture(__DIR__ . '/fixtures/document_with_text.json');
-        $value = $this->loadContentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
+        $json = $this->loadFixture($file_path);
+        $value = $this->loadContentFromFixture($file_path);
 
         $json = implode("\n",
             array_map(function(string $line): string {
@@ -19,5 +22,13 @@ class ValueTest extends TestCase
         );
 
         $this->assertEquals(trim($json), $value->toJson(JSON_PRETTY_PRINT));
+    }
+
+    public function fixtures(): array
+    {
+        return [
+            'document_with_text.json'       => [__DIR__ . '/fixtures/document_with_text.json'],
+            'document_with_void_nodes.json' => [__DIR__ . '/fixtures/document_with_void_nodes.json'],
+        ];
     }
 }

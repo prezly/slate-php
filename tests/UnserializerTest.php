@@ -146,6 +146,22 @@ class UnserializerTest extends TestCase
 
     /**
      * @test
+     */
+    public function it_should_mark_void_nodes()
+    {
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/document_with_void_nodes.json");
+
+        $this->assertTrue($document->getNodes()[0]->isVoid());
+
+        $this->assertInstanceOf(Inline::class, $document->getNodes()[1]->getNodes()[0]);
+        /** @var Inline $inline */
+        $inline = $document->getNodes()[1]->getNodes()[0];
+        $this->assertTrue($inline->isVoid());
+
+    }
+
+    /**
+     * @test
      * @dataProvider invalid_documents_fixtures
      *
      * @param string $file
