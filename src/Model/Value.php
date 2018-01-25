@@ -21,4 +21,9 @@ class Value implements Object
     {
         $this->document = $document;
     }
+
+    public static function createEmpty(): Value
+    {
+        return new Value(new Document());
+    }
 }
