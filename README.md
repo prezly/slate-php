@@ -9,4 +9,4 @@ The PHP model implementation bascially follows
 
 -----------------
 
-Brought to you with :heart: by [Prezly](https://www.prezly.com/).
+Brought to you with :heart: by [Prezly](https://www.prezly.com/?utm_source=github).
