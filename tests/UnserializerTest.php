@@ -22,13 +22,6 @@ class UnserializerTest extends TestCase
         $this->unserializer = new Unserializer();
     }
 
-    private function getDocumentFromFixture(string $file_path): Document
-    {
-        $fixture = $this->loadFixture($file_path);
-        $value = $this->unserializer->fromJSON($fixture);
-        return $value->getDocument();
-    }
-
     /**
      * The top level node of the Slate model is the Value. Any JSON that doesn't
      * have a top-level document node is invalid
