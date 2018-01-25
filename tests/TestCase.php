@@ -13,15 +13,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return file_get_contents($file_path);
     }
 
-    protected function loadContent(string $file_path): Value
+    protected function loadContentFromFixture(string $file_path): Value
     {
         $json = $this->loadFixture($file_path);
         $unserializer = new Unserializer();
         return $unserializer->fromJSON($json);
     }
 
-    protected function getDocumentFromFixture(string $file_path): Document
+    protected function loadDocumentFromFixture(string $file_path): Document
     {
-        return $this->loadContent($file_path)->getDocument();
+        return $this->loadContentFromFixture($file_path)->getDocument();
     }
 }
