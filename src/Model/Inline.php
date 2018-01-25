@@ -78,4 +78,16 @@ class Inline implements Node
         }
         return $text;
     }
+
+    public function jsonSerialize()
+    {
+        return (object)[
+            'object' => Entity::INLINE,
+            'type'   => $this->type,
+            'data'   => (object)$this->data,
+            'nodes'  => array_map(function (Entity $node) {
+                return $node->jsonSerialize();
+            }, $this->nodes)
+        ];
+    }
 }

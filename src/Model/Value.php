@@ -21,4 +21,12 @@ class Value implements Entity
     {
         $this->document = $document;
     }
+
+    public function jsonSerialize()
+    {
+        return (object)[
+            'object'   => Entity::VALUE,
+            'document' => $this->document->jsonSerialize(),
+        ];
+    }
 }

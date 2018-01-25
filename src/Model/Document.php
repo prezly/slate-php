@@ -41,4 +41,14 @@ class Document implements Node
         }
         return $text;
     }
+
+    public function jsonSerialize()
+    {
+        return (object)[
+            'object' => Entity::DOCUMENT,
+            'nodes'  => array_map(function (Entity $node) {
+                return $node->jsonSerialize();
+            }, $this->nodes)
+        ];
+    }
 }
