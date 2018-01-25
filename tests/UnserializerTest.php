@@ -22,9 +22,9 @@ class UnserializerTest extends TestCase
         $this->unserializer = new Unserializer();
     }
 
-    private function getDocumentFromFixture(string $fixture_name): Document
+    private function getDocumentFromFixture(string $file_path): Document
     {
-        $fixture = $this->loadFixture($fixture_name);
+        $fixture = $this->loadFixture($file_path);
         $value = $this->unserializer->fromJSON($fixture);
         return $value->getDocument();
     }
@@ -51,14 +51,13 @@ class UnserializerTest extends TestCase
      */
     public function it_should_return_document_node()
     {
-        $fixture_name = "empty_document.json";
-        $document = $this->getDocumentFromFixture($fixture_name);
+        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/empty_document.json");
         $this->assertEmpty($document->getNodes());
     }
 
     public function it_should_only_accept_block_nodes_for_document()
     {
-        $fixture = $this->loadFixture("document_with_inline_children.json");
+        $fixture = $this->loadFixture(__DIR__ . "/fixtures/document_with_inline_children.json");
         $this->expectException(InvalidArgumentException::class);
         $this->unserializer->fromJSON($fixture);
     }
@@ -68,7 +67,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_add_children_to_document()
     {
-        $document = $this->getDocumentFromFixture("document_with_flat_children.json");
+        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/document_with_flat_children.json");
         $nodes = $document->getNodes();
 
         $this->assertEquals(3, count($nodes));
@@ -86,7 +85,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_nest_children()
     {
-        $document = $this->getDocumentFromFixture("document_with_nested_children.json");
+        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/document_with_nested_children.json");
         $children = $document->getNodes();
 
         // Second-level children
@@ -100,7 +99,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_load_document_with_leaves()
     {
-        $document = $this->getDocumentFromFixture("document_with_text.json");
+        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/document_with_text.json");
 
         $this->assertCount(1, $document->getNodes());
         $block = $document->getNodes()[0];
@@ -135,7 +134,7 @@ class UnserializerTest extends TestCase
      */
     public function it_should_set_node_data()
     {
-        $document = $this->getDocumentFromFixture("nodes_with_data.json");
+        $document = $this->getDocumentFromFixture(__DIR__ . "/fixtures/nodes_with_data.json");
         $block = $document->getNodes()[0];
         $this->assertEquals(["foo" => "bar"], $block->getData());
 
@@ -164,13 +163,13 @@ class UnserializerTest extends TestCase
     public function invalid_documents_fixtures()
     {
         return [
-            ['invalid_document_01.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'],
-            ['invalid_document_02.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'],
-            ['invalid_document_03.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'],
-            ['invalid_document_04.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'],
-            ['invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
-            ['invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
-            ['invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
+            [__DIR__ . '/fixtures/invalid_document_01.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'],
+            [__DIR__ . '/fixtures/invalid_document_02.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'],
+            [__DIR__ . '/fixtures/invalid_document_03.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'],
+            [__DIR__ . '/fixtures/invalid_document_04.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'],
+            [__DIR__ . '/fixtures/invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
+            [__DIR__ . '/fixtures/invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
+            [__DIR__ . '/fixtures/invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
         ];
     }
 }
