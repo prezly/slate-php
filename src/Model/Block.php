@@ -84,6 +84,7 @@ class Block implements Node
         return (object)[
             'object' => Entity::BLOCK,
             'type'   => $this->type,
+            'isVoid' => false,
             'data'   => (object)$this->data,
             'nodes'  => array_map(function (Entity $node) {
                 return $node->jsonSerialize();
