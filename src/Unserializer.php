@@ -9,7 +9,8 @@ use Prezly\Slate\Model\Inline;
 use InvalidArgumentException;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
-use Prezly\Slate\Model\Object;
+use Prezly\Slate\Model\Entity;
+use Prezly\Slate\Model\ObjectType;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
 use RuntimeException;
@@ -21,7 +22,7 @@ class Unserializer
     {
         $data = json_decode($json, false);
 
-        $this->validateIsSlateObject($data, Object::VALUE, ['document' => 'is_object']);
+        $this->validateIsSlateObject($data, Entity::VALUE, ['document' => 'is_object']);
 
         return $this->createValue($data);
     }
@@ -83,7 +84,7 @@ class Unserializer
 
     private function createValue(stdClass $object): Value
     {
-        $this->validateIsSlateObject($object->document, Object::DOCUMENT, [
+        $this->validateIsSlateObject($object->document, Entity::DOCUMENT, [
             'data'  => 'is_object',
             'nodes' => 'is_array',
         ]);
@@ -95,7 +96,7 @@ class Unserializer
     {
         $nodes = [];
         foreach ($object->nodes as $node) {
-            $this->validateIsSlateObject($node, Object::BLOCK, [
+            $this->validateIsSlateObject($node, Entity::BLOCK, [
                 'isVoid' => 'is_bool',
                 'data'   => 'is_object',
                 'nodes'  => 'is_array',
@@ -145,7 +146,7 @@ class Unserializer
     {
         $marks = [];
         foreach ($object->marks as $mark) {
-            $this->validateIsSlateObject($mark, Object::MARK, [
+            $this->validateIsSlateObject($mark, Entity::MARK, [
                 'type' => 'is_string',
                 'data' => 'is_object',
             ]);
@@ -164,11 +165,11 @@ class Unserializer
      * @param \stdClass $object
      * @return Object|Block|Inline|Text
      */
-    private function createObject(stdClass $object): Object
+    private function createObject(stdClass $object): Entity
     {
         switch ($object->object) {
-            case Object::BLOCK:
-                $this->validateIsSlateObject($object, Object::BLOCK, [
+            case Entity::BLOCK:
+                $this->validateIsSlateObject($object, Entity::BLOCK, [
                     'type'   => 'is_string',
                     'data'   => 'is_object',
                     'nodes'  => 'is_array',
@@ -177,8 +178,8 @@ class Unserializer
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createBlock($object);
 
-            case Object::INLINE:
-                $this->validateIsSlateObject($object, Object::INLINE, [
+            case Entity::INLINE:
+                $this->validateIsSlateObject($object, Entity::INLINE, [
                     'type'   => 'is_string',
                     'data'   => 'is_object',
                     'nodes'  => 'is_array',
@@ -187,8 +188,8 @@ class Unserializer
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createInline($object);
 
-            case Object::TEXT:
-                $this->validateIsSlateObject($object, Object::TEXT, [
+            case Entity::TEXT:
+                $this->validateIsSlateObject($object, Entity::TEXT, [
                     'leaves' => 'is_array',
                 ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */

@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Model;
 
-class Value implements Object
+class Value implements Entity
 {
     /** @var Document */
     private $document;

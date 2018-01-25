@@ -60,7 +60,7 @@ class Inline implements Node
      * @param Node|Text $node
      * @return Inline
      */
-    public function addNode(Object $node): Inline
+    public function addNode(Entity $node): Inline
     {
         if ($node instanceof Node || $node instanceof Text) {
             $this->nodes[] = $node;

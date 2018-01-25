@@ -60,7 +60,7 @@ class Block implements Node
      * @param Node|Text $node
      * @return Block
      */
-    public function addNode(Object $node): Block
+    public function addNode(Entity $node): Block
     {
         if ($node instanceof Node || $node instanceof Text) {
             $this->nodes[] = $node;

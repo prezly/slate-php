@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Model;
 
-interface Node extends Object
+interface Node extends Entity
 {
     /**
      * @return Node[]
