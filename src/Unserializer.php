@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Entity;
-use Prezly\Slate\Model\ObjectType;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
 use RuntimeException;
