@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Model;
 
-class Mark implements Object
+class Mark implements Entity
 {
     /** @var string */
     private $type;

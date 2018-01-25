@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Model;
 
-class Leaf implements Object
+class Leaf implements Entity
 {
     /** @var string */
     private $text;
