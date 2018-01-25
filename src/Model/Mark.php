@@ -21,4 +21,12 @@ class Mark implements Entity
     {
         $this->type = $type;
     }
+
+    public function jsonSerialize()
+    {
+        return (object)[
+            'object' => Entity::MARK,
+            'type'   => $this->type,
+        ];
+    }
 }

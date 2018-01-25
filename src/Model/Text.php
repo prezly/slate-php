@@ -39,4 +39,14 @@ class Text implements Entity
         }
         return $text;
     }
+
+    public function jsonSerialize()
+    {
+        return (object)[
+            'object' => Entity::TEXT,
+            'leaves'  => array_map(function (Leaf $leaf) {
+                return $leaf->jsonSerialize();
+            }, $this->leaves)
+        ];
+    }
 }
