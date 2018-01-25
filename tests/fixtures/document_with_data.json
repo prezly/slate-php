@@ -1,0 +1,8 @@
+{
+  "object": "value",
+  "document": {
+    "object": "document",
+    "data": {"foo": "bar"},
+    "nodes": []
+  }
+}

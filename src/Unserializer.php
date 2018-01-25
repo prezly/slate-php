@@ -104,7 +104,7 @@ class Unserializer
             $nodes[] = $this->createBlock($node);
         }
 
-        return new Document($nodes);
+        return new Document($nodes, (array) $object->data);
     }
 
     private function createBlock(stdClass $object): Block
