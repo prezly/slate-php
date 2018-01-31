@@ -187,6 +187,7 @@ class UnserializerTest extends TestCase
             [__DIR__ . '/fixtures/invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
             [__DIR__ . '/fixtures/invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
             [__DIR__ . '/fixtures/invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
+            [__DIR__ . '/fixtures/invalid_document_08_invalid_leaf_object.json', 'Invalid JSON structure given to construct Leaf. It should have "object" property set to "leaf".'],
         ];
     }
 }

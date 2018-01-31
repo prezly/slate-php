@@ -135,6 +135,11 @@ class Unserializer
     {
         $leaves = [];
         foreach ($object->leaves as $leaf) {
+            $this->validateIsSlateObject($leaf, Entity::LEAF, [
+                'text'  => 'is_string',
+                'marks' => 'is_array',
+            ]);
+
             $leaves[] = $this->createLeaf($leaf);
         }
 
