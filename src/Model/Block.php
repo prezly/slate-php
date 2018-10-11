@@ -13,20 +13,15 @@ class Block implements Node
     /** @var Node[]|Text[] */
     private $nodes = [];
 
-    /** @var bool */
-    private $is_void;
-
     /**
      * @param string $type
      * @param array $data
      * @param Node[]|Text[] $nodes
-     * @param bool $is_void
      */
-    public function __construct(string $type, array $data = [], array $nodes = [], bool $is_void = false)
+    public function __construct(string $type, array $data = [], array $nodes = [])
     {
         $this->type = $type;
         $this->data = $data;
-        $this->is_void = $is_void;
 
         foreach ($nodes as $node) {
             $this->addNode($node);
@@ -62,22 +57,6 @@ class Block implements Node
     }
 
     /**
-     * @return bool
-     */
-    public function isVoid(): bool
-    {
-        return $this->is_void;
-    }
-
-    /**
-     * @param bool $is_void
-     */
-    public function setIsVoid(bool $is_void): void
-    {
-        $this->is_void = $is_void;
-    }
-
-    /**
      * @param Node|Text $node
      * @return Block
      */
@@ -102,11 +81,10 @@ class Block implements Node
 
     public function jsonSerialize()
     {
-        return (object)[
+        return (object) [
             'object' => Entity::BLOCK,
             'type'   => $this->type,
-            'isVoid' => $this->is_void,
-            'data'   => (object)$this->data,
+            'data'   => (object) $this->data,
             'nodes'  => array_map(function (Entity $node) {
                 return $node->jsonSerialize();
             }, $this->nodes)

@@ -16,7 +16,7 @@ class ValueTest extends TestCase
         $value = $this->loadContentFromFixture($file_path);
 
         $json = implode("\n",
-            array_map(function(string $line): string {
+            array_map(function (string $line): string {
                 return preg_replace('/^(\s+)/', '$1$1', $line);
             }, explode("\n", $json))
         );
@@ -27,8 +27,7 @@ class ValueTest extends TestCase
     public function fixtures(): array
     {
         return [
-            'document_with_text.json'       => [__DIR__ . '/fixtures/document_with_text.json'],
-            'document_with_void_nodes.json' => [__DIR__ . '/fixtures/document_with_void_nodes.json'],
+            'document_with_text.json' => [__DIR__ . '/fixtures/document_with_text.json'],
         ];
     }
 }

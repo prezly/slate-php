@@ -7,13 +7,11 @@
             {
                 "object": "block",
                 "type": "paragraph",
-                "isVoid": false,
                 "data": {},
                 "nodes": [
                     {
                         "object": "inline",
                         "type": "span",
-                        "isVoid": false,
                         "data": {},
                         "nodes": [
                             {
@@ -35,27 +33,23 @@
             {
                 "object": "block",
                 "type": "paragraph",
-                "isVoid": false,
                 "data": {},
                 "nodes": []
             },
             {
                 "object": "block",
                 "type": "paragraph",
-                "isVoid": false,
                 "data": {},
                 "nodes": [
                     {
                         "object": "inline",
                         "type": "span",
-                        "isVoid": false,
                         "data": {},
                         "nodes": []
                     },
                     {
                         "object": "inline",
                         "type": "span",
-                        "isVoid": false,
                         "data": {},
                         "nodes": []
                     }
