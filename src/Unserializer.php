@@ -34,7 +34,7 @@ class Unserializer
     private function validateIsSlateObject($object, string $object_type = null, array $shape = []): void
     {
         // Validate it's an stdClass
-        if (! $object instanceof stdClass) {
+        if (!$object instanceof stdClass) {
             throw new InvalidArgumentException(sprintf(
                 'Unexpected JSON value given: %s. An object is expected to construct %s.',
                 gettype($object),
@@ -44,7 +44,7 @@ class Unserializer
         }
 
         // Validate "object" property presence
-        if (! property_exists($object, 'object')) {
+        if (!property_exists($object, 'object')) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid JSON structure given to construct %s. It should have "object" property.',
                 ucfirst($object_type)
@@ -52,7 +52,7 @@ class Unserializer
         }
 
         // Validate "object" property value
-        if ($object_type !== null &&  $object_type !== $object->object) {
+        if ($object_type !== null && $object_type !== $object->object) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid JSON structure given to construct %s. It should have "object" property set to "%s".',
                 ucfirst($object_type),
@@ -62,7 +62,7 @@ class Unserializer
 
         // Validate Shape
         foreach ($shape as $property => $checker) {
-            if (! property_exists($object, $property)) {
+            if (!property_exists($object, $property)) {
                 throw new InvalidArgumentException(sprintf(
                     'Unexpected JSON structure given for %s. A %s should have "%s" property.',
                     ucfirst($object_type),
@@ -70,7 +70,7 @@ class Unserializer
                     $property
                 ));
             }
-            if (! $checker($object->$property)) {
+            if (!$checker($object->$property)) {
                 throw new InvalidArgumentException(sprintf(
                     'Unexpected JSON structure given for %s. The "%s" property should be %s.',
                     ucfirst($object_type),
@@ -96,9 +96,8 @@ class Unserializer
         $nodes = [];
         foreach ($object->nodes as $node) {
             $this->validateIsSlateObject($node, Entity::BLOCK, [
-                'isVoid' => 'is_bool',
-                'data'   => 'is_object',
-                'nodes'  => 'is_array',
+                'data'  => 'is_object',
+                'nodes' => 'is_array',
             ]);
 
             $nodes[] = $this->createBlock($node);
@@ -116,7 +115,7 @@ class Unserializer
             $nodes[] = $this->createObject($node);
         }
 
-        return new Block($object->type, (array) $object->data, $nodes, (bool) $object->isVoid);
+        return new Block($object->type, (array) $object->data, $nodes);
     }
 
     private function createInline(stdClass $object): Inline
@@ -128,7 +127,7 @@ class Unserializer
             $nodes[] = $this->createObject($node);
         }
 
-        return new Inline($object->type, (array) $object->data, $nodes, (bool) $object->isVoid);
+        return new Inline($object->type, (array) $object->data, $nodes);
     }
 
     private function createText(stdClass $object): Text
@@ -174,20 +173,18 @@ class Unserializer
         switch ($object->object) {
             case Entity::BLOCK:
                 $this->validateIsSlateObject($object, Entity::BLOCK, [
-                    'type'   => 'is_string',
-                    'data'   => 'is_object',
-                    'nodes'  => 'is_array',
-                    'isVoid' => 'is_bool',
+                    'type'  => 'is_string',
+                    'data'  => 'is_object',
+                    'nodes' => 'is_array',
                 ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createBlock($object);
 
             case Entity::INLINE:
                 $this->validateIsSlateObject($object, Entity::INLINE, [
-                    'type'   => 'is_string',
-                    'data'   => 'is_object',
-                    'nodes'  => 'is_array',
-                    'isVoid' => 'is_bool',
+                    'type'  => 'is_string',
+                    'data'  => 'is_object',
+                    'nodes' => 'is_array',
                 ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
                 return $this->createInline($object);

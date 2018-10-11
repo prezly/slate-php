@@ -3,7 +3,6 @@
 namespace Prezly\Slate\Tests;
 
 use Prezly\Slate\Model\Block;
-use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Inline;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Text;
@@ -142,22 +141,6 @@ class UnserializerTest extends TestCase
         /** @var Inline $inline */
         $inline = $block->getNodes()[0];
         $this->assertEquals(["name" => "John Doe", "id" => 1234], $inline->getData());
-    }
-
-    /**
-     * @test
-     */
-    public function it_should_mark_void_nodes()
-    {
-        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/document_with_void_nodes.json");
-
-        $this->assertTrue($document->getNodes()[0]->isVoid());
-
-        $this->assertInstanceOf(Inline::class, $document->getNodes()[1]->getNodes()[0]);
-        /** @var Inline $inline */
-        $inline = $document->getNodes()[1]->getNodes()[0];
-        $this->assertTrue($inline->isVoid());
-
     }
 
     /**

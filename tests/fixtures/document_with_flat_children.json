@@ -7,21 +7,18 @@
             {
                 "object": "block",
                 "type": "paragraph",
-                "isVoid": false,
                 "data": {},
                 "nodes": []
             },
             {
                 "object": "block",
                 "type": "blockquote",
-                "isVoid": false,
                 "data": {},
                 "nodes": []
             },
             {
                 "object": "block",
                 "type": "list",
-                "isVoid": false,
                 "data": {},
                 "nodes": []
             }
