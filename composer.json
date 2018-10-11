@@ -17,7 +17,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Prezly\\Slate\\": "src/",
+            "Prezly\\Slate\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Prezly\\Slate\\Tests\\": "tests/"
         }
     }
