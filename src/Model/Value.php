@@ -24,7 +24,7 @@ class Value implements Entity
 
     public function jsonSerialize()
     {
-        return (object)[
+        return (object) [
             'object'   => Entity::VALUE,
             'document' => $this->document->jsonSerialize(),
         ];

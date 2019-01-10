@@ -4,14 +4,14 @@ namespace Prezly\Slate;
 
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
+use Prezly\Slate\Model\Entity;
 use Prezly\Slate\Model\Inline;
-
-use InvalidArgumentException;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
-use Prezly\Slate\Model\Entity;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
+
+use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
 
