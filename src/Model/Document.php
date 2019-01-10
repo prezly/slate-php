@@ -65,9 +65,9 @@ class Document implements Node
 
     public function jsonSerialize()
     {
-        return (object)[
+        return (object) [
             'object' => Entity::DOCUMENT,
-            'data'   => (object)$this->data,
+            'data'   => (object) $this->data,
             'nodes'  => array_map(function (Entity $node) {
                 return $node->jsonSerialize();
             }, $this->nodes),

@@ -1,4 +1,5 @@
 <?php
+
 namespace Prezly\Slate\Tests;
 
 class DocumentTest extends TestCase

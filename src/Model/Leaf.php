@@ -22,7 +22,6 @@ class Leaf implements Entity
         }
     }
 
-
     public function getText(): ?string
     {
         return $this->text;
@@ -49,7 +48,7 @@ class Leaf implements Entity
 
     public function jsonSerialize()
     {
-        return (object)[
+        return (object) [
             'object' => Entity::LEAF,
             'text'   => $this->text,
             'marks'  => array_map(function (Mark $mark) {

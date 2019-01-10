@@ -24,10 +24,10 @@ class Mark implements Entity
 
     public function jsonSerialize()
     {
-        return (object)[
+        return (object) [
             'object' => Entity::MARK,
             'type'   => $this->type,
-            'data'   => (object)[],
+            'data'   => (object) [],
         ];
     }
 }

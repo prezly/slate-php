@@ -28,7 +28,6 @@ class Inline implements Node
         }
     }
 
-
     public function getType(): string
     {
         return $this->type;
