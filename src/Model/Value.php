@@ -2,36 +2,43 @@
 
 namespace Prezly\Slate\Model;
 
-class Value implements Entity
+class Value implements JsonConvertible
 {
-    /** @var Document */
-    private $document;
+    use JsonStringConvertible;
 
+    const OBJECT = 'value';
+
+    /** @var Document */
+    public $document;
+
+    /**
+     * @param Document $document
+     * @return void
+     */
     public function __construct(Document $document)
     {
         $this->document = $document;
     }
 
-    public function getDocument(): Document
+    /**
+     * @param \stdClass $value
+     * @return self
+     */
+    public static function jsonDeserialize(\stdClass $value): self
     {
-        return $this->document;
+        return new self(
+            Document::jsonDeserialize($value->document)
+        );
     }
 
-    public function setDocument(Document $document): void
+    /**
+     * @return \stdClass
+     */
+    public function jsonSerialize(): \stdClass
     {
-        $this->document = $document;
-    }
-
-    public function jsonSerialize()
-    {
-        return (object)[
-            'object'   => Entity::VALUE,
-            'document' => $this->document->jsonSerialize(),
+        return (object) [
+            'object'   => self::OBJECT,
+            'document' => $this->document,
         ];
-    }
-
-    public function toJson(int $options = 0): string
-    {
-        return json_encode($this->jsonSerialize(), $options);
     }
 }

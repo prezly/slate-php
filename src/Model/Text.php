@@ -2,51 +2,63 @@
 
 namespace Prezly\Slate\Model;
 
-class Text implements Entity
+class Text extends TextContainingNode
 {
+    const OBJECT = 'text';
+
     /** @var Leaf[] */
-    private $leaves = [];
+    public $leaves = [];
 
     /**
      * @param \Prezly\Slate\Model\Leaf[] $leaves
+     * @return void
      */
     public function __construct(array $leaves = [])
     {
-        foreach ($leaves as $leaf) {
-            $this->addLeaf($leaf);
-        }
+        $this->leaves = $leaves;
     }
 
     /**
-     * @return \Prezly\Slate\Model\Leaf[]
+     * @return \stdClass
      */
-    public function getLeaves(): array
+    public function jsonSerialize(): \stdClass
     {
-        return $this->leaves;
-    }
-
-    public function addLeaf(Leaf $leaf): Text
-    {
-        $this->leaves[] = $leaf;
-        return $this;
-    }
-
-    public function getText(): string
-    {
-        $text = '';
-        foreach ($this->leaves as $leaf) {
-            $text .= $leaf->getText();
-        }
-        return $text;
-    }
-
-    public function jsonSerialize()
-    {
-        return (object)[
-            'object' => Entity::TEXT,
-            'leaves'  => array_map(function (Leaf $leaf) {
-                return $leaf->jsonSerialize();
-            }, $this->leaves)
+        return (object) [
+            'object' => self::OBJECT,
+            'leaves'  => $this->leaves
         ];
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return self
+     */
+    public static function jsonDeserialize(\stdClass $object): self
+    {
+        return new self(
+            array_map(
+                function(\stdClass $leaf): Leaf {
+                    return Leaf::jsonDeserialize($leaf);
+                },
+                $object->leaves
+            )
+        );
+    }
+
+    /**
+     * Concatenate all the descendant text nodes of this node.
+     *
+     * @return string
+     */
+    protected function computeTextProperty(): string
+    {
+
+        return array_reduce(
+            $this->leaves,
+            function(string $text, Leaf $leaf): string {
+                return $text . $leaf->text;
+            },
+            ''
+        );
     }
 }

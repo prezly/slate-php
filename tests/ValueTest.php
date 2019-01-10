@@ -15,13 +15,17 @@ class ValueTest extends TestCase
         $json = $this->loadFixture($file_path);
         $value = $this->loadContentFromFixture($file_path);
 
-        $json = implode("\n",
-            array_map(function (string $line): string {
-                return preg_replace('/^(\s+)/', '$1$1', $line);
-            }, explode("\n", $json))
+        $json = implode(
+            "\n",
+            array_map(
+                function (string $line): string {
+                    return preg_replace('/^(\s+)/', '$1$1', $line);
+                },
+                explode("\n", $json)
+            )
         );
 
-        $this->assertEquals(trim($json), $value->toJson(JSON_PRETTY_PRINT));
+        $this->assertEquals(trim($json), json_encode($value, JSON_PRETTY_PRINT));
     }
 
     public function fixtures(): array

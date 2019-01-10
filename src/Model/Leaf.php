@@ -2,10 +2,12 @@
 
 namespace Prezly\Slate\Model;
 
-class Leaf implements Entity
+class Leaf extends TextContainingNode
 {
+    const OBJECT = 'leaf';
+
     /** @var string */
-    private $text;
+    public $text;
 
     /** @var Mark[] */
     private $marks = [];
@@ -17,44 +19,45 @@ class Leaf implements Entity
     public function __construct(string $text, array $marks = [])
     {
         $this->text = $text;
-        foreach ($marks as $mark) {
-            $this->addMark($mark);
-        }
-    }
-
-
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
-
-    public function setText(string $text): void
-    {
-        $this->text = $text;
+        $this->marks = $marks;
     }
 
     /**
-     * @return Mark[]
+     * @return \stdClass
      */
-    public function getMarks(): array
+    public function jsonSerialize(): \stdClass
     {
-        return $this->marks;
-    }
-
-    public function addMark(Mark $mark): Leaf
-    {
-        $this->marks[] = $mark;
-        return $this;
-    }
-
-    public function jsonSerialize()
-    {
-        return (object)[
-            'object' => Entity::LEAF,
+        return (object) [
+            'object' => self::OBJECT,
             'text'   => $this->text,
-            'marks'  => array_map(function (Mark $mark) {
-                return $mark->jsonSerialize();
-            }, $this->marks)
+            'marks'  => $this->marks
         ];
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return self
+     */
+    public static function jsonDeserialize(\stdClass $object): self
+    {
+        return new self(
+            $object->text,
+            array_map(
+                function(\stdClass $mark): Mark {
+                    return Mark::jsonDeserialize($mark);
+                },
+                $object->marks
+            )
+        );
+    }
+
+    /**
+     * We are finally there, just return the text.
+     *
+     * @return string
+     */
+    protected function computeTextProperty(): string
+    {
+        return $this->text;
     }
 }

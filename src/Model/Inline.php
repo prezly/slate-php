@@ -2,93 +2,80 @@
 
 namespace Prezly\Slate\Model;
 
-class Inline implements Node
+class Inline extends TextContainingNode
 {
+    const OBJECT = 'inline';
+
     /** @var string */
-    private $type;
+    public $type;
 
-    /** @var array */
-    private $data = [];
+    /** @var \stdClass */
+    public $data;
 
-    /** @var Node[]|Text[] */
+    /** @var Inline[]|Text[] */
     private $nodes = [];
 
     /**
      * @param string $type
-     * @param array $data
-     * @param Node[]|Text[] $nodes
+     * @param Text[]|Inline[] $nodes
+     * @param \stdClass $data
      */
-    public function __construct(string $type, array $data = [], array $nodes = [])
+    public function __construct(string $type, ?array $nodes = null, ?\stdClass $data = null)
     {
         $this->type = $type;
-        $this->data = $data;
-
-        foreach ($nodes as $node) {
-            $this->addNode($node);
-        }
-    }
-
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function setData(array $data): void
-    {
-        $this->data = $data;
+        $this->nodes = $nodes ?? [new Text()];
+        $this->data = $data ?? new \stdClass();
     }
 
     /**
-     * @return Node[]|Text[]
+     * @return string
      */
-    public function getNodes(): array
+    public function computeTextProperty(): string
     {
-        return $this->nodes;
+        return array_reduce(
+            $this->nodes,
+            function(string $text, TextContainingNode $node): string {
+                return $text . $node->text;
+            },
+            ''
+        );
     }
 
     /**
-     * @param Node|Text $node
-     * @return Inline
+     * @return \stdClass
      */
-    public function addNode(Entity $node): Inline
-    {
-        if ($node instanceof Node || $node instanceof Text) {
-            $this->nodes[] = $node;
-            return $this;
-        }
-
-        throw new \InvalidArgumentException('Inline can only have Node and Text child nodes');
-    }
-
-    public function getText(): string
-    {
-        $text = '';
-        foreach ($this->nodes as $node) {
-            $text .= $node->getText();
-        }
-        return $text;
-    }
-
-    public function jsonSerialize()
+    public function jsonSerialize(): \stdClass
     {
         return (object) [
-            'object' => Entity::INLINE,
+            'object' => self::OBJECT,
             'type'   => $this->type,
-            'data'   => (object) $this->data,
-            'nodes'  => array_map(function (Entity $node) {
-                return $node->jsonSerialize();
-            }, $this->nodes)
+            'data'   => $this->data,
+            'nodes'  => $this->nodes
         ];
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return static
+     */
+    public static function jsonDeserialize(\stdClass $object)
+    {
+        return new self(
+            $object->type,
+            array_map(
+                function(\stdClass $node): TextContainingNode {
+                    switch($node->object){
+                        case self::OBJECT:
+                            return self::jsonDeserialize($node);
+                        case Text::OBJECT:
+                            return Text::jsonDeserialize($node);
+                        default:
+                            throw new \Exception("Found unknown node of kind $node->object when trying to deserialize a Inline");
+                    }
+                },
+                $object->nodes
+            ),
+            $object->data
+        );
     }
 }

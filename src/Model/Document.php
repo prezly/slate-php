@@ -2,75 +2,67 @@
 
 namespace Prezly\Slate\Model;
 
-class Document implements Node
+class Document extends TextContainingNode
 {
-    /** @var Block[] */
-    private $nodes = [];
+    const OBJECT = 'document';
 
-    /** @var array */
-    private $data = [];
+    /** @var Block[] */
+    public $nodes;
+
+    /** @var \stdClass */
+    public $data;
 
     /**
      * @param \Prezly\Slate\Model\Block[] $nodes
-     * @param array $data
+     * @param \stdClass|null $data
+     * @return void
      */
-    public function __construct(array $nodes = [], array $data = [])
+    public function __construct(array $nodes = [], ?\stdClass $data = null)
     {
-        foreach ($nodes as $node) {
-            $this->addNode($node);
-        }
-        $this->data = $data;
+        $this->nodes = $nodes;
+        $this->data = $data ?? new \stdClass();
     }
 
     /**
-     * The direct descendants of the Document node can only be Blocks
-     *
-     * @return Block[]
+     * @return string
      */
-    public function getNodes(): array
+    protected function computeTextProperty(): string
     {
-        return $this->nodes;
-    }
-
-    public function addNode(Block $block): Document
-    {
-        $this->nodes[] = $block;
-        return $this;
+        return array_reduce(
+            $this->nodes,
+            function(string $text, Block $block): string {
+                return $text . $block->text;
+            },
+            ''
+        );
     }
 
     /**
-     * @return array
+     * @return \stdClass
      */
-    public function getData(): array
+    public function jsonSerialize(): \stdClass
     {
-        return $this->data;
-    }
-
-    /**
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        $this->data = $data;
-    }
-
-    public function getText(): string
-    {
-        $text = '';
-        foreach ($this->nodes as $node) {
-            $text .= $node->getText();
-        }
-        return $text;
-    }
-
-    public function jsonSerialize()
-    {
-        return (object)[
-            'object' => Entity::DOCUMENT,
-            'data'   => (object)$this->data,
-            'nodes'  => array_map(function (Entity $node) {
-                return $node->jsonSerialize();
-            }, $this->nodes),
+        return (object) [
+            'object' => self::OBJECT,
+            'data'   => $this->data,
+            'nodes'  => $this->nodes,
         ];
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return self
+     */
+    public static function jsonDeserialize(\stdClass $object): self
+    {
+        return new self(
+            array_map(
+                function(\stdClass $block): Block {
+                    return Block::jsonDeserialize($block);
+                },
+                $object->nodes
+            ),
+            $object->data
+        );
     }
 }

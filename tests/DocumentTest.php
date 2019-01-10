@@ -1,4 +1,5 @@
 <?php
+
 namespace Prezly\Slate\Tests;
 
 class DocumentTest extends TestCase
@@ -12,7 +13,7 @@ class DocumentTest extends TestCase
 
         $this->assertEquals(
             "I'd like to introduce you to a very important person!",
-            $document->getText()
+            $document->text
         );
     }
 }

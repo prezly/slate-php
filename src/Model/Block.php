@@ -2,92 +2,76 @@
 
 namespace Prezly\Slate\Model;
 
-class Block implements Node
+class Block extends TextContainingNode
 {
+    const OBJECT = 'block';
+
     /** @var string */
-    private $type;
+    public $type;
 
-    /** @var array */
-    private $data = [];
+    /** @var \stdClass */
+    public $data;
 
-    /** @var Node[]|Text[] */
-    private $nodes = [];
+    /** @var Block[]|Text[]|Inline[] */
+    public $nodes;
 
     /**
      * @param string $type
-     * @param array $data
-     * @param Node[]|Text[] $nodes
+     * @param Block[]|Text[]|Inline[] $nodes
+     * @param \stdClass $data
      */
-    public function __construct(string $type, array $data = [], array $nodes = [])
+    public function __construct(string $type, ?array $nodes = null, ?\stdClass $data = null)
     {
         $this->type = $type;
-        $this->data = $data;
-
-        foreach ($nodes as $node) {
-            $this->addNode($node);
-        }
+        $this->nodes = $nodes ?? [new Text()];
+        $this->data = $data ?? new \stdClass();
     }
 
-    public function getType(): string
+    public function computeTextProperty(): string
     {
-        return $this->type;
+        return array_reduce(
+            $this->nodes,
+            function(string $text, TextContainingNode $node): string {
+                return $text . $node->text;
+            },
+            ''
+        );
     }
 
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function setData(array $data): void
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * @return Node[]|Text[]
-     */
-    public function getNodes(): array
-    {
-        return $this->nodes;
-    }
-
-    /**
-     * @param Node|Text $node
-     * @return Block
-     */
-    public function addNode(Entity $node): Block
-    {
-        if ($node instanceof Node || $node instanceof Text) {
-            $this->nodes[] = $node;
-            return $this;
-        }
-
-        throw new \InvalidArgumentException('Block can only have Node and Text child nodes');
-    }
-
-    public function getText(): string
-    {
-        $text = '';
-        foreach ($this->nodes as $node) {
-            $text .= $node->getText();
-        }
-        return $text;
-    }
-
-    public function jsonSerialize()
+    public function jsonSerialize(): \stdClass
     {
         return (object) [
-            'object' => Entity::BLOCK,
+            'object' => self::OBJECT,
             'type'   => $this->type,
-            'data'   => (object) $this->data,
-            'nodes'  => array_map(function (Entity $node) {
-                return $node->jsonSerialize();
-            }, $this->nodes)
+            'data'   => $this->data,
+            'nodes'  => $this->nodes,
         ];
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return self
+     */
+    public static function jsonDeserialize(\stdClass $object): self
+    {
+        return new self(
+            $object->type,
+            array_map(
+                function(\stdClass $node): TextContainingNode {
+                    switch($node->object){
+                        case self::OBJECT:
+                            return self::jsonDeserialize($node);
+                        case Inline::OBJECT:
+                            return Inline::jsonDeserialize($node);
+                        case Text::OBJECT:
+                            return Text::jsonDeserialize($node);
+                        default:
+                            throw new \Exception("Found unknown node of kind $node->object when trying to deserialize a Block");
+                    }
+                },
+                $object->nodes
+            ),
+            $object->data
+        );
     }
 }

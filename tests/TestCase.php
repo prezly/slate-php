@@ -4,7 +4,6 @@ namespace Prezly\Slate\Tests;
 
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Value;
-use Prezly\Slate\Unserializer;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -16,12 +15,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function loadContentFromFixture(string $file_path): Value
     {
         $json = $this->loadFixture($file_path);
-        $unserializer = new Unserializer();
-        return $unserializer->fromJSON($json);
+
+        return Value::fromJSON($json);
     }
 
     protected function loadDocumentFromFixture(string $file_path): Document
     {
-        return $this->loadContentFromFixture($file_path)->getDocument();
+        return $this->loadContentFromFixture($file_path)->document;
     }
 }

@@ -2,32 +2,50 @@
 
 namespace Prezly\Slate\Model;
 
-class Mark implements Entity
+class Mark implements JsonConvertible
 {
+    use JsonStringConvertible;
+
+    const OBJECT = 'mark';
+
     /** @var string */
-    private $type;
+    public $type;
 
-    public function __construct(string $type)
+    /** @var \stdClass */
+    public $data;
+
+    /**
+     * @param string $type
+     * @param \stdClass|null $data
+     * @return void
+     */
+    public function __construct(string $type, \stdClass $data = null)
     {
         $this->type = $type;
+        $this->data = $data ?? new \stdClass();
     }
 
-    public function getType(): string
+    /**
+     * @return \stdClass
+     */
+    public function jsonSerialize(): \stdClass
     {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function jsonSerialize()
-    {
-        return (object)[
-            'object' => Entity::MARK,
+        return (object) [
+            'object' => self::OBJECT,
             'type'   => $this->type,
-            'data'   => (object)[],
+            'data'   => $this->data,
         ];
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return self
+     */
+    public static function jsonDeserialize(\stdClass $object): self
+    {
+        return new self(
+            $object->type,
+            $object->data
+        );
     }
 }
