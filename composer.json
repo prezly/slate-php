@@ -1,6 +1,6 @@
 {
     "name": "prezly/slate-php",
-    "description": "Slate model implementation in PHP.",
+    "description": "PHP implementation of the Slate Rich Text Editor data model",
     "type": "library",
     "license": "proprietary",
     "authors": [
