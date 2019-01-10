@@ -13,7 +13,7 @@ class Inline extends TextContainingNode
     public $data;
 
     /** @var Inline[]|Text[] */
-    private $nodes = [];
+    public $nodes = [];
 
     /**
      * @param string $type

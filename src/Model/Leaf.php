@@ -10,7 +10,7 @@ class Leaf extends TextContainingNode
     public $text;
 
     /** @var Mark[] */
-    private $marks = [];
+    public $marks = [];
 
     /**
      * @param string $text
