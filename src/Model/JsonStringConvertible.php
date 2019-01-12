@@ -20,4 +20,14 @@ trait JsonStringConvertible
     {
         return json_encode(static::jsonSerialize());
     }
+    /**
+     * @param \stdClass $object
+     * @return static
+     */
+    abstract public static function jsonDeserialize(\stdClass $object);
+
+    /**
+     * @return \stdClass
+     */
+    abstract public function jsonSerialize(): \stdClass;
 }
