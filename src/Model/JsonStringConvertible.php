@@ -14,12 +14,13 @@ trait JsonStringConvertible
     }
 
     /**
-     * @return static
+     * @return string
      */
     public function toJSON()
     {
         return json_encode(static::jsonSerialize());
     }
+
     /**
      * @param \stdClass $object
      * @return static
