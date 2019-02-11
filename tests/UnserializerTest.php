@@ -145,6 +145,16 @@ class UnserializerTest extends TestCase
 
     /**
      * @test
+     */
+    public function it_should_set_mark_data()
+    {
+        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/mark_with_data.json");
+        $leaf = $document->getNodes()[0]->getNodes()[0]->getLeaves()[0];
+        $this->assertEquals(["href" => "/foo"], $leaf->getMarks()[0]->getData());
+    }
+
+    /**
+     * @test
      * @dataProvider invalid_documents_fixtures
      *
      * @param string $file
