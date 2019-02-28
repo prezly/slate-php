@@ -161,7 +161,7 @@ class Unserializer
 
     private function createMark(stdClass $object): Mark
     {
-        return new Mark($object->type);
+        return new Mark($object->type, (array) $object->data);
     }
 
     /**
