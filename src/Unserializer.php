@@ -115,7 +115,7 @@ class Unserializer
             $nodes[] = $this->createObject($node);
         }
 
-        return new Block($object->type, (array) $object->data, $nodes);
+        return new Block($object->type, $nodes, (array) $object->data);
     }
 
     private function createInline(stdClass $object): Inline
@@ -127,7 +127,7 @@ class Unserializer
             $nodes[] = $this->createObject($node);
         }
 
-        return new Inline($object->type, (array) $object->data, $nodes);
+        return new Inline($object->type, $nodes, (array) $object->data);
     }
 
     private function createText(stdClass $object): Text
