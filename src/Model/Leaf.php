@@ -22,7 +22,7 @@ class Leaf implements Entity
         }
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
