@@ -29,7 +29,7 @@ class Leaf implements Entity
         }
 
         $this->text = $text;
-        $this->marks = $marks;
+        $this->marks = array_values($marks);
     }
 
     /**

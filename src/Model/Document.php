@@ -27,7 +27,7 @@ class Document implements Node
                 ));
             }
         }
-        $this->nodes = $nodes;
+        $this->nodes = array_values($nodes);
         $this->data = $data;
     }
 
