@@ -32,7 +32,7 @@ class Leaf implements Entity
         $this->marks = $marks;
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
