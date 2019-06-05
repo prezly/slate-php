@@ -12,14 +12,29 @@ class Value implements Entity
         $this->document = $document;
     }
 
+    /**
+     * @return Document
+     */
     public function getDocument(): Document
     {
         return $this->document;
     }
 
+    /**
+     * @param Document $document
+     */
     public function setDocument(Document $document): void
     {
         $this->document = $document;
+    }
+
+    /**
+     * @param Document $document
+     * @return Value New instance
+     */
+    public function withDocument(Document $document): Value
+    {
+        return new self($document);
     }
 
     public function jsonSerialize()
