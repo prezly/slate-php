@@ -2,33 +2,46 @@
 
 namespace Prezly\Slate\Model;
 
+use InvalidArgumentException;
+
 class Text implements Entity
 {
     /** @var Leaf[] */
     private $leaves = [];
 
     /**
-     * @param \Prezly\Slate\Model\Leaf[] $leaves
+     * @param Leaf[] $leaves
      */
     public function __construct(array $leaves = [])
     {
         foreach ($leaves as $leaf) {
-            $this->addLeaf($leaf);
+            if (! $leaf instanceof Leaf) {
+                throw new InvalidArgumentException(sprintf(
+                    'Text can only have %s as leaves. %s given.',
+                    Leaf::class,
+                    is_object($leaf) ? get_class($leaf) : gettype($leaf)
+                ));
+            }
         }
+
+        $this->leaves = $leaves;
     }
 
     /**
-     * @return \Prezly\Slate\Model\Leaf[]
+     * @return Leaf[]
      */
     public function getLeaves(): array
     {
         return $this->leaves;
     }
 
-    public function addLeaf(Leaf $leaf): Text
+    /**
+     * @param array $leaves
+     * @return Text
+     */
+    public function withLeaves(array $leaves): self
     {
-        $this->leaves[] = $leaf;
-        return $this;
+        return new self($leaves);
     }
 
     public function getText(): string

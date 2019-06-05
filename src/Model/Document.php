@@ -2,6 +2,8 @@
 
 namespace Prezly\Slate\Model;
 
+use InvalidArgumentException;
+
 class Document implements Node
 {
     /** @var Block[] */
@@ -11,14 +13,21 @@ class Document implements Node
     private $data = [];
 
     /**
-     * @param \Prezly\Slate\Model\Block[] $nodes
+     * @param Block[] $nodes
      * @param array $data
      */
     public function __construct(array $nodes = [], array $data = [])
     {
         foreach ($nodes as $node) {
-            $this->addNode($node);
+            if (! $node instanceof Block) {
+                throw new InvalidArgumentException(sprintf(
+                    'Document can only have %s as child nodes. %s given.',
+                    Block::class,
+                    is_object($node) ? get_class($node) : gettype($node)
+                ));
+            }
         }
+        $this->nodes = $nodes;
         $this->data = $data;
     }
 
@@ -32,12 +41,6 @@ class Document implements Node
         return $this->nodes;
     }
 
-    public function addNode(Block $block): Document
-    {
-        $this->nodes[] = $block;
-        return $this;
-    }
-
     /**
      * @return array
      */
@@ -47,11 +50,21 @@ class Document implements Node
     }
 
     /**
-     * @param array $data
+     * @param Block[] $nodes
+     * @return Document New Document instance
      */
-    public function setData(array $data): void
+    public function withNodes(array $nodes): Document
     {
-        $this->data = $data;
+        return new self($nodes, $this->data);
+    }
+
+    /**
+     * @param array $data
+     * @return Document New Document instance
+     */
+    public function withData(array $data): Document
+    {
+        return new self($this->nodes, $data);
     }
 
     public function getText(): string

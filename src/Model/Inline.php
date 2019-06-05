@@ -2,6 +2,8 @@
 
 namespace Prezly\Slate\Model;
 
+use InvalidArgumentException;
+
 class Inline implements Node
 {
     /** @var string */
@@ -20,12 +22,20 @@ class Inline implements Node
      */
     public function __construct(string $type, array $data = [], array $nodes = [])
     {
+        foreach ($nodes as $node) {
+            if (! $node instanceof Node && ! $node instanceof Text) {
+                throw new InvalidArgumentException(sprintf(
+                    'Block can only have %s or %s as child nodes. %s given.',
+                    Node::class,
+                    Text::class,
+                    is_object($node) ? get_class($node) : gettype($node)
+                ));
+            }
+        }
+
         $this->type = $type;
         $this->data = $data;
-
-        foreach ($nodes as $node) {
-            $this->addNode($node);
-        }
+        $this->nodes = $nodes;
     }
 
     public function getType(): string
@@ -33,19 +43,9 @@ class Inline implements Node
         return $this->type;
     }
 
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
     public function getData(): array
     {
         return $this->data;
-    }
-
-    public function setData(array $data): void
-    {
-        $this->data = $data;
     }
 
     /**
@@ -56,18 +56,23 @@ class Inline implements Node
         return $this->nodes;
     }
 
-    /**
-     * @param Node|Text $node
-     * @return Inline
-     */
-    public function addNode(Entity $node): Inline
+    public function withType(string $type): self
     {
-        if ($node instanceof Node || $node instanceof Text) {
-            $this->nodes[] = $node;
-            return $this;
-        }
+        return new self($type, $this->data, $this->nodes);
+    }
 
-        throw new \InvalidArgumentException('Inline can only have Node and Text child nodes');
+    public function withData(array $data): self
+    {
+        return new self($this->type, $data, $this->nodes);
+    }
+
+    /**
+     * @param Node[]|Text[] $nodes
+     * @return self
+     */
+    public function withNodes(array $nodes): self
+    {
+        return new self($this->type, $this->data, $nodes);
     }
 
     public function getText(): string

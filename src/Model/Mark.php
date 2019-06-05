@@ -21,19 +21,27 @@ class Mark implements Entity
         return $this->type;
     }
 
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
     public function getData(): array
     {
         return $this->data;
     }
 
-    public function setData(array $data): void
+    /**
+     * @param string $type
+     * @return Mark new instance
+     */
+    public function withType(string $type): Mark
     {
-        $this->data = $data;
+        return new self($type, $this->data);
+    }
+
+    /**
+     * @param array $data
+     * @return Mark new instance
+     */
+    public function withData(array $data): Mark
+    {
+        return new self($this->type, $data);
     }
 
     public function jsonSerialize()

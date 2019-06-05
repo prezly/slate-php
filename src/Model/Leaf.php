@@ -2,6 +2,8 @@
 
 namespace Prezly\Slate\Model;
 
+use InvalidArgumentException;
+
 class Leaf implements Entity
 {
     /** @var string */
@@ -12,24 +14,27 @@ class Leaf implements Entity
 
     /**
      * @param string $text
-     * @param \Prezly\Slate\Model\Mark[] $marks
+     * @param Mark[] $marks
      */
     public function __construct(string $text, array $marks = [])
     {
-        $this->text = $text;
         foreach ($marks as $mark) {
-            $this->addMark($mark);
+            if (! $mark instanceof Mark) {
+                throw new InvalidArgumentException(sprintf(
+                    'Leaf can only have %s as child marks. %s given.',
+                    Mark::class,
+                    is_object($mark) ? get_class($mark) : gettype($mark)
+                ));
+            }
         }
+
+        $this->text = $text;
+        $this->marks = $marks;
     }
 
     public function getText(): ?string
     {
         return $this->text;
-    }
-
-    public function setText(string $text): void
-    {
-        $this->text = $text;
     }
 
     /**
@@ -40,21 +45,22 @@ class Leaf implements Entity
         return $this->marks;
     }
 
-    public function addMark(Mark $mark): Leaf
+    /**
+     * @param string $text
+     * @return Leaf new instance
+     */
+    public function withText(string $text): Leaf
     {
-        $this->marks[] = $mark;
-        return $this;
+        return new self($text, $this->marks);
     }
 
     /**
      * @param Mark[] $marks
+     * @return Leaf new instance
      */
-    public function setMarks(array $marks): void
+    public function withMarks(array $marks): Leaf
     {
-        $this->marks = [];
-        foreach ($marks as $mark) {
-            $this->addMark($mark);
-        }
+        return new self($this->text, $marks);
     }
 
     public function jsonSerialize()
