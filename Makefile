@@ -4,7 +4,7 @@ COMPOSER_PHAR_CHECKSUM = 4e4c1cd74b54a26618699f3190e6f5fc63bb308b13fa660f71f2a2d
 test: vendor
 	vendor/bin/phpunit
 
-vendor:
+vendor: composer.phar
 	php composer.phar install
 
 composer.phar: Makefile
