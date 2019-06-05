@@ -2,6 +2,8 @@
 
 namespace Prezly\Slate\Model;
 
+use InvalidArgumentException;
+
 class Block implements Node
 {
     /** @var string */
@@ -20,29 +22,53 @@ class Block implements Node
      */
     public function __construct(string $type, array $data = [], array $nodes = [])
     {
+        foreach ($nodes as $node) {
+            if (! $node instanceof Node && ! $node instanceof Text) {
+                throw new InvalidArgumentException(sprintf(
+                    'Block can only have %s or %s as child nodes. %s given.',
+                    Node::class,
+                    Text::class,
+                    is_object($node) ? get_class($node) : gettype($node)
+                ));
+            }
+        }
+
         $this->type = $type;
         $this->data = $data;
-
-        foreach ($nodes as $node) {
-            $this->addNode($node);
-        }
+        $this->nodes = $nodes;
     }
 
+    /**
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
+    /**
+     * @deprecated Deprecated in favor of immutable API. Use withType() instead.
+     * @see withType()
+     * @param string $type
+     */
     public function setType(string $type): void
     {
         $this->type = $type;
     }
 
+    /**
+     * @return array
+     */
     public function getData(): array
     {
         return $this->data;
     }
 
+    /**
+     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
+     * @see withData()
+     * @param array $data
+     */
     public function setData(array $data): void
     {
         $this->data = $data;
@@ -57,6 +83,8 @@ class Block implements Node
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withNodes() instead.
+     * @see withNodes()
      * @param Node|Text $node
      * @return Block
      */
@@ -70,6 +98,36 @@ class Block implements Node
         throw new \InvalidArgumentException('Block can only have Node and Text child nodes');
     }
 
+    /**
+     * @param string $type
+     * @return Block New instance
+     */
+    public function withType(string $type): Block
+    {
+        return new self($type, $this->data, $this->nodes);
+    }
+
+    /**
+     * @param array $data
+     * @return Block New instance
+     */
+    public function withData(array $data): Block
+    {
+        return new self($this->type, $data, $this->nodes);
+    }
+
+    /**
+     * @param Node[]|Text[] $nodes
+     * @return Block New instance
+     */
+    public function withNodes(array $nodes): Block
+    {
+        return new self($this->type, $this->data, $nodes);
+    }
+
+    /**
+     * @return string
+     */
     public function getText(): string
     {
         $text = '';
