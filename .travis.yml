@@ -5,3 +5,7 @@ php:
   - '7.3'
 
 before_script: make vendor
+
+cache:
+  directories:
+    - $HOME/.cache/composer
