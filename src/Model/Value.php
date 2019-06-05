@@ -22,7 +22,7 @@ class Value implements Entity
 
     /**
      * @param Document $document
-     * @return Value new instance
+     * @return Value New instance
      */
     public function withDocument(Document $document): Value
     {

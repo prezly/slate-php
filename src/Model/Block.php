@@ -35,7 +35,7 @@ class Block implements Node
 
         $this->type = $type;
         $this->data = $data;
-        $this->nodes = array_values($nodes);
+        $this->nodes = $nodes;
     }
 
     /**
@@ -63,6 +63,33 @@ class Block implements Node
     }
 
     /**
+     * @param string $type
+     * @return Block New instance
+     */
+    public function withType(string $type): Block
+    {
+        return new self($type, $this->nodes, $this->data);
+    }
+
+    /**
+     * @param array $data
+     * @return Block New instance
+     */
+    public function withData(array $data): Block
+    {
+        return new self($this->type, $this->nodes, $data);
+    }
+
+    /**
+     * @param Node[]|Text[] $nodes
+     * @return Block New instance
+     */
+    public function withNodes(array $nodes): Block
+    {
+        return new self($this->type, $nodes, $this->data);
+    }
+
+    /**
      * @return string
      */
     public function getText(): string
@@ -72,33 +99,6 @@ class Block implements Node
             $text .= $node->getText();
         }
         return $text;
-    }
-
-    /**
-     * @param string $type
-     * @return Block new instance
-     */
-    public function withType(string $type): Block
-    {
-        return new self($type, $this->data, $this->nodes);
-    }
-
-    /**
-     * @param array $data
-     * @return Block new instance
-     */
-    public function withData(array $data): Block
-    {
-        return new self($this->type, $data, $this->nodes);
-    }
-
-    /**
-     * @param Node[]|Text[] $nodes
-     * @return Block new instance
-     */
-    public function withNodes(array $nodes): Block
-    {
-        return new self($this->type, $this->data, $nodes);
     }
 
     public function jsonSerialize()

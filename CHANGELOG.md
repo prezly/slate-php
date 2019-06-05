@@ -1,5 +1,15 @@
 # Changelog
 
+## master
+
+- Reorder `Block` and `Inline` constructor arguments ([#21](https://github.com/prezly/slate-php/issues/21))
+
+## 2.2.0
+
+6 Jun 2019
+
+- Implement immutable properties setters, deprecate their mutable analogs ([#22](https://github.com/prezly/slate-php/issues/22))
+
 ## 2.1.1
 
 5 Jun 2019

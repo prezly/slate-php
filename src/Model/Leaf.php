@@ -29,9 +29,12 @@ class Leaf implements Entity
         }
 
         $this->text = $text;
-        $this->marks = array_values($marks);
+        $this->marks = $marks;
     }
 
+    /**
+     * @return string
+     */
     public function getText(): string
     {
         return $this->text;
@@ -47,7 +50,7 @@ class Leaf implements Entity
 
     /**
      * @param string $text
-     * @return Leaf new instance
+     * @return Leaf New instance
      */
     public function withText(string $text): Leaf
     {
@@ -56,7 +59,7 @@ class Leaf implements Entity
 
     /**
      * @param Mark[] $marks
-     * @return Leaf new instance
+     * @return Leaf New instance
      */
     public function withMarks(array $marks): Leaf
     {

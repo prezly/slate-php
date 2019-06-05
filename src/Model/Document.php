@@ -27,7 +27,7 @@ class Document implements Node
                 ));
             }
         }
-        $this->nodes = array_values($nodes);
+        $this->nodes = $nodes;
         $this->data = $data;
     }
 
@@ -39,6 +39,18 @@ class Document implements Node
     public function getNodes(): array
     {
         return $this->nodes;
+    }
+
+    /**
+     * @deprecated Deprecated in favor of immutable API. Use withNodes() instead.
+     * @see withNodes()
+     * @param Block $block
+     * @return Document
+     */
+    public function addNode(Block $block): Document
+    {
+        $this->nodes[] = $block;
+        return $this;
     }
 
     /**
@@ -67,6 +79,9 @@ class Document implements Node
         return new self($this->nodes, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getText(): string
     {
         $text = '';

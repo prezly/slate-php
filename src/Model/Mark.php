@@ -16,11 +16,17 @@ class Mark implements Entity
         $this->data = $data;
     }
 
+    /**
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
+    /**
+     * @return array
+     */
     public function getData(): array
     {
         return $this->data;
@@ -28,7 +34,7 @@ class Mark implements Entity
 
     /**
      * @param string $type
-     * @return Mark new instance
+     * @return Mark New instance
      */
     public function withType(string $type): Mark
     {
@@ -37,7 +43,7 @@ class Mark implements Entity
 
     /**
      * @param array $data
-     * @return Mark new instance
+     * @return Mark New instance
      */
     public function withData(array $data): Mark
     {

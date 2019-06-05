@@ -24,7 +24,7 @@ class Text implements Entity
             }
         }
 
-        $this->leaves = array_values($leaves);
+        $this->leaves = $leaves;
     }
 
     /**
@@ -36,8 +36,8 @@ class Text implements Entity
     }
 
     /**
-     * @param array $leaves
-     * @return Text
+     * @param Leaf[] $leaves
+     * @return Text New instance
      */
     public function withLeaves(array $leaves): self
     {
