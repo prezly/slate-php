@@ -46,6 +46,17 @@ class Leaf implements Entity
         return $this;
     }
 
+    /**
+     * @param Mark[] $marks
+     */
+    public function setMarks(array $marks): void
+    {
+        $this->marks = [];
+        foreach ($marks as $mark) {
+            $this->addMark($mark);
+        }
+    }
+
     public function jsonSerialize()
     {
         return (object) [
