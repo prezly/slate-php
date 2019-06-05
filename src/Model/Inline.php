@@ -25,7 +25,7 @@ class Inline implements Node
         foreach ($nodes as $node) {
             if (! $node instanceof Node && ! $node instanceof Text) {
                 throw new InvalidArgumentException(sprintf(
-                    'Block can only have %s or %s as child nodes. %s given.',
+                    'Inline can only have %s or %s as child nodes. %s given.',
                     Node::class,
                     Text::class,
                     is_object($node) ? get_class($node) : gettype($node)
