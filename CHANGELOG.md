@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- Reorder `Block` and `Inline` constructor arguments ([#21](https://github.com/prezly/slate-php/issues/21))
+
 ## 2.1.1
 
 5 Jun 2019
