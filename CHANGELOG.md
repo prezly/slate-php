@@ -4,13 +4,13 @@
 
 5 Jun 2019
 
-- Implement `Leaf::setMarks()` method (fixed #17)
+- Implement `Leaf::setMarks()` method (fixed [#17](https://github.com/prezly/slate-php/issues/17))
 
 ## 2.1.0
 
 28 Feb 2019
 
-- Add `data` property support to Mark (#15)
+- Add `data` property support to Mark ([#15](https://github.com/prezly/slate-php/pull/15))
 
 ## 2.0.0
 
