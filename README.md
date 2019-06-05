@@ -11,4 +11,8 @@ The PHP model implementation basically follows the
 
 -----------------
 
+- [Changelog](./CHANGELOG.md)
+
+-----------------
+
 Brought to you with :heart: by [Prezly](https://www.prezly.com/?utm_source=github&utm_campaign=slate).
