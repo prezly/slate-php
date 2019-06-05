@@ -17,10 +17,10 @@ class Inline implements Node
 
     /**
      * @param string $type
-     * @param array $data
      * @param Node[]|Text[] $nodes
+     * @param array $data
      */
-    public function __construct(string $type, array $data = [], array $nodes = [])
+    public function __construct(string $type, array $nodes = [], array $data = [])
     {
         foreach ($nodes as $node) {
             if (! $node instanceof Node && ! $node instanceof Text) {
