@@ -47,6 +47,8 @@ class Inline implements Node
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withType() instead.
+     * @see withType()
      * @param string $type
      */
     public function setType(string $type): void
@@ -63,6 +65,8 @@ class Inline implements Node
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
+     * @see withData()
      * @param array $data
      */
     public function setData(array $data): void
@@ -79,6 +83,8 @@ class Inline implements Node
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withNodes() instead.
+     * @see withNodes()
      * @param Node|Text $node
      * @return Inline current instance (for method chaining)
      */

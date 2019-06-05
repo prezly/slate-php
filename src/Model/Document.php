@@ -42,6 +42,8 @@ class Document implements Node
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withNodes() instead.
+     * @see withNodes()
      * @param Block $block
      * @return Document
      */
@@ -60,6 +62,8 @@ class Document implements Node
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
+     * @see withData()
      * @param array $data
      */
     public function setData(array $data): void

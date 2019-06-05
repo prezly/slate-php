@@ -25,6 +25,8 @@ class Mark implements Entity
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withType() instead.
+     * @see withType()
      * @param string $type
      */
     public function setType(string $type): void
@@ -41,6 +43,8 @@ class Mark implements Entity
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
+     * @see withData()
      * @param array $data
      */
     public function setData(array $data): void

@@ -41,6 +41,8 @@ class Leaf implements Entity
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withText() instead.
+     * @see withText()
      * @param string $text
      */
     public function setText(string $text): void
@@ -56,7 +58,9 @@ class Leaf implements Entity
         return $this->marks;
     }
 
-    /**\
+    /**
+     * @deprecated Deprecated in favor of immutable API. Use withMarks() instead.
+     * @see withMarks()
      * @param Mark $mark
      * @return Leaf current instance (for method chaining)
      */
@@ -67,6 +71,8 @@ class Leaf implements Entity
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withMarks() instead.
+     * @see withMarks()
      * @param Mark[] $marks
      */
     public function setMarks(array $marks): void

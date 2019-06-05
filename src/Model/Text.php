@@ -36,6 +36,8 @@ class Text implements Entity
     }
 
     /**
+     * @deprecated Deprecated in favor of immutable API. Use withLeaves() instead.
+     * @see withLeaves()
      * @param Leaf $leaf
      * @return Text current instance (for method chaining)
      */
