@@ -24,7 +24,7 @@ class Text implements Entity
             }
         }
 
-        $this->leaves = $leaves;
+        $this->leaves = array_values($leaves);
     }
 
     /**
