@@ -1,8 +1,12 @@
 # Changelog
 
-## master
+## 3.0.0
+
+7 Jun 2019
 
 - Reorder `Block` and `Inline` constructor arguments ([#21](https://github.com/prezly/slate-php/issues/21))
+- Drop mutable setters in favour of their immutable analogs ([#20](https://github.com/prezly/slate-php/issues/20))
+- `Leaf::getText()` is now always returning a string ([d1df77f3](https://github.com/prezly/slate-php/commit/d1df77f3b206749b3f6a69a2e48105da3fffb6e9)).
 
 ## 2.2.1
 
