@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.1
+
+7 Jun 2019
+
+- Always drop array keys of child nodes ([1f3aff87](https://github.com/prezly/slate-php/commit/1f3aff87e671da5aea7a5323dc815cf7d53f39f6)).
+
 ## 2.2.0
 
 6 Jun 2019
