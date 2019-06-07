@@ -62,16 +62,6 @@ class Document implements Node
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
-     * @see withData()
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        $this->data = $data;
-    }
-
-    /**
      * @param Block[] $nodes
      * @return Document New Document instance
      */

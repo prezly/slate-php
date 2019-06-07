@@ -41,46 +41,11 @@ class Leaf implements Entity
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withText() instead.
-     * @see withText()
-     * @param string $text
-     */
-    public function setText(string $text): void
-    {
-        $this->text = $text;
-    }
-
-    /**
      * @return Mark[]
      */
     public function getMarks(): array
     {
         return $this->marks;
-    }
-
-    /**
-     * @deprecated Deprecated in favor of immutable API. Use withMarks() instead.
-     * @see withMarks()
-     * @param Mark $mark
-     * @return Leaf current instance (for method chaining)
-     */
-    public function addMark(Mark $mark): Leaf
-    {
-        $this->marks[] = $mark;
-        return $this;
-    }
-
-    /**
-     * @deprecated Deprecated in favor of immutable API. Use withMarks() instead.
-     * @see withMarks()
-     * @param Mark[] $marks
-     */
-    public function setMarks(array $marks): void
-    {
-        $this->marks = [];
-        foreach ($marks as $mark) {
-            $this->addMark($mark);
-        }
     }
 
     /**

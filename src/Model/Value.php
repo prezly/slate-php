@@ -21,16 +21,6 @@ class Value implements Entity
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withDocument() instead.
-     * @see withDocument()
-     * @param Document $document
-     */
-    public function setDocument(Document $document): void
-    {
-        $this->document = $document;
-    }
-
-    /**
      * @param Document $document
      * @return Value New instance
      */

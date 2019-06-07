@@ -25,31 +25,11 @@ class Mark implements Entity
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withType() instead.
-     * @see withType()
-     * @param string $type
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return array
      */
     public function getData(): array
     {
         return $this->data;
-    }
-
-    /**
-     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
-     * @see withData()
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        $this->data = $data;
     }
 
     /**

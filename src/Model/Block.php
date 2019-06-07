@@ -47,16 +47,6 @@ class Block implements Node
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withType() instead.
-     * @see withType()
-     * @param string $type
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return array
      */
     public function getData(): array
@@ -65,37 +55,11 @@ class Block implements Node
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withData() instead.
-     * @see withData()
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        $this->data = $data;
-    }
-
-    /**
      * @return Node[]|Text[]
      */
     public function getNodes(): array
     {
         return $this->nodes;
-    }
-
-    /**
-     * @deprecated Deprecated in favor of immutable API. Use withNodes() instead.
-     * @see withNodes()
-     * @param Node|Text $node
-     * @return Block
-     */
-    public function addNode(Entity $node): Block
-    {
-        if ($node instanceof Node || $node instanceof Text) {
-            $this->nodes[] = $node;
-            return $this;
-        }
-
-        throw new \InvalidArgumentException('Block can only have Node and Text child nodes');
     }
 
     /**
