@@ -35,7 +35,7 @@ class Inline implements Node
 
         $this->type = $type;
         $this->data = $data;
-        $this->nodes = $nodes;
+        $this->nodes = array_values($nodes);
     }
 
     /**
