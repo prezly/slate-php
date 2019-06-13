@@ -23,7 +23,7 @@ class Unserializer implements ValueUnserializer
 
         $this->validateIsSlateObject($data, Entity::VALUE, ['document' => 'is_object']);
 
-        return $this->createValue($data);
+        return $this->unserializeValue($data);
     }
 
     /**
@@ -80,17 +80,17 @@ class Unserializer implements ValueUnserializer
         }
     }
 
-    private function createValue(stdClass $object): Value
+    private function unserializeValue($object): Value
     {
         $this->validateIsSlateObject($object->document, Entity::DOCUMENT, [
             'data'  => 'is_object',
             'nodes' => 'is_array',
         ]);
 
-        return new Value($this->createDocument($object->document));
+        return new Value($this->unserializeDocument($object->document));
     }
 
-    private function createDocument(stdClass $object): Document
+    private function unserializeDocument(stdClass $object): Document
     {
         $nodes = [];
         foreach ($object->nodes as $node) {
@@ -99,37 +99,37 @@ class Unserializer implements ValueUnserializer
                 'nodes' => 'is_array',
             ]);
 
-            $nodes[] = $this->createBlock($node);
+            $nodes[] = $this->unserializeBlock($node);
         }
 
         return new Document($nodes, (array) $object->data);
     }
 
-    private function createBlock(stdClass $object): Block
+    private function unserializeBlock(stdClass $object): Block
     {
         $nodes = [];
         foreach ((array) $object->nodes as $node) {
             $this->validateIsSlateObject($node); // generic slate object check
 
-            $nodes[] = $this->createObject($node);
+            $nodes[] = $this->unserializeEntity($node);
         }
 
         return new Block($object->type, $nodes, (array) $object->data);
     }
 
-    private function createInline(stdClass $object): Inline
+    private function unserializeInline(stdClass $object): Inline
     {
         $nodes = [];
         foreach ((array) $object->nodes as $node) {
             $this->validateIsSlateObject($object); // generic slate object check
 
-            $nodes[] = $this->createObject($node);
+            $nodes[] = $this->unserializeEntity($node);
         }
 
         return new Inline($object->type, $nodes, (array) $object->data);
     }
 
-    private function createText(stdClass $object): Text
+    private function unserializeText(stdClass $object): Text
     {
         $leaves = [];
         foreach ($object->leaves as $leaf) {
@@ -138,13 +138,13 @@ class Unserializer implements ValueUnserializer
                 'marks' => 'is_array',
             ]);
 
-            $leaves[] = $this->createLeaf($leaf);
+            $leaves[] = $this->unserializeLeaf($leaf);
         }
 
         return new Text($leaves);
     }
 
-    private function createLeaf(stdClass $object): Leaf
+    private function unserializeLeaf(stdClass $object): Leaf
     {
         $marks = [];
         foreach ($object->marks as $mark) {
@@ -153,12 +153,12 @@ class Unserializer implements ValueUnserializer
                 'data' => 'is_object',
             ]);
 
-            $marks[] = $this->createMark($mark);
+            $marks[] = $this->unserializeMark($mark);
         }
         return new Leaf($object->text, $marks);
     }
 
-    private function createMark(stdClass $object): Mark
+    private function unserializeMark(stdClass $object): Mark
     {
         return new Mark($object->type, (array) $object->data);
     }
@@ -167,7 +167,7 @@ class Unserializer implements ValueUnserializer
      * @param \stdClass $object
      * @return Object|Block|Inline|Text
      */
-    private function createObject(stdClass $object): Entity
+    private function unserializeEntity(stdClass $object): Entity
     {
         switch ($object->object) {
             case Entity::BLOCK:
@@ -177,7 +177,7 @@ class Unserializer implements ValueUnserializer
                     'nodes' => 'is_array',
                 ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
-                return $this->createBlock($object);
+                return $this->unserializeBlock($object);
 
             case Entity::INLINE:
                 $this->validateIsSlateObject($object, Entity::INLINE, [
@@ -186,14 +186,14 @@ class Unserializer implements ValueUnserializer
                     'nodes' => 'is_array',
                 ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
-                return $this->createInline($object);
+                return $this->unserializeInline($object);
 
             case Entity::TEXT:
                 $this->validateIsSlateObject($object, Entity::TEXT, [
                     'leaves' => 'is_array',
                 ]);
                 /** @noinspection PhpIncompatibleReturnTypeInspection */
-                return $this->createText($object);
+                return $this->unserializeText($object);
         }
         throw new RuntimeException("Unsupported object type: " . $object->object);
     }
