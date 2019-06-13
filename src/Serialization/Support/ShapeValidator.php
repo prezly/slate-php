@@ -1,5 +1,5 @@
 <?php
-namespace Prezly\Slate\Serialization;
+namespace Prezly\Slate\Serialization\Support;
 
 use InvalidArgumentException;
 use stdClass;

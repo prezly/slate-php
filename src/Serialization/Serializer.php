@@ -10,6 +10,7 @@ use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
+use Prezly\Slate\Serialization\Support\ShapeValidator;
 use RuntimeException;
 
 class Serializer implements ValueSerializer
