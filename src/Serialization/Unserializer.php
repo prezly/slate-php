@@ -21,17 +21,49 @@ class Unserializer implements ValueUnserializer
     {
         $data = json_decode($json, false);
 
-        $this->validateIsSlateObject($data, Entity::VALUE, ['document' => 'is_object']);
-
         return $this->unserializeValue($data);
+    }
+
+    /**
+     * @param mixed $object
+     * @return Object|Block|Inline|Text
+     */
+    private function unserializeEntity($object): Entity
+    {
+        $object = $this->validateSlateObject($object); // generic slate object check
+
+        switch ($object->object) {
+            case Entity::VALUE:
+                return $this->unserializeValue($object);
+
+            case Entity::DOCUMENT:
+                return $this->unserializeDocument($object);
+
+            case Entity::BLOCK:
+                return $this->unserializeBlock($object);
+
+            case Entity::INLINE:
+                return $this->unserializeInline($object);
+
+            case Entity::TEXT:
+                return $this->unserializeText($object);
+
+            case Entity::LEAF:
+                return $this->unserializeLeaf($object);
+
+            case Entity::MARK:
+                return $this->unserializeMark($object);
+        }
+        throw new RuntimeException("Unsupported object type: " . $object->object);
     }
 
     /**
      * @param \stdClass|mixed $object
      * @param string|null $object_type
-     * @param callable[] $shape [ $property_name => $checker, ... ]
+     * @param callable[] $shape [ string $property_name => string $checker, ... ]
+     * @return \stdClass
      */
-    private function validateIsSlateObject($object, string $object_type = null, array $shape = []): void
+    private function validateSlateObject($object, string $object_type = null, array $shape = []): stdClass
     {
         // Validate it's an stdClass
         if (!$object instanceof stdClass) {
@@ -78,123 +110,123 @@ class Unserializer implements ValueUnserializer
                 ));
             }
         }
+
+        return $object;
     }
 
+    /**
+     * @param mixed $object
+     * @return \Prezly\Slate\Model\Value
+     */
     private function unserializeValue($object): Value
     {
-        $this->validateIsSlateObject($object->document, Entity::DOCUMENT, [
-            'data'  => 'is_object',
-            'nodes' => 'is_array',
-        ]);
+        $object = $this->validateSlateObject($object, Entity::VALUE, ['document' => 'is_object']);
 
         return new Value($this->unserializeDocument($object->document));
     }
 
-    private function unserializeDocument(stdClass $object): Document
+    /**
+     * @param mixed $object
+     * @return \Prezly\Slate\Model\Document
+     */
+    private function unserializeDocument($object): Document
     {
+        $object = $this->validateSlateObject($object, Entity::DOCUMENT, [
+            'data'  => 'is_object',
+            'nodes' => 'is_array',
+        ]);
+
         $nodes = [];
         foreach ($object->nodes as $node) {
-            $this->validateIsSlateObject($node, Entity::BLOCK, [
-                'data'  => 'is_object',
-                'nodes' => 'is_array',
-            ]);
-
             $nodes[] = $this->unserializeBlock($node);
         }
 
         return new Document($nodes, (array) $object->data);
     }
 
-    private function unserializeBlock(stdClass $object): Block
+    private function unserializeBlock($object): Block
     {
-        $nodes = [];
-        foreach ((array) $object->nodes as $node) {
-            $this->validateIsSlateObject($node); // generic slate object check
+        $object = $this->validateSlateObject($object, Entity::BLOCK, [
+            'type'  => 'is_string',
+            'data'  => 'is_object',
+            'nodes' => 'is_array',
+        ]);
 
+        $nodes = [];
+        foreach ($object->nodes as $node) {
             $nodes[] = $this->unserializeEntity($node);
         }
 
         return new Block($object->type, $nodes, (array) $object->data);
     }
 
-    private function unserializeInline(stdClass $object): Inline
+    /**
+     * @param mixed $object
+     * @return \Prezly\Slate\Model\Inline
+     */
+    private function unserializeInline($object): Inline
     {
-        $nodes = [];
-        foreach ((array) $object->nodes as $node) {
-            $this->validateIsSlateObject($object); // generic slate object check
+        $object = $this->validateSlateObject($object, Entity::INLINE, [
+            'type'  => 'is_string',
+            'data'  => 'is_object',
+            'nodes' => 'is_array',
+        ]);
 
+        $nodes = [];
+        foreach ($object->nodes as $node) {
             $nodes[] = $this->unserializeEntity($node);
         }
 
         return new Inline($object->type, $nodes, (array) $object->data);
     }
 
-    private function unserializeText(stdClass $object): Text
+    /**
+     * @param mixed $object
+     * @return \Prezly\Slate\Model\Text
+     */
+    private function unserializeText($object): Text
     {
+        $this->validateSlateObject($object, Entity::TEXT, [
+            'leaves' => 'is_array',
+        ]);
+
         $leaves = [];
         foreach ($object->leaves as $leaf) {
-            $this->validateIsSlateObject($leaf, Entity::LEAF, [
-                'text'  => 'is_string',
-                'marks' => 'is_array',
-            ]);
-
             $leaves[] = $this->unserializeLeaf($leaf);
         }
 
         return new Text($leaves);
     }
 
-    private function unserializeLeaf(stdClass $object): Leaf
+    /**
+     * @param mixed $object
+     * @return \Prezly\Slate\Model\Leaf
+     */
+    private function unserializeLeaf($object): Leaf
     {
+        $object = $this->validateSlateObject($object, Entity::LEAF, [
+            'text'  => 'is_string',
+            'marks' => 'is_array',
+        ]);
+
         $marks = [];
         foreach ($object->marks as $mark) {
-            $this->validateIsSlateObject($mark, Entity::MARK, [
-                'type' => 'is_string',
-                'data' => 'is_object',
-            ]);
-
             $marks[] = $this->unserializeMark($mark);
         }
+
         return new Leaf($object->text, $marks);
     }
 
-    private function unserializeMark(stdClass $object): Mark
-    {
-        return new Mark($object->type, (array) $object->data);
-    }
-
     /**
-     * @param \stdClass $object
-     * @return Object|Block|Inline|Text
+     * @param mixed $object
+     * @return \Prezly\Slate\Model\Mark
      */
-    private function unserializeEntity(stdClass $object): Entity
+    private function unserializeMark($object): Mark
     {
-        switch ($object->object) {
-            case Entity::BLOCK:
-                $this->validateIsSlateObject($object, Entity::BLOCK, [
-                    'type'  => 'is_string',
-                    'data'  => 'is_object',
-                    'nodes' => 'is_array',
-                ]);
-                /** @noinspection PhpIncompatibleReturnTypeInspection */
-                return $this->unserializeBlock($object);
-
-            case Entity::INLINE:
-                $this->validateIsSlateObject($object, Entity::INLINE, [
-                    'type'  => 'is_string',
-                    'data'  => 'is_object',
-                    'nodes' => 'is_array',
-                ]);
-                /** @noinspection PhpIncompatibleReturnTypeInspection */
-                return $this->unserializeInline($object);
-
-            case Entity::TEXT:
-                $this->validateIsSlateObject($object, Entity::TEXT, [
-                    'leaves' => 'is_array',
-                ]);
-                /** @noinspection PhpIncompatibleReturnTypeInspection */
-                return $this->unserializeText($object);
-        }
-        throw new RuntimeException("Unsupported object type: " . $object->object);
+        $object = $this->validateSlateObject($object, Entity::MARK, [
+            'type' => 'is_string',
+            'data' => 'is_object',
+        ]);
+        return new Mark($object->type, (array) $object->data);
     }
 }
