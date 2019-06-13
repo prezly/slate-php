@@ -38,7 +38,6 @@ class Unserializer implements ValueUnserializer
             throw new InvalidArgumentException(sprintf(
                 'Unexpected JSON value given: %s. An object is expected to construct %s.',
                 gettype($object),
-                ucfirst($object_type),
                 ucfirst($object_type) ?: 'a Slate structure object'
             ));
         }
