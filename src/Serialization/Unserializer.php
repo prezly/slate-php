@@ -11,9 +11,7 @@ use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
 
-use InvalidArgumentException;
 use RuntimeException;
-use stdClass;
 
 class Unserializer implements ValueUnserializer
 {
@@ -30,7 +28,7 @@ class Unserializer implements ValueUnserializer
      */
     private function unserializeEntity($object): Entity
     {
-        $object = $this->validateSlateObject($object); // generic slate object check
+        $object = ShapeValidator::validateSlateObject($object); // generic slate object check
 
         switch ($object->object) {
             case Entity::VALUE:
@@ -58,69 +56,12 @@ class Unserializer implements ValueUnserializer
     }
 
     /**
-     * @param \stdClass|mixed $object
-     * @param string|null $object_type
-     * @param callable[] $shape [ string $property_name => string $checker, ... ]
-     * @return \stdClass
-     */
-    private function validateSlateObject($object, string $object_type = null, array $shape = []): stdClass
-    {
-        // Validate it's an stdClass
-        if (!$object instanceof stdClass) {
-            throw new InvalidArgumentException(sprintf(
-                'Unexpected JSON value given: %s. An object is expected to construct %s.',
-                gettype($object),
-                ucfirst($object_type) ?: 'a Slate structure object'
-            ));
-        }
-
-        // Validate "object" property presence
-        if (!property_exists($object, 'object')) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid JSON structure given to construct %s. It should have "object" property.',
-                ucfirst($object_type)
-            ));
-        }
-
-        // Validate "object" property value
-        if ($object_type !== null && $object_type !== $object->object) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid JSON structure given to construct %s. It should have "object" property set to "%s".',
-                ucfirst($object_type),
-                $object_type
-            ));
-        }
-
-        // Validate Shape
-        foreach ($shape as $property => $checker) {
-            if (!property_exists($object, $property)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Unexpected JSON structure given for %s. A %s should have "%s" property.',
-                    ucfirst($object_type),
-                    ucfirst($object_type),
-                    $property
-                ));
-            }
-            if (!$checker($object->$property)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Unexpected JSON structure given for %s. The "%s" property should be %s.',
-                    ucfirst($object_type),
-                    $property,
-                    substr($checker, 0, 3) === 'is_' ? substr($checker, 3) : $checker
-                ));
-            }
-        }
-
-        return $object;
-    }
-
-    /**
      * @param mixed $object
      * @return \Prezly\Slate\Model\Value
      */
     private function unserializeValue($object): Value
     {
-        $object = $this->validateSlateObject($object, Entity::VALUE, ['document' => 'is_object']);
+        $object = ShapeValidator::validateSlateObject($object, Entity::VALUE, ['document' => 'is_object']);
 
         return new Value($this->unserializeDocument($object->document));
     }
@@ -131,7 +72,7 @@ class Unserializer implements ValueUnserializer
      */
     private function unserializeDocument($object): Document
     {
-        $object = $this->validateSlateObject($object, Entity::DOCUMENT, [
+        $object = ShapeValidator::validateSlateObject($object, Entity::DOCUMENT, [
             'data'  => 'is_object',
             'nodes' => 'is_array',
         ]);
@@ -146,7 +87,7 @@ class Unserializer implements ValueUnserializer
 
     private function unserializeBlock($object): Block
     {
-        $object = $this->validateSlateObject($object, Entity::BLOCK, [
+        $object = ShapeValidator::validateSlateObject($object, Entity::BLOCK, [
             'type'  => 'is_string',
             'data'  => 'is_object',
             'nodes' => 'is_array',
@@ -166,7 +107,7 @@ class Unserializer implements ValueUnserializer
      */
     private function unserializeInline($object): Inline
     {
-        $object = $this->validateSlateObject($object, Entity::INLINE, [
+        $object = ShapeValidator::validateSlateObject($object, Entity::INLINE, [
             'type'  => 'is_string',
             'data'  => 'is_object',
             'nodes' => 'is_array',
@@ -186,7 +127,7 @@ class Unserializer implements ValueUnserializer
      */
     private function unserializeText($object): Text
     {
-        $this->validateSlateObject($object, Entity::TEXT, [
+        ShapeValidator::validateSlateObject($object, Entity::TEXT, [
             'leaves' => 'is_array',
         ]);
 
@@ -204,7 +145,7 @@ class Unserializer implements ValueUnserializer
      */
     private function unserializeLeaf($object): Leaf
     {
-        $object = $this->validateSlateObject($object, Entity::LEAF, [
+        $object = ShapeValidator::validateSlateObject($object, Entity::LEAF, [
             'text'  => 'is_string',
             'marks' => 'is_array',
         ]);
@@ -223,7 +164,7 @@ class Unserializer implements ValueUnserializer
      */
     private function unserializeMark($object): Mark
     {
-        $object = $this->validateSlateObject($object, Entity::MARK, [
+        $object = ShapeValidator::validateSlateObject($object, Entity::MARK, [
             'type' => 'is_string',
             'data' => 'is_object',
         ]);
