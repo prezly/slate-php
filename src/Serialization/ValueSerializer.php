@@ -6,4 +6,6 @@ use Prezly\Slate\Model\Value;
 interface ValueSerializer
 {
     public function toJson(Value $value, int $json_options = null): string;
+
+    public function fromJson(string $value): Value;
 }

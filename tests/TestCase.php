@@ -4,7 +4,7 @@ namespace Prezly\Slate\Tests;
 
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Value;
-use Prezly\Slate\Serialization\Unserializer;
+use Prezly\Slate\Serialization\Serializer;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -16,8 +16,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function loadContentFromFixture(string $file_path): Value
     {
         $json = $this->loadFixture($file_path);
-        $unserializer = new Unserializer();
-        return $unserializer->fromJson($json);
+        $serializer = new Serializer();
+        return $serializer->fromJson($json);
     }
 
     protected function loadDocumentFromFixture(string $file_path): Document
