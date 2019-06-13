@@ -42,18 +42,6 @@ class Document implements Node
     }
 
     /**
-     * @deprecated Deprecated in favor of immutable API. Use withNodes() instead.
-     * @see withNodes()
-     * @param Block $block
-     * @return Document
-     */
-    public function addNode(Block $block): Document
-    {
-        $this->nodes[] = $block;
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getData(): array
