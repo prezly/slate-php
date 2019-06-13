@@ -82,7 +82,7 @@ class Serializer implements ValueSerializer
             'type'   => $inline->getType(),
             'data'   => (object) $inline->getData(),
             'nodes'  => array_map(function (Entity $node) {
-                return $this->serializeEntity($node->jsonSerialize());
+                return $this->serializeEntity($node);
             }, $inline->getNodes())
         ];
     }
