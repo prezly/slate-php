@@ -108,20 +108,17 @@ class UnserializerTest extends TestCase
         /** @var Block $block */
         $this->assertInstanceOf(Block::class, $block);
         $this->assertEquals('paragraph', $block->getType());
-        $this->assertCount(1, $block->getNodes());
+        $this->assertCount(3, $block->getNodes());
 
         /** @var Text $text */
         $text = $block->getNodes()[0];
         $this->assertInstanceOf(Text::class, $text);
-        $this->assertCount(6, $text->getLeaves());
+        $this->assertCount(3, $text->getLeaves());
 
         $expected_texts = [
             "I'd like to introduce ",
             'you',
             ' to a ',
-            'very important ',
-            'person',
-            '!',
         ];
 
         foreach ($text->getLeaves() as $i => $leaf) {

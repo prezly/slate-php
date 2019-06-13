@@ -32,34 +32,53 @@
                 "object": "leaf",
                 "text": " to a ",
                 "marks": []
-              },
+              }
+            ]
+          },
+          {
+            "object": "inline",
+            "type": "link",
+            "data": {
+              "href": "https:\/\/en.wikipedia.org\/wiki\/Elvis_Presley"
+            },
+            "nodes": [
               {
-                "object": "leaf",
-                "text": "very important ",
-                "marks": [
+                "object": "text",
+                "leaves": [
                   {
-                    "object": "mark",
-                    "type": "bold",
-                    "data": {}
-                  }
-                ]
-              },
-              {
-                "object": "leaf",
-                "text": "person",
-                "marks": [
-                  {
-                    "object": "mark",
-                    "type": "italic",
-                    "data": {}
+                    "object": "leaf",
+                    "text": "very important ",
+                    "marks": [
+                      {
+                        "object": "mark",
+                        "type": "bold",
+                        "data": {}
+                      }
+                    ]
                   },
                   {
-                    "object": "mark",
-                    "type": "bold",
-                    "data": {}
+                    "object": "leaf",
+                    "text": "person",
+                    "marks": [
+                      {
+                        "object": "mark",
+                        "type": "italic",
+                        "data": {}
+                      },
+                      {
+                        "object": "mark",
+                        "type": "bold",
+                        "data": {}
+                      }
+                    ]
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "object": "text",
+            "leaves": [
               {
                 "object": "leaf",
                 "text": "!",
