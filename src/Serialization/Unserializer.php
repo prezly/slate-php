@@ -1,6 +1,6 @@
 <?php
 
-namespace Prezly\Slate;
+namespace Prezly\Slate\Serialization;
 
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
@@ -15,9 +15,9 @@ use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
 
-class Unserializer
+class Unserializer implements ValueUnserializer
 {
-    public function fromJSON(string $json): Value
+    public function fromJson(string $json): Value
     {
         $data = json_decode($json, false);
 

@@ -6,7 +6,7 @@ use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Inline;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Text;
-use Prezly\Slate\Unserializer;
+use Prezly\Slate\Serialization\Unserializer;
 
 use InvalidArgumentException;
 
@@ -32,7 +32,7 @@ class UnserializerTest extends TestCase
     public function it_should_expect_top_level_document()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->unserializer->fromJSON("{}");
+        $this->unserializer->fromJson("{}");
     }
 
     /**
@@ -60,7 +60,7 @@ class UnserializerTest extends TestCase
     {
         $fixture = $this->loadFixture(__DIR__ . "/fixtures/document_with_inline_children.json");
         $this->expectException(InvalidArgumentException::class);
-        $this->unserializer->fromJSON($fixture);
+        $this->unserializer->fromJson($fixture);
     }
 
     /**
