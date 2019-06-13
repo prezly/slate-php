@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.1
+
+13 Jun 2019
+
+- Drop missed mutable setter `Document::addNode()` ([4c32a883](https://github.com/prezly/slate-php/commit/4c32a8833502283d47abc5dd9862be18a1fc22c8)).
+
 ## 3.0.0
 
 7 Jun 2019
