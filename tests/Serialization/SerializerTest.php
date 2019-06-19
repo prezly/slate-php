@@ -56,15 +56,22 @@ class SerializerTest extends TestCase
      */
     public function it_should_serialize_to_different_versions()
     {
-        $json_v0_44 = $this->serializer()->toJson(new Value(new Document()), '0.44');
-        $json_v0_44_13 = $this->serializer()->toJson(new Value(new Document()), '0.44.13');
-        $json_v0_45 = $this->serializer()->toJson(new Value(new Document()), '0.45');
-        $json_v0_45_1 = $this->serializer()->toJson(new Value(new Document()), '0.45.1');
+        $value = new Value(new Document());
+
+        $json_v0_44 = $this->serializer()->toJson($value, '0.44');
+        $json_v0_44_13 = $this->serializer()->toJson($value, '0.44.13');
+        $json_v0_45 = $this->serializer()->toJson($value, '0.45');
+        $json_v0_45_1 = $this->serializer()->toJson($value, '0.45.1');
 
         $this->assertArraySubset(['version' => '0.44'], json_decode($json_v0_44, true));
         $this->assertArraySubset(['version' => '0.44.13'], json_decode($json_v0_44_13, true));
         $this->assertArraySubset(['version' => '0.45'], json_decode($json_v0_45, true));
         $this->assertArraySubset(['version' => '0.45.1'], json_decode($json_v0_45_1, true));
+
+        $this->assertEquals($value, $this->serializer()->fromJson($json_v0_44));
+        $this->assertEquals($value, $this->serializer()->fromJson($json_v0_44_13));
+        $this->assertEquals($value, $this->serializer()->fromJson($json_v0_45));
+        $this->assertEquals($value, $this->serializer()->fromJson($json_v0_45_1));
     }
 
     /**
