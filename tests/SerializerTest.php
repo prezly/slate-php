@@ -195,13 +195,13 @@ class SerializerTest extends TestCase
     public function invalid_documents_fixtures()
     {
         return [
-            [__DIR__ . '/fixtures/invalid_document_01.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'],
-            [__DIR__ . '/fixtures/invalid_document_02.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'],
-            [__DIR__ . '/fixtures/invalid_document_03.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'],
-            [__DIR__ . '/fixtures/invalid_document_04.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'],
-            [__DIR__ . '/fixtures/invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
-            [__DIR__ . '/fixtures/invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
-            [__DIR__ . '/fixtures/invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
+            [__DIR__ . '/fixtures/invalid_document_01_not_an_object_int.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'],
+            [__DIR__ . '/fixtures/invalid_document_02_not_an_object_string.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'],
+            [__DIR__ . '/fixtures/invalid_document_03_empty_object.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'],
+            [__DIR__ . '/fixtures/invalid_document_04_invalid_value_object.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'],
+            [__DIR__ . '/fixtures/invalid_document_05_missing_document.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
+            [__DIR__ . '/fixtures/invalid_document_06_null_document.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
+            [__DIR__ . '/fixtures/invalid_document_07_invalid_document_object.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
             [__DIR__ . '/fixtures/invalid_document_08_invalid_leaf_object.json', 'Invalid JSON structure given to construct Leaf. It should have "object" property set to "leaf".'],
         ];
     }
