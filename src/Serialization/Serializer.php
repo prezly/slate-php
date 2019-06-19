@@ -68,11 +68,13 @@ class Serializer implements ValueSerializer
      */
     private function getSerializer(string $version): EntitySerializer
     {
-        if (! isset(self::SERIALIZATION_VERSIONS[$version])) {
+        $generic_version = implode('.', array_slice(explode('.', $version), 0, 2));
+
+        if (! isset(self::SERIALIZATION_VERSIONS[$generic_version])) {
             throw new VersionNotSupportedException($version);
         }
 
-        $serializer_class = self::SERIALIZATION_VERSIONS[$version];
+        $serializer_class = self::SERIALIZATION_VERSIONS[$generic_version];
         /** @var \Prezly\Slate\Serialization\Versions\EntitySerializer $serializer */
         $serializer = new $serializer_class();
 
