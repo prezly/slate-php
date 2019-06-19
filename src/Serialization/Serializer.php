@@ -11,8 +11,6 @@ use stdClass;
 
 class Serializer implements ValueSerializer
 {
-    public static $default_version = self::LATEST_SERIALIZATION_VERSION;
-
     public const LATEST_SERIALIZATION_VERSION = '0.45';
 
     private const SERIALIZATION_VERSIONS = [
@@ -24,11 +22,15 @@ class Serializer implements ValueSerializer
         '0.45' => v0_40_EntitySerializer::class,
     ];
 
+    /** @var string */
+    private $default_version;
+
     /** @var int */
     private $json_encode_options;
 
-    public function __construct(int $json_encode_options = null)
+    public function __construct(?string $default_version = self::LATEST_SERIALIZATION_VERSION, int $json_encode_options = null)
     {
+        $this->default_version = $default_version ?? self::LATEST_SERIALIZATION_VERSION;
         $this->json_encode_options = $json_encode_options;
     }
 
@@ -47,7 +49,7 @@ class Serializer implements ValueSerializer
 
     private function serializeValue(Value $value, ?string $version): stdClass
     {
-        $version = $version ?? self::$default_version;
+        $version = $version ?? $this->default_version;
         $object = $this->getSerializer($version)->serializeValue($value);
         $object->version = $version;
 
@@ -57,7 +59,7 @@ class Serializer implements ValueSerializer
     private function unserializeValue($value, ?string $default_version = null): Value
     {
         $object = ShapeValidator::validateSlateObject($value, Entity::VALUE);
-        $version = $object->version ?? $default_version ?? self::$default_version;
+        $version = $object->version ?? $default_version ?? $this->default_version;
 
         return $this->getSerializer($version)->unserializeValue($object);
     }

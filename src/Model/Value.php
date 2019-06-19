@@ -33,7 +33,7 @@ class Value implements Entity
 
     public function toJson(int $options = 0): string
     {
-        $serializer = new Serializer($options);
+        $serializer = new Serializer(Serializer::LATEST_SERIALIZATION_VERSION, $options);
         return $serializer->toJson($this);
     }
 }

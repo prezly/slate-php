@@ -10,9 +10,9 @@ use Prezly\Slate\Tests\TestCase;
 
 class SerializerTest extends TestCase
 {
-    private function serializer(): Serializer
+    private function serializer(string $version = null): Serializer
     {
-        return new Serializer();
+        return new Serializer($version);
     }
 
     /**
@@ -83,6 +83,19 @@ class SerializerTest extends TestCase
         $json = $this->serializer()->toJson($value);
 
         $this->assertArraySubset(['version' => Serializer::LATEST_SERIALIZATION_VERSION], json_decode($json, true));
+        $this->assertEquals($value, $this->serializer()->fromJson($json));
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_be_possible_to_set_default_serialization_version()
+    {
+        $value = new Value(new Document());
+        $json = $this->serializer('0.44')->toJson($value);
+
+        $this->assertNotEquals(Serializer::LATEST_SERIALIZATION_VERSION, '0.44');
+        $this->assertArraySubset(['version' => '0.44'], json_decode($json, true));
         $this->assertEquals($value, $this->serializer()->fromJson($json));
     }
 
