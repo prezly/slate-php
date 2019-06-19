@@ -13,7 +13,7 @@ class Serializer implements ValueSerializer
 {
     public static $default_version = self::LATEST_SERIALIZATION_VERSION;
 
-    private const LATEST_SERIALIZATION_VERSION = '0.45';
+    public const LATEST_SERIALIZATION_VERSION = '0.45';
 
     private const SERIALIZATION_VERSIONS = [
         '0.40' => v0_40_EntitySerializer::class,

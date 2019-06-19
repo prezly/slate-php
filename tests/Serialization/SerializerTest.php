@@ -77,6 +77,18 @@ class SerializerTest extends TestCase
     /**
      * @test
      */
+    public function it_should_serialize_to_latest_version_by_default()
+    {
+        $value = new Value(new Document());
+        $json = $this->serializer()->toJson($value);
+
+        $this->assertArraySubset(['version' => Serializer::LATEST_SERIALIZATION_VERSION], json_decode($json, true));
+        $this->assertEquals($value, $this->serializer()->fromJson($json));
+    }
+
+    /**
+     * @test
+     */
     public function it_should_throw_on_unsupported_serialization_version()
     {
         $this->expectException(UnsupprotedVersionException::class);
