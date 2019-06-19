@@ -1,5 +1,5 @@
 <?php
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\Serialization;
 
 use InvalidArgumentException;
 use Prezly\Slate\Model\Block;
@@ -7,6 +7,7 @@ use Prezly\Slate\Model\Inline;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Serialization\Serializer;
+use Prezly\Slate\Tests\TestCase;
 
 class SerializerTest extends TestCase
 {

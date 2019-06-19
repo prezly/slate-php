@@ -1,9 +1,10 @@
 <?php
 
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\Model;
 
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Value;
+use Prezly\Slate\Tests\TestCase;
 
 class ValueTest extends TestCase
 {
@@ -46,7 +47,7 @@ class ValueTest extends TestCase
     public function fixtures(): array
     {
         return [
-            'document_with_text.json' => [__DIR__ . '/fixtures/document_with_text.json'],
+            'document_with_text.json' => [__DIR__ . '/../fixtures/document_with_text.json'],
         ];
     }
 }

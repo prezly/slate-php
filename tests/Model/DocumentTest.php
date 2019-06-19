@@ -1,9 +1,10 @@
 <?php
 
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\Model;
 
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
+use Prezly\Slate\Tests\TestCase;
 
 class DocumentTest extends TestCase
 {
@@ -12,7 +13,7 @@ class DocumentTest extends TestCase
      */
     public function it_should_get_concatenated_plain_text_content_of_inner_nodes()
     {
-        $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
+        $document = $this->loadDocumentFromFixture(__DIR__ . '/../fixtures/document_with_text.json');
 
         $this->assertEquals(
             "I'd like to introduce you to a very important person!",
