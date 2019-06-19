@@ -4,7 +4,6 @@ namespace Prezly\Slate\Tests\Serialization\Versions\v0_40;
 use InvalidArgumentException;
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
-use Prezly\Slate\Model\Entity;
 use Prezly\Slate\Model\Inline;
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
@@ -61,124 +60,6 @@ class v0_40_EntitySerializerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->serializer()->unserializeValue($invalid_value);
-    }
-
-    /**
-     * @test
-     */
-    public function it_should_serialize_complete_slate_value(): void
-    {
-        $value = new Value(
-            new Document(
-                [
-                    new Block('image', [], [
-                        'src' => 'http://memory.loc.gov/pnp/cph/3d00000/3d02000/3d02000/3d02067r.jpg',
-                    ]),
-                    new Block('header', [
-                        new Text([
-                            new Leaf('Return to Sender'),
-                        ]),
-                    ]),
-                    new Block('paragraph', [
-                        new Inline('quote'),
-                        new Text([
-                            new Leaf('I gave a letter to the postman'),
-                            new Leaf("He put it his sack", [new Mark('bold')]),
-                            new Leaf('Bright in early next morning', [new Mark('underlined'), new Mark('bold')]),
-                            new Leaf('He brought my letter back', [new Mark('underlined')]),
-                        ]),
-                    ]),
-                ]
-            )
-        );
-
-        $serialized = $this->serializer()->serializeValue($value);
-
-        $this->assertEquals((object) [
-            'object'   => 'value',
-            'document' => (object) [
-                'object' => 'document',
-                'data'   => (object) [],
-                'nodes'  => [
-                    (object) [
-                        'object' => 'block',
-                        'type'   => 'image',
-                        'data'   => (object) ['src' => 'http://memory.loc.gov/pnp/cph/3d00000/3d02000/3d02000/3d02067r.jpg'],
-                        'nodes'  => [],
-                    ],
-                    (object) [
-                        'object' => 'block',
-                        'type'   => 'header',
-                        'data'   => (object) [],
-                        'nodes'  => [
-                            (object) [
-                                'object' => 'text',
-                                'leaves' => [
-                                    (object) [
-                                        'object' => 'leaf',
-                                        'text'   => 'Return to Sender',
-                                        'marks'  => [],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    (object) [
-                        'object' => 'block',
-                        'type'   => 'paragraph',
-                        'data'   => (object) [],
-                        'nodes'  => [
-                            (object) [
-                                'object' => 'inline',
-                                'type'   => 'quote',
-                                'nodes'  => [],
-                                'data'   => (object) [],
-                            ],
-                            (object) [
-                                'object' => 'text',
-                                'leaves' => [
-                                    (object) [
-                                        'object' => 'leaf',
-                                        'text'   => 'I gave a letter to the postman',
-                                        'marks'  => [],
-                                    ],
-                                    (object) [
-                                        'object' => 'leaf',
-                                        'text'   => 'He put it his sack',
-                                        'marks'  => [
-                                            (object) ['object' => 'mark', 'type' => 'bold', 'data' => (object) []],
-                                        ],
-                                    ],
-                                    (object) [
-                                        'object' => 'leaf',
-                                        'text'   => 'Bright in early next morning',
-                                        'marks'  => [
-                                            (object) [
-                                                'object' => 'mark',
-                                                'type'   => 'underlined',
-                                                'data'   => (object) [],
-                                            ],
-                                            (object) ['object' => 'mark', 'type' => 'bold', 'data' => (object) []],
-                                        ],
-                                    ],
-                                    (object) [
-                                        'object' => 'leaf',
-                                        'text'   => 'He brought my letter back',
-                                        'marks'  => [
-                                            (object) [
-                                                'object' => 'mark',
-                                                'type'   => 'underlined',
-                                                'data'   => (object) [],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ], $serialized);
     }
 
     public function marks(): iterable
@@ -357,17 +238,11 @@ class v0_40_EntitySerializerTest extends TestCase
                 ],
             ];
         }
-    }
 
-    public function entities(): iterable
-    {
-        yield from $this->marks();
-        yield from $this->leaves();
-        yield from $this->texts();
-        yield from $this->inlines();
-        yield from $this->blocks();
-        yield from $this->documents();
-        yield from $this->values();
+        yield "Return to Sender" => [
+            require __DIR__ . '/fixtures/return-to-sender.value.php',
+            require __DIR__ . '/fixtures/return-to-sender.std-class.php',
+        ];
     }
 
     public function invalid_marks(): iterable
