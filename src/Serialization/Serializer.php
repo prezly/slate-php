@@ -3,7 +3,7 @@ namespace Prezly\Slate\Serialization;
 
 use Prezly\Slate\Model\Entity;
 use Prezly\Slate\Model\Value;
-use Prezly\Slate\Serialization\Exceptions\VersionNotSupportedException;
+use Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException;
 use Prezly\Slate\Serialization\Support\ShapeValidator;
 use Prezly\Slate\Serialization\Versions\EntitySerializer;
 use Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer;
@@ -71,7 +71,7 @@ class Serializer implements ValueSerializer
         $generic_version = implode('.', array_slice(explode('.', $version), 0, 2));
 
         if (! isset(self::SERIALIZATION_VERSIONS[$generic_version])) {
-            throw new VersionNotSupportedException($version);
+            throw new UnsupprotedVersionException($version);
         }
 
         $serializer_class = self::SERIALIZATION_VERSIONS[$generic_version];
