@@ -26,10 +26,34 @@ use stdClass;
 class v0_40_EntitySerializer implements EntitySerializer
 {
     /**
+     * @param \Prezly\Slate\Model\Value $value
+     * @return \stdClass
+     */
+    public function serializeValue(Value $value): stdClass
+    {
+        return (object) [
+            'object'   => Entity::VALUE,
+            'document' => $this->serializeDocument($value->getDocument()),
+        ];
+    }
+
+    /**
+     * @param \stdClass $value
+     * @return \Prezly\Slate\Model\Value
+     * @throws \InvalidArgumentException
+     */
+    public function unserializeValue(stdClass $value): Value
+    {
+        $value = ShapeValidator::validateSlateObject($value, Entity::VALUE, ['document' => 'is_object']);
+
+        return new Value($this->unserializeDocument($value->document));
+    }
+
+    /**
      * @param \Prezly\Slate\Model\Entity $entity
      * @return \stdClass
      */
-    public function serializeEntity(Entity $entity): stdClass
+    private function serializeEntity(Entity $entity): stdClass
     {
         if ($entity instanceof Value) {
             return $this->serializeValue($entity);
@@ -59,7 +83,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @param \stdClass $entity
      * @return Object|Block|Inline|Text
      */
-    public function unserializeEntity(stdClass $entity): Entity
+    private function unserializeEntity(stdClass $entity): Entity
     {
         $entity = ShapeValidator::validateSlateObject($entity); // generic slate object check
 
@@ -89,34 +113,10 @@ class v0_40_EntitySerializer implements EntitySerializer
     }
 
     /**
-     * @param \Prezly\Slate\Model\Value $value
-     * @return \stdClass
-     */
-    public function serializeValue(Value $value): stdClass
-    {
-        return (object) [
-            'object'   => Entity::VALUE,
-            'document' => $this->serializeDocument($value->getDocument()),
-        ];
-    }
-
-    /**
-     * @param \stdClass $value
-     * @return \Prezly\Slate\Model\Value
-     * @throws \InvalidArgumentException
-     */
-    public function unserializeValue(stdClass $value): Value
-    {
-        $value = ShapeValidator::validateSlateObject($value, Entity::VALUE, ['document' => 'is_object']);
-
-        return new Value($this->unserializeDocument($value->document));
-    }
-
-    /**
      * @param \Prezly\Slate\Model\Document $document
      * @return \stdClass
      */
-    public function serializeDocument(Document $document): stdClass
+    private function serializeDocument(Document $document): stdClass
     {
         return (object) [
             'object' => Entity::DOCUMENT,
@@ -132,7 +132,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @return \Prezly\Slate\Model\Document
      * @throws \InvalidArgumentException
      */
-    public function unserializeDocument(stdClass $object): Document
+    private function unserializeDocument(stdClass $object): Document
     {
         $object = ShapeValidator::validateSlateObject($object, Entity::DOCUMENT, [
             'data'  => 'is_object',
@@ -151,7 +151,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @param \Prezly\Slate\Model\Block $block
      * @return \stdClass
      */
-    public function serializeBlock(Block $block): stdClass
+    private function serializeBlock(Block $block): stdClass
     {
         return (object) [
             'object' => Entity::BLOCK,
@@ -168,7 +168,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @return \Prezly\Slate\Model\Block
      * @throws \InvalidArgumentException
      */
-    public function unserializeBlock(stdClass $object): Block
+    private function unserializeBlock(stdClass $object): Block
     {
         $object = ShapeValidator::validateSlateObject($object, Entity::BLOCK, [
             'type'  => 'is_string',
@@ -188,7 +188,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @param \Prezly\Slate\Model\Inline $inline
      * @return \stdClass
      */
-    public function serializeInline(Inline $inline): stdClass
+    private function serializeInline(Inline $inline): stdClass
     {
         return (object) [
             'object' => Entity::INLINE,
@@ -205,7 +205,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @return \Prezly\Slate\Model\Inline
      * @throws \InvalidArgumentException
      */
-    public function unserializeInline(stdClass $inline): Inline
+    private function unserializeInline(stdClass $inline): Inline
     {
         $inline = ShapeValidator::validateSlateObject($inline, Entity::INLINE, [
             'type'  => 'is_string',
@@ -225,7 +225,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @param \Prezly\Slate\Model\Text $text
      * @return \stdClass
      */
-    public function serializeText(Text $text): stdClass
+    private function serializeText(Text $text): stdClass
     {
         return (object) [
             'object' => Entity::TEXT,
@@ -240,7 +240,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @return \Prezly\Slate\Model\Text
      * @throws \InvalidArgumentException
      */
-    public function unserializeText(stdClass $object): Text
+    private function unserializeText(stdClass $object): Text
     {
         ShapeValidator::validateSlateObject($object, Entity::TEXT, [
             'leaves' => 'is_array',
@@ -258,7 +258,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @param \Prezly\Slate\Model\Leaf $leaf
      * @return \stdClass
      */
-    public function serializeLeaf(Leaf $leaf): stdClass
+    private function serializeLeaf(Leaf $leaf): stdClass
     {
         return (object) [
             'object' => Entity::LEAF,
@@ -274,7 +274,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @return \Prezly\Slate\Model\Leaf
      * @throws \InvalidArgumentException
      */
-    public function unserializeLeaf(stdClass $object): Leaf
+    private function unserializeLeaf(stdClass $object): Leaf
     {
         $object = ShapeValidator::validateSlateObject($object, Entity::LEAF, [
             'text'  => 'is_string',
@@ -293,7 +293,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @param \Prezly\Slate\Model\Mark $mark
      * @return \stdClass
      */
-    public function serializeMark(Mark $mark): stdClass
+    private function serializeMark(Mark $mark): stdClass
     {
         return (object) [
             'object' => Entity::MARK,
@@ -307,7 +307,7 @@ class v0_40_EntitySerializer implements EntitySerializer
      * @return \Prezly\Slate\Model\Mark
      * @throws \InvalidArgumentException
      */
-    public function unserializeMark(stdClass $object): Mark
+    private function unserializeMark(stdClass $object): Mark
     {
         $object = ShapeValidator::validateSlateObject($object, Entity::MARK, [
             'type' => 'is_string',
