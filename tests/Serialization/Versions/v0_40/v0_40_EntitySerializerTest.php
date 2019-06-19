@@ -1,6 +1,7 @@
 <?php
 namespace Prezly\Slate\Tests\Serialization\Versions\v0_40;
 
+use InvalidArgumentException;
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Entity;
@@ -53,6 +54,17 @@ class v0_40_EntitySerializerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalid_marks
+     * @param \stdClass $invalid_mark
+     */
+    public function it_should_throw_on_unserializing_invalid_marks(stdClass $invalid_mark): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeMark($invalid_mark);
+    }
+
+    /**
+     * @test
      * @dataProvider leaves
      * @param \Prezly\Slate\Model\Leaf $leaf
      * @param \stdClass $serialized
@@ -77,6 +89,17 @@ class v0_40_EntitySerializerTest extends TestCase
             $leaf,
             $this->serializer()->unserializeLeaf($serialized)
         );
+    }
+
+    /**
+     * @test
+     * @dataProvider invalid_leaves
+     * @param \stdClass $invalid_leaf
+     */
+    public function it_should_throw_on_unserializing_invalid_leaves(stdClass $invalid_leaf): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeLeaf($invalid_leaf);
     }
 
     /**
@@ -109,6 +132,17 @@ class v0_40_EntitySerializerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalid_texts
+     * @param \stdClass $invalid_text
+     */
+    public function it_should_throw_on_unserializing_invalid_texts(stdClass $invalid_text): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeText($invalid_text);
+    }
+
+    /**
+     * @test
      * @dataProvider inlines
      * @param \Prezly\Slate\Model\Inline $inline
      * @param \stdClass $serialized
@@ -133,6 +167,17 @@ class v0_40_EntitySerializerTest extends TestCase
             $inline,
             $this->serializer()->unserializeInline($serialized)
         );
+    }
+
+    /**
+     * @test
+     * @dataProvider invalid_inlines
+     * @param \stdClass $invalid_inline
+     */
+    public function it_should_throw_on_unserializing_invalid_inlines(stdClass $invalid_inline): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeInline($invalid_inline);
     }
 
     /**
@@ -165,6 +210,17 @@ class v0_40_EntitySerializerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalid_blocks
+     * @param \stdClass $invalid_block
+     */
+    public function it_should_throw_on_unserializing_invalid_blocks(stdClass $invalid_block): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeBlock($invalid_block);
+    }
+
+    /**
+     * @test
      * @dataProvider documents
      * @param \Prezly\Slate\Model\Document $document
      * @param \stdClass $serialized
@@ -189,6 +245,17 @@ class v0_40_EntitySerializerTest extends TestCase
             $document,
             $this->serializer()->unserializeDocument($serialized)
         );
+    }
+
+    /**
+     * @test
+     * @dataProvider invalid_documents
+     * @param \stdClass $invalid_document
+     */
+    public function it_should_throw_on_unserializing_invalid_documents(stdClass $invalid_document): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeDocument($invalid_document);
     }
 
     /**
@@ -221,6 +288,17 @@ class v0_40_EntitySerializerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalid_values
+     * @param \stdClass $invalid_value
+     */
+    public function it_should_throw_on_unserializing_invalid_values(stdClass $invalid_value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeValue($invalid_value);
+    }
+
+    /**
+     * @test
      * @dataProvider entities
      * @param \Prezly\Slate\Model\Entity $entity
      * @param \stdClass $serialized
@@ -247,9 +325,20 @@ class v0_40_EntitySerializerTest extends TestCase
         );
     }
 
+    /**
+     * @test
+     * @dataProvider invalid_entities
+     * @param \stdClass $invalid_entity
+     */
+    public function it_should_throw_on_unserializing_invalid_entities(stdClass $invalid_entity): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->serializer()->unserializeEntity($invalid_entity);
+    }
+
     public function marks(): iterable
     {
-        yield 'Mark(bold)' => $bold_mark = [
+        yield 'Mark(bold)' => [
             new Mark('bold'),
             (object) ['object' => 'mark', 'type' => 'bold', 'data' => (object) []],
         ];
@@ -312,7 +401,6 @@ class v0_40_EntitySerializerTest extends TestCase
                 'data'   => (object) ['username' => 'Elvis'],
             ],
         ];
-
 
         foreach ($this->texts() as $name => [$text, $serialized_text]) {
             yield "Inline(mention, [{$name}])" => [
@@ -435,6 +523,86 @@ class v0_40_EntitySerializerTest extends TestCase
         yield from $this->blocks();
         yield from $this->documents();
         yield from $this->values();
+    }
+
+    public function invalid_marks(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not a mark' => [(object) ['object' => 'block', 'type' => 'paragraph']];
+        yield 'no type' => [(object) ['object' => 'mark', 'data' => (object) []]];
+        yield 'no data' => [(object) ['object' => 'mark', 'type' => 'bold']];
+        yield 'invalid data' => [(object) ['object' => 'mark', 'data' => []]];
+    }
+
+    public function invalid_leaves(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not a leaf' => [(object) ['object' => 'block', 'type' => 'paragraph']];
+        yield 'no text' => [(object) ['object' => 'leaf']];
+        yield 'invalid text' => [(object) ['object' => 'leaf', 'text' => 2]];
+    }
+
+    public function invalid_texts(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not a text' => [(object) ['object' => 'block', 'type' => 'paragraph']];
+        yield 'no leaves' => [(object) ['object' => 'text']];
+        yield 'invalid leaves' => [(object) ['object' => 'text', 'leaves' => 2]];
+    }
+
+    public function invalid_inlines(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not an inline' => [(object) ['object' => 'block', 'type' => 'paragraph']];
+        yield 'no type' => [(object) ['object' => 'inline', 'nodes' => [], 'data' => (object) []]];
+        yield 'invalid type' => [(object) ['object' => 'inline', 'type' => 10, 'data' => (object) []]];
+        yield 'no nodes' => [(object) ['object' => 'inline', 'type' => 'mention', 'data' => (object) []]];
+        yield 'invalid nodes' => [(object) ['object' => 'inline', 'type' => 'mention', 'nodes' => false]];
+        yield 'no data' => [(object) ['object' => 'inline', 'type' => 'mention', 'nodes' => []]];
+        yield 'invalid data' => [(object) ['object' => 'inline', 'type' => 'mention', 'data' => null]];
+    }
+
+    public function invalid_blocks(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not a block' => [(object) ['object' => 'inline', 'type' => 'mention']];
+        yield 'no type' => [(object) ['object' => 'block', 'nodes' => [], 'data' => (object) []]];
+        yield 'invalid type' => [(object) ['object' => 'block', 'type' => 10, 'data' => (object) []]];
+        yield 'no nodes' => [(object) ['object' => 'block', 'type' => 'paragraph', 'data' => (object) []]];
+        yield 'invalid nodes' => [(object) ['object' => 'block', 'type' => 'paragraph', 'nodes' => false]];
+        yield 'no data' => [(object) ['object' => 'block', 'type' => 'paragraph', 'nodes' => []]];
+        yield 'invalid data' => [(object) ['object' => 'block', 'type' => 'paragraph', 'data' => null]];
+    }
+
+    public function invalid_documents(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not a document' => [(object) ['object' => 'inline', 'type' => 'mention']];
+        yield 'no nodes' => [(object) ['object' => 'document', 'data' => (object) []]];
+        yield 'invalid nodes' => [(object) ['object' => 'document', 'nodes' => false]];
+        yield 'no data' => [(object) ['object' => 'document', 'nodes' => []]];
+        yield 'invalid data' => [(object) ['object' => 'document', 'data' => null]];
+    }
+
+    public function invalid_values(): iterable
+    {
+        yield 'empty object' => [(object) []];
+        yield 'not a document' => [(object) ['object' => 'inline', 'type' => 'mention']];
+        yield 'no nodes' => [(object) ['object' => 'document', 'data' => (object) []]];
+        yield 'invalid nodes' => [(object) ['object' => 'document', 'nodes' => false]];
+        yield 'no data' => [(object) ['object' => 'document', 'nodes' => []]];
+        yield 'invalid data' => [(object) ['object' => 'document', 'data' => null]];
+    }
+
+    public function invalid_entities(): iterable
+    {
+        yield from $this->invalid_marks();
+        yield from $this->invalid_leaves();
+        yield from $this->invalid_texts();
+        yield from $this->invalid_inlines();
+        yield from $this->invalid_blocks();
+        yield from $this->invalid_documents();
+        yield from $this->invalid_values();
     }
 
     /**
