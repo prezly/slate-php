@@ -6,8 +6,8 @@ use stdClass;
 
 /**
  * @internal Please do not use this class outside of this package.
- * It's considered internal API and thus is not a subject for semantic versioning.
- * The interface may change in future without major version bump.
+ *           It's considered internal API and thus is not a subject for semantic versioning.
+ *           The interface may change in future without major version bump.
  */
 class ShapeValidator
 {
@@ -16,6 +16,7 @@ class ShapeValidator
      * @param string|null $object_type
      * @param callable[] $shape [ string $property_name => string $check_function, ... ]
      * @return \stdClass
+     * @throws \InvalidArgumentException
      */
     public static function validateSlateObject($object, string $object_type = null, array $shape = []): stdClass
     {
