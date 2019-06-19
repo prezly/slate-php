@@ -13,7 +13,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return file_get_contents($file_path);
     }
 
-    protected function loadContentFromFixture(string $file_path): Value
+    protected function loadValueFromFixture(string $file_path): Value
     {
         $json = $this->loadFixture($file_path);
         $serializer = new Serializer();
@@ -22,6 +22,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function loadDocumentFromFixture(string $file_path): Document
     {
-        return $this->loadContentFromFixture($file_path)->getDocument();
+        return $this->loadValueFromFixture($file_path)->getDocument();
     }
 }

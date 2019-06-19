@@ -16,7 +16,7 @@ class ValueTest extends TestCase
     public function it_should_serialize_to_json(string $file_path)
     {
         $json = $this->loadFixture($file_path);
-        $value = $this->loadContentFromFixture($file_path);
+        $value = $this->loadValueFromFixture($file_path);
 
         $json = implode("\n",
             array_map(function (string $line): string {
