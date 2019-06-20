@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.1
+
+20 Jun 2019
+
+- Leaf model deprecated ([908a91ba](https://github.com/prezly/slate-php/commit/908a91ba65617c2c1e38a8d929974758fd27cb7e))
+
 ## 4.0.0
 
 20 Jun 2019
