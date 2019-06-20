@@ -35,6 +35,12 @@ class Serializer implements ValueSerializer
     /** @var array */
     private $serialization_versions;
 
+    /**
+     * @param string|null $default_version Default serialization version to use
+     *                                     when serializing/unserializing with no version set.
+     * @param int|null $json_encode_options JSON options to use for json_encode()
+     * @param array|null $serialization_versions Configuration map of serialization version to VersionSerialize class
+     */
     public function __construct(
         ?string $default_version = self::LATEST_SERIALIZATION_VERSION,
         int $json_encode_options = null,
@@ -45,6 +51,18 @@ class Serializer implements ValueSerializer
         $this->serialization_versions = $serialization_versions ?? self::SERIALIZATION_VERSIONS;
     }
 
+    /**
+     * Serialize value to JSON
+     *
+     * Optionally you can provide desired serialization version.
+     *
+     * If no version argument provided, default serialization version
+     * will be used (which is set to LATEST by default).
+     *
+     * @param \Prezly\Slate\Model\Value $value
+     * @param string|null $version
+     * @return string
+     */
     public function toJson(Value $value, ?string $version = null): string
     {
         return json_encode(
@@ -53,6 +71,19 @@ class Serializer implements ValueSerializer
         );
     }
 
+    /**
+     * Unserialize value from JSON
+     *
+     * Optional you can provide serialization version to use
+     * in case if value JSON does not have "version" property.
+     *
+     * If no version argument is given, default serialization
+     * version will be implied (which is set to LATEST by default).
+     *
+     * @param string $value
+     * @param string|null $default_version
+     * @return \Prezly\Slate\Model\Value
+     */
     public function fromJson(string $value, ?string $default_version = null): Value
     {
         return $this->unserializeValue(json_decode($value, false));
