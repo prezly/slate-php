@@ -111,6 +111,46 @@ class SerializerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider equivalent_documents_of_different_versions
+     * @param string $json_a
+     * @param string $json_b
+     */
+    public function it_should_be_able_to_convert_documents_to_different_versions(string $json_a, string $json_b)
+    {
+        $version_a = json_decode($json_a, true)['version'];
+        $version_b = json_decode($json_b, true)['version'];
+
+        $this->assertNotEquals($json_a, $json_b, 'JSON strings are different');
+        $this->assertNotEquals(
+            $version_a,
+            $version_b,
+            'JSON versions are different'
+        );
+        $this->assertNotEquals(
+            json_decode($json_a, true)['document'],
+            json_decode($json_b, true)['document'],
+            'JSON structures are different'
+        );
+
+        $value_a = $this->serializer()->fromJson($json_a);
+        $value_b = $this->serializer()->fromJson($json_b);
+
+        $this->assertEquals($value_a, $value_b, 'But unserialized value is equivalent');
+
+        $this->assertJsonStringEqualsJsonString(
+            $json_b,
+            $this->serializer()->toJson($value_a, $version_b),
+            'Value can be serialized to a different version'
+        );
+        $this->assertJsonStringEqualsJsonString(
+            $json_a,
+            $this->serializer()->toJson($value_b, $version_a),
+            'Value can be serialized to a different version'
+        );
+    }
+
+    /**
+     * @test
      * @dataProvider invalid_documents_fixtures
      *
      * @param string $file
@@ -126,7 +166,16 @@ class SerializerTest extends TestCase
     public function valid_documents_jsons(): array
     {
         return [
-            'document_with_text.json' => [__DIR__ . '/fixtures/document_with_text.json'],
+            'document_with_text.v0.40.json' => [__DIR__ . '/fixtures/document_with_text.v0.40.json'],
+            'document_with_text.v0.46.json' => [__DIR__ . '/fixtures/document_with_text.v0.46.json'],
+        ];
+    }
+
+    public function equivalent_documents_of_different_versions(): iterable
+    {
+        yield 'document_with_text' => [
+            $this->loadFixture(__DIR__ . '/fixtures/document_with_text.v0.40.json'),
+            $this->loadFixture(__DIR__ . '/fixtures/document_with_text.v0.46.json'),
         ];
     }
 
