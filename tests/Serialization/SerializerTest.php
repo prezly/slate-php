@@ -4,7 +4,7 @@ namespace Prezly\Slate\Tests\Serialization;
 use InvalidArgumentException;
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Value;
-use Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException;
+use Prezly\Slate\Serialization\Exceptions\UnsupportedVersionException;
 use Prezly\Slate\Serialization\Serializer;
 use Prezly\Slate\Tests\TestCase;
 
@@ -104,7 +104,7 @@ class SerializerTest extends TestCase
      */
     public function it_should_throw_on_unsupported_serialization_version()
     {
-        $this->expectException(UnsupprotedVersionException::class);
+        $this->expectException(UnsupportedVersionException::class);
         $this->expectExceptionMessage('Unsupported serialization version requested: 0.20.1');
         $this->serializer()->toJson(new Value(new Document()), '0.20.1');
     }

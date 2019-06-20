@@ -3,7 +3,7 @@ namespace Prezly\Slate\Serialization\Exceptions;
 
 use InvalidArgumentException;
 
-class UnsupprotedVersionException extends InvalidArgumentException
+class UnsupportedVersionException extends InvalidArgumentException
 {
     public function __construct(string $version)
     {

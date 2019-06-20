@@ -8,7 +8,7 @@ interface VersionSerializerFactory
     /**
      * @param string $version
      * @return \Prezly\Slate\Serialization\Versions\VersionSerializer
-     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException
+     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupportedVersionException
      */
     public function getSerializer(string $version): VersionSerializer;
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Prezly\Slate\Serialization;
 
-use Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException;
+use Prezly\Slate\Serialization\Exceptions\UnsupportedVersionException;
 use Prezly\Slate\Serialization\Versions\v0_40_VersionSerializer;
 use Prezly\Slate\Serialization\Versions\v0_46_VersionSerializer;
 use Prezly\Slate\Serialization\Versions\VersionSerializer;
@@ -31,14 +31,14 @@ class DefaultVersionSerializerFactory implements VersionSerializerFactory
     /**
      * @param string $version
      * @return \Prezly\Slate\Serialization\Versions\VersionSerializer
-     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException
+     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupportedVersionException
      */
     public function getSerializer(string $version): VersionSerializer
     {
         $generic_version = implode('.', array_slice(explode('.', $version), 0, 2));
 
         if (! isset($this->serialization_versions[$generic_version])) {
-            throw new UnsupprotedVersionException($version);
+            throw new UnsupportedVersionException($version);
         }
 
         $serializer_class = $this->serialization_versions[$generic_version];
