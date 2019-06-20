@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.2
+
+20 Jun 2019
+
+- Fix slate_version parameter not passed ([f7c8f062](https://github.com/prezly/slate-php/commit/f7c8f062ecd584200b86a387b3dbe589e1740f64))
+
 ## 4.0.1
 
 20 Jun 2019
