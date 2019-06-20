@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.3
+
+20 Jun 2019
+
+- Fix exception classname typo ([3a21cb2f](https://github.com/prezly/slate-php/commit/3a21cb2f41df244102ef635abbeb59a9e8f29f04))
+
 ## 4.0.2
 
 20 Jun 2019
