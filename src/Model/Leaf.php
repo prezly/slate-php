@@ -4,6 +4,10 @@ namespace Prezly\Slate\Model;
 
 use InvalidArgumentException;
 
+/**
+ * @deprecated Leaf will be dropped in the next version in favour of Text node.
+ * @see https://github.com/ianstormtaylor/slate/blob/master/packages/slate/Changelog.md#0460--may-1-2019
+ */
 class Leaf implements Entity
 {
     /** @var string */
