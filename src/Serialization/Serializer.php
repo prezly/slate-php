@@ -7,11 +7,12 @@ use Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException;
 use Prezly\Slate\Serialization\Support\ShapeValidator;
 use Prezly\Slate\Serialization\Versions\EntitySerializer;
 use Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer;
+use Prezly\Slate\Serialization\Versions\v0_46_EntitySerializer;
 use stdClass;
 
 class Serializer implements ValueSerializer
 {
-    public const LATEST_SERIALIZATION_VERSION = '0.45';
+    public const LATEST_SERIALIZATION_VERSION = '0.47';
 
     private const SERIALIZATION_VERSIONS = [
         '0.40' => v0_40_EntitySerializer::class,
@@ -20,6 +21,9 @@ class Serializer implements ValueSerializer
         '0.43' => v0_40_EntitySerializer::class,
         '0.44' => v0_40_EntitySerializer::class,
         '0.45' => v0_40_EntitySerializer::class,
+        // 0.46 - leaves data combined into text nodes
+        '0.46' => v0_46_EntitySerializer::class,
+        '0.47' => v0_46_EntitySerializer::class,
     ];
 
     /** @var string */

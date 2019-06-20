@@ -143,7 +143,8 @@ class SerializerTest extends TestCase
             [__DIR__ . '/fixtures/invalid_document_05_missing_document.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
             [__DIR__ . '/fixtures/invalid_document_06_null_document.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
             [__DIR__ . '/fixtures/invalid_document_07_invalid_document_object.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
-            [__DIR__ . '/fixtures/invalid_document_08_invalid_leaf_object.json', 'Invalid JSON structure given to construct Leaf. It should have "object" property set to "leaf".'],
+            [__DIR__ . '/fixtures/invalid_document_08_invalid_leaf_object.v0.40.json', 'Invalid JSON structure given to construct Leaf. It should have "object" property set to "leaf".'],
+            [__DIR__ . '/fixtures/invalid_document_09_invalid_text_object.v0.46.json', 'Unexpected JSON structure given for Text. A Text should have "text" property.'],
         ];
     }
 }

@@ -9,18 +9,18 @@ use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
-use Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer;
+use Prezly\Slate\Serialization\Versions\v0_46_EntitySerializer;
 use Prezly\Slate\Tests\TestCase;
 use stdClass;
 
 /**
- * @covers \Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer
+ * @covers \Prezly\Slate\Serialization\Versions\v0_46_EntitySerializer
  */
-class v0_40_EntitySerializerTest extends TestCase
+class v0_46_EntitySerializerTest extends TestCase
 {
-    private function serializer(): v0_40_EntitySerializer
+    private function serializer(): v0_46_EntitySerializer
     {
-        return new v0_40_EntitySerializer();
+        return new v0_46_EntitySerializer();
     }
 
     /**
@@ -81,20 +81,20 @@ class v0_40_EntitySerializerTest extends TestCase
         $hello_leaf = new Leaf('hello');
         yield 'Leaf(hello)' => [
             $hello_leaf,
-            (object) ['object' => 'leaf', 'text' => 'hello', 'marks' => []],
+            (object) ['object' => 'text', 'text' => 'hello', 'marks' => []],
         ];
 
         foreach ($this->marks() as $name => [$mark, $serialized_mark]) {
             yield "Leaf(hello, [{$name}])" => [
                 new Leaf('hello', [$mark]),
-                (object) ['object' => 'leaf', 'text' => 'hello', 'marks' => [$serialized_mark]],
+                (object) ['object' => 'text', 'text' => 'hello', 'marks' => [$serialized_mark]],
             ];
         }
 
         foreach ($this->aggregate($this->marks()) as $name => [$marks, $serialized_marks]) {
             yield "Leaf(hello, [{$name}])" => [
                 new Leaf('hello', $marks),
-                (object) ['object' => 'leaf', 'text' => 'hello', 'marks' => $serialized_marks],
+                (object) ['object' => 'text', 'text' => 'hello', 'marks' => $serialized_marks],
             ];
         }
     }
@@ -102,24 +102,21 @@ class v0_40_EntitySerializerTest extends TestCase
     public function texts(): iterable
     {
         $empty_text = new Text();
-        yield 'Text()' => [
-            $empty_text,
-            (object) ['object' => 'text', 'leaves' => []],
-        ];
+        yield 'Text()' => [$empty_text, [(object) ['object' => 'text', 'text' => '', 'marks' => []]]];
 
         foreach ($this->leaves() as $name => [$leaf, $serialized_leaf]) {
             yield "Text([{$name}])" => [
                 new Text([$leaf]),
-                (object) ['object' => 'text', 'leaves' => [$serialized_leaf]],
+                [$serialized_leaf],
             ];
         }
 
-        foreach ($this->aggregate($this->leaves()) as $names => [$leaves, $serialized_leaves]) {
-            yield "Text([{$names}])" => [
-                new Text($leaves),
-                (object) ['object' => 'text', 'leaves' => $serialized_leaves],
-            ];
-        }
+//        foreach ($this->aggregate($this->leaves()) as $names => [$leaves, $serialized_leaves]) {
+//            yield "Text([{$names}])" => [
+//                new Text($leaves),
+//                $serialized_leaves,
+//            ];
+//        }
     }
 
     public function inlines(): iterable
@@ -135,26 +132,14 @@ class v0_40_EntitySerializerTest extends TestCase
             ],
         ];
 
-        foreach ($this->texts() as $name => [$text, $serialized_text]) {
+        foreach ($this->texts() as $name => [$text, $serialized_texts]) {
             yield "Inline(mention, [{$name}])" => [
                 new Inline('mention', [$text]),
                 (object) [
                     'object' => 'inline',
                     'type'   => 'mention',
-                    'nodes'  => [$serialized_text],
-                    'data'   => (object) [],
-                ],
-            ];
-        }
-
-        foreach ($this->aggregate($this->texts()) as $names => [$texts, $serialized_texts]) {
-            yield "Inline(mention, [{$names}], { username: Elvis })" => [
-                new Inline('mention', $texts, ['username' => 'Elvis']),
-                (object) [
-                    'object' => 'inline',
-                    'type'   => 'mention',
                     'nodes'  => $serialized_texts,
-                    'data'   => (object) ['username' => 'Elvis'],
+                    'data'   => (object) [],
                 ],
             ];
         }
@@ -174,26 +159,14 @@ class v0_40_EntitySerializerTest extends TestCase
         ];
 
 
-        foreach ($this->texts() as $name => [$text, $serialized_text]) {
+        foreach ($this->texts() as $name => [$text, $serialized_texts]) {
             yield "Block(paragraph, [{$name}])" => [
                 new Block('paragraph', [$text]),
                 (object) [
                     'object' => 'block',
                     'type'   => 'paragraph',
-                    'nodes'  => [$serialized_text],
-                    'data'   => (object) [],
-                ],
-            ];
-        }
-
-        foreach ($this->aggregate($this->texts()) as $names => [$texts, $serialized_texts]) {
-            yield "Block(quote, [{$names}], { author: Elvis })" => [
-                new Block('quote', $texts, ['author' => 'Elvis']),
-                (object) [
-                    'object' => 'block',
-                    'type'   => 'quote',
                     'nodes'  => $serialized_texts,
-                    'data'   => (object) ['author' => 'Elvis'],
+                    'data'   => (object) [],
                 ],
             ];
         }
@@ -273,8 +246,10 @@ class v0_40_EntitySerializerTest extends TestCase
     {
         yield 'empty object' => [(object) []];
         yield 'not a text' => [(object) ['object' => 'block', 'type' => 'paragraph']];
-        yield 'no leaves' => [(object) ['object' => 'text']];
-        yield 'invalid leaves' => [(object) ['object' => 'text', 'leaves' => 2]];
+        yield 'no text' => [(object) ['object' => 'text', 'marks' => []]];
+        yield 'invalid text' => [(object) ['object' => 'text', 'text' => true, 'marks' => []]];
+        yield 'no marks' => [(object) ['object' => 'text', 'text' => 'hello']];
+        yield 'invalid marks' => [(object) ['object' => 'text', 'text' => 'hello', 'marks' => []]];
     }
 
     public function invalid_inlines(): iterable

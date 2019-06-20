@@ -1,0 +1,23 @@
+{
+  "version": "0.46.1",
+  "object": "value",
+  "document": {
+    "object": "document",
+    "data": {},
+    "nodes": [
+      {
+        "object": "block",
+        "type": "paragraph",
+        "data": {},
+        "nodes": [
+          {
+            "object": "text",
+            "leaves": [
+              {"object": "leaft", "text": "", "marks": []}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
