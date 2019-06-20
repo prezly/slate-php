@@ -9,7 +9,7 @@ use stdClass;
  *           It's considered internal API and thus is not a subject for semantic versioning.
  *           The interface may change in future without major version bump.
  */
-interface EntitySerializer
+interface VersionSerializer
 {
     /**
      * @param \Prezly\Slate\Model\Value $value

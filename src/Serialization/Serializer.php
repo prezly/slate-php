@@ -5,9 +5,9 @@ use Prezly\Slate\Model\Entity;
 use Prezly\Slate\Model\Value;
 use Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException;
 use Prezly\Slate\Serialization\Support\ShapeValidator;
-use Prezly\Slate\Serialization\Versions\EntitySerializer;
-use Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer;
-use Prezly\Slate\Serialization\Versions\v0_46_EntitySerializer;
+use Prezly\Slate\Serialization\Versions\VersionSerializer;
+use Prezly\Slate\Serialization\Versions\v0_40_VersionSerializer;
+use Prezly\Slate\Serialization\Versions\v0_46_VersionSerializer;
 use stdClass;
 
 class Serializer implements ValueSerializer
@@ -15,15 +15,15 @@ class Serializer implements ValueSerializer
     public const LATEST_SERIALIZATION_VERSION = '0.47';
 
     private const SERIALIZATION_VERSIONS = [
-        '0.40' => v0_40_EntitySerializer::class,
-        '0.41' => v0_40_EntitySerializer::class,
-        '0.42' => v0_40_EntitySerializer::class,
-        '0.43' => v0_40_EntitySerializer::class,
-        '0.44' => v0_40_EntitySerializer::class,
-        '0.45' => v0_40_EntitySerializer::class,
+        '0.40' => v0_40_VersionSerializer::class,
+        '0.41' => v0_40_VersionSerializer::class,
+        '0.42' => v0_40_VersionSerializer::class,
+        '0.43' => v0_40_VersionSerializer::class,
+        '0.44' => v0_40_VersionSerializer::class,
+        '0.45' => v0_40_VersionSerializer::class,
         // 0.46 - leaves data combined into text nodes
-        '0.46' => v0_46_EntitySerializer::class,
-        '0.47' => v0_46_EntitySerializer::class,
+        '0.46' => v0_46_VersionSerializer::class,
+        '0.47' => v0_46_VersionSerializer::class,
     ];
 
     /** @var string */
@@ -70,9 +70,9 @@ class Serializer implements ValueSerializer
 
     /**
      * @param string $version
-     * @return \Prezly\Slate\Serialization\Versions\EntitySerializer
+     * @return \Prezly\Slate\Serialization\Versions\VersionSerializer
      */
-    private function getSerializer(string $version): EntitySerializer
+    private function getSerializer(string $version): VersionSerializer
     {
         $generic_version = implode('.', array_slice(explode('.', $version), 0, 2));
 
@@ -81,7 +81,7 @@ class Serializer implements ValueSerializer
         }
 
         $serializer_class = self::SERIALIZATION_VERSIONS[$generic_version];
-        /** @var \Prezly\Slate\Serialization\Versions\EntitySerializer $serializer */
+        /** @var \Prezly\Slate\Serialization\Versions\VersionSerializer $serializer */
         $serializer = new $serializer_class();
 
         return $serializer;

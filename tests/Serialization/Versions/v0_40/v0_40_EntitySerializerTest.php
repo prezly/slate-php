@@ -9,18 +9,18 @@ use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
-use Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer;
+use Prezly\Slate\Serialization\Versions\v0_40_VersionSerializer;
 use Prezly\Slate\Tests\TestCase;
 use stdClass;
 
 /**
- * @covers \Prezly\Slate\Serialization\Versions\v0_40_EntitySerializer
+ * @covers \Prezly\Slate\Serialization\Versions\v0_40_VersionSerializer
  */
 class v0_40_EntitySerializerTest extends TestCase
 {
-    private function serializer(): v0_40_EntitySerializer
+    private function serializer(): v0_40_VersionSerializer
     {
-        return new v0_40_EntitySerializer();
+        return new v0_40_VersionSerializer();
     }
 
     /**
