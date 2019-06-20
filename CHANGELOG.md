@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0
+
+20 Jun 2019
+
+- Implement versionable serialization ([#24](https://github.com/prezly/slate-php/issues/24))
+
 ## 3.0.1
 
 13 Jun 2019
