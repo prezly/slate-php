@@ -70,7 +70,7 @@ class Serializer implements ValueSerializer
      */
     public function fromJson(string $value, ?string $default_version = null): Value
     {
-        return $this->unserializeValue(json_decode($value, false));
+        return $this->unserializeValue(json_decode($value, false), $default_version);
     }
 
     private function serializeValue(Value $value, ?string $version): stdClass
