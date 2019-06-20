@@ -46,6 +46,7 @@ class Serializer implements ValueSerializer
      * @param \Prezly\Slate\Model\Value $value
      * @param string|null $version
      * @return string
+     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException
      */
     public function toJson(Value $value, ?string $version = null): string
     {
@@ -67,6 +68,7 @@ class Serializer implements ValueSerializer
      * @param string $value
      * @param string|null $default_version
      * @return \Prezly\Slate\Model\Value
+     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException
      */
     public function fromJson(string $value, ?string $default_version = null): Value
     {

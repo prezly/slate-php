@@ -5,5 +5,10 @@ use Prezly\Slate\Serialization\Versions\VersionSerializer;
 
 interface VersionSerializerFactory
 {
+    /**
+     * @param string $version
+     * @return \Prezly\Slate\Serialization\Versions\VersionSerializer
+     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException
+     */
     public function getSerializer(string $version): VersionSerializer;
 }

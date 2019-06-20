@@ -28,6 +28,11 @@ class DefaultVersionSerializerFactory implements VersionSerializerFactory
         $this->serialization_versions = $serialization_versions ?? self::SERIALIZATION_VERSIONS;
     }
 
+    /**
+     * @param string $version
+     * @return \Prezly\Slate\Serialization\Versions\VersionSerializer
+     * @throws \Prezly\Slate\Serialization\Exceptions\UnsupprotedVersionException
+     */
     public function getSerializer(string $version): VersionSerializer
     {
         $generic_version = implode('.', array_slice(explode('.', $version), 0, 2));
