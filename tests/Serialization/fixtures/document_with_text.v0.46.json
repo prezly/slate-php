@@ -1,0 +1,79 @@
+{
+    "version": "0.47.1",
+    "object": "value",
+    "document": {
+        "object": "document",
+        "data": {},
+        "nodes": [
+            {
+                "object": "block",
+                "type": "paragraph",
+                "data": {},
+                "nodes": [
+                    {
+                        "object": "text",
+                        "text": "I'd like to introduce ",
+                        "marks": []
+                    },
+                    {
+                        "object": "text",
+                        "text": "you",
+                        "marks": [
+                            {
+                                "object": "mark",
+                                "type": "underlined",
+                                "data": {}
+                            }
+                        ]
+                    },
+                    {
+                        "object": "text",
+                        "text": " to a ",
+                        "marks": []
+                    },
+                    {
+                        "object": "inline",
+                        "type": "link",
+                        "data": {
+                            "href": "https:\/\/en.wikipedia.org\/wiki\/Elvis_Presley"
+                        },
+                        "nodes": [
+                            {
+                                "object": "text",
+                                "text": "very important ",
+                                "marks": [
+                                    {
+                                        "object": "mark",
+                                        "type": "bold",
+                                        "data": {}
+                                    }
+                                ]
+                            },
+                            {
+                                "object": "text",
+                                "text": "person",
+                                "marks": [
+                                    {
+                                        "object": "mark",
+                                        "type": "italic",
+                                        "data": {}
+                                    },
+                                    {
+                                        "object": "mark",
+                                        "type": "bold",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "object": "text",
+                        "text": "!",
+                        "marks": []
+                    }
+                ]
+            }
+        ]
+    }
+}

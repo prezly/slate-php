@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Model;
 
-interface Entity extends \JsonSerializable
+interface Entity
 {
     const BLOCK = "block";
     const DOCUMENT = "document";

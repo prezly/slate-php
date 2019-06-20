@@ -2,6 +2,8 @@
 
 namespace Prezly\Slate\Model;
 
+use Prezly\Slate\Serialization\Serializer;
+
 class Value implements Entity
 {
     /** @var Document */
@@ -29,16 +31,9 @@ class Value implements Entity
         return new self($document);
     }
 
-    public function jsonSerialize()
-    {
-        return (object) [
-            'object'   => Entity::VALUE,
-            'document' => $this->document->jsonSerialize(),
-        ];
-    }
-
     public function toJson(int $options = 0): string
     {
-        return json_encode($this->jsonSerialize(), $options);
+        $serializer = new Serializer(Serializer::LATEST_SERIALIZATION_VERSION, $options);
+        return $serializer->toJson($this);
     }
 }

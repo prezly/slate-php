@@ -1,8 +1,9 @@
 <?php
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\Model;
 
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Inline;
+use Prezly\Slate\Tests\TestCase;
 
 class BlockTest extends TestCase
 {

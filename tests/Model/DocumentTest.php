@@ -1,9 +1,14 @@
 <?php
 
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\Model;
 
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
+use Prezly\Slate\Model\Inline;
+use Prezly\Slate\Model\Leaf;
+use Prezly\Slate\Model\Mark;
+use Prezly\Slate\Model\Text;
+use Prezly\Slate\Tests\TestCase;
 
 class DocumentTest extends TestCase
 {
@@ -12,7 +17,24 @@ class DocumentTest extends TestCase
      */
     public function it_should_get_concatenated_plain_text_content_of_inner_nodes()
     {
-        $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
+        $document = new Document([
+            new Block('paragraph', [
+                new Text([
+                    new Leaf("I'd like to introduce "),
+                    new Leaf('you', [new Mark('underlined')]),
+                    new Leaf(' to a '),
+                ]),
+                new Inline('link', [
+                    new Text([
+                        new Leaf('very important', [new Mark('bold')]),
+                        new Leaf(' person'),
+                    ]),
+                ], ['href' => 'https://en.wikipedia.org/wiki/Elvis_Presley']),
+                new Text([
+                    new Leaf('!'),
+                ])
+            ])
+        ]);
 
         $this->assertEquals(
             "I'd like to introduce you to a very important person!",

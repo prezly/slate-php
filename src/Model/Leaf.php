@@ -65,15 +65,4 @@ class Leaf implements Entity
     {
         return new self($this->text, $marks);
     }
-
-    public function jsonSerialize()
-    {
-        return (object) [
-            'object' => Entity::LEAF,
-            'text'   => $this->text,
-            'marks'  => array_map(function (Mark $mark) {
-                return $mark->jsonSerialize();
-            }, $this->marks)
-        ];
-    }
 }

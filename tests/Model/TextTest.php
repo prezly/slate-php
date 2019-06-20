@@ -1,8 +1,9 @@
 <?php
-namespace Prezly\Slate\Tests;
+namespace Prezly\Slate\Tests\Model;
 
 use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Text;
+use Prezly\Slate\Tests\TestCase;
 
 class TextTest extends TestCase
 {

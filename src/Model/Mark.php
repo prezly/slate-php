@@ -49,13 +49,4 @@ class Mark implements Entity
     {
         return new self($this->type, $data);
     }
-
-    public function jsonSerialize()
-    {
-        return (object) [
-            'object' => Entity::MARK,
-            'type'   => $this->type,
-            'data'   => (object) $this->data,
-        ];
-    }
 }
