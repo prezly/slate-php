@@ -32,10 +32,14 @@ class Serializer implements ValueSerializer
     /** @var int */
     private $json_encode_options;
 
-    public function __construct(?string $default_version = self::LATEST_SERIALIZATION_VERSION, int $json_encode_options = null)
+    /** @var array */
+    private $serialization_versions;
+
+    public function __construct(?string $default_version = self::LATEST_SERIALIZATION_VERSION, int $json_encode_options = null, array $serialization_versions = null)
     {
         $this->default_version = $default_version ?? self::LATEST_SERIALIZATION_VERSION;
         $this->json_encode_options = $json_encode_options;
+        $this->serialization_versions = $serialization_versions ?? self::SERIALIZATION_VERSIONS;
     }
 
     public function toJson(Value $value, ?string $version = null): string
@@ -76,11 +80,11 @@ class Serializer implements ValueSerializer
     {
         $generic_version = implode('.', array_slice(explode('.', $version), 0, 2));
 
-        if (! isset(self::SERIALIZATION_VERSIONS[$generic_version])) {
+        if (! isset($this->serialization_versions[$generic_version])) {
             throw new UnsupprotedVersionException($version);
         }
 
-        $serializer_class = self::SERIALIZATION_VERSIONS[$generic_version];
+        $serializer_class = $this->serialization_versions[$generic_version];
         /** @var \Prezly\Slate\Serialization\Versions\VersionSerializer $serializer */
         $serializer = new $serializer_class();
 
