@@ -35,8 +35,11 @@ class Serializer implements ValueSerializer
     /** @var array */
     private $serialization_versions;
 
-    public function __construct(?string $default_version = self::LATEST_SERIALIZATION_VERSION, int $json_encode_options = null, array $serialization_versions = null)
-    {
+    public function __construct(
+        ?string $default_version = self::LATEST_SERIALIZATION_VERSION,
+        int $json_encode_options = null,
+        array $serialization_versions = null
+    ) {
         $this->default_version = $default_version ?? self::LATEST_SERIALIZATION_VERSION;
         $this->json_encode_options = $json_encode_options;
         $this->serialization_versions = $serialization_versions ?? self::SERIALIZATION_VERSIONS;
