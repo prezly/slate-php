@@ -2,6 +2,7 @@
 namespace Prezly\Slate\Serialization;
 
 use Prezly\Slate\Serialization\Exceptions\UnsupportedVersionException;
+use Prezly\Slate\Serialization\Versions\v0_27_VersionSerializer;
 use Prezly\Slate\Serialization\Versions\v0_40_VersionSerializer;
 use Prezly\Slate\Serialization\Versions\v0_46_VersionSerializer;
 use Prezly\Slate\Serialization\Versions\VersionSerializer;
@@ -9,6 +10,20 @@ use Prezly\Slate\Serialization\Versions\VersionSerializer;
 class DefaultVersionSerializerFactory implements VersionSerializerFactory
 {
     private const SERIALIZATION_VERSIONS = [
+        '0.27' => v0_27_VersionSerializer::class,
+        '0.28' => v0_27_VersionSerializer::class,
+        '0.29' => v0_27_VersionSerializer::class,
+        '0.30' => v0_27_VersionSerializer::class,
+        '0.31' => v0_27_VersionSerializer::class,
+        '0.32' => v0_27_VersionSerializer::class,
+        '0.33' => v0_27_VersionSerializer::class,
+        '0.34' => v0_27_VersionSerializer::class,
+        '0.35' => v0_27_VersionSerializer::class,
+        '0.36' => v0_27_VersionSerializer::class,
+        '0.37' => v0_27_VersionSerializer::class,
+        '0.38' => v0_27_VersionSerializer::class,
+        '0.39' => v0_27_VersionSerializer::class,
+        // 0.40 "isVoid" dropped
         '0.40' => v0_40_VersionSerializer::class,
         '0.41' => v0_40_VersionSerializer::class,
         '0.42' => v0_40_VersionSerializer::class,

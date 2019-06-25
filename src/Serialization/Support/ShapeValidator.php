@@ -47,8 +47,15 @@ class ShapeValidator
         }
 
         // Validate Shape
-        foreach ($shape as $property => $checker) {
-            if (! property_exists($object, $property)) {
+        foreach ($shape as $property => $prop_type) {
+            if ($prop_type[0] === '?') {
+                $is_required = false;
+                $prop_type = substr($prop_type, 1);
+            } else {
+                $is_required = true;
+            }
+
+            if ($is_required && ! property_exists($object, $property)) {
                 throw new InvalidArgumentException(sprintf(
                     'Unexpected JSON structure given for %s. A %s should have "%s" property.',
                     ucfirst($object_type),
@@ -56,12 +63,13 @@ class ShapeValidator
                     $property
                 ));
             }
-            if (! $checker($object->$property)) {
+
+            if (! $prop_type($object->$property)) {
                 throw new InvalidArgumentException(sprintf(
                     'Unexpected JSON structure given for %s. The "%s" property should be %s.',
                     ucfirst($object_type),
                     $property,
-                    substr($checker, 0, 3) === 'is_' ? substr($checker, 3) : $checker
+                    substr($prop_type, 0, 3) === 'is_' ? substr($prop_type, 3) : $prop_type
                 ));
             }
         }
