@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.4
+
+25 Jun 2019
+
+- Implement 0.27..0.39 model serializer ([85db1887](https://github.com/prezly/slate-php/commit/85db18877887750efda86137b7e93b7081eb065d))
+
 ## 4.0.3
 
 20 Jun 2019
