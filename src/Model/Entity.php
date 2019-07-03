@@ -9,6 +9,5 @@ interface Entity
     const INLINE = "inline";
     const TEXT = "text";
     const VALUE = "value";
-    const LEAF = "leaf";
     const MARK = "mark";
 }
