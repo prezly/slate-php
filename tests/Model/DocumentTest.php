@@ -5,7 +5,6 @@ namespace Prezly\Slate\Tests\Model;
 use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Inline;
-use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Tests\TestCase;
@@ -19,21 +18,15 @@ class DocumentTest extends TestCase
     {
         $document = new Document([
             new Block('paragraph', [
-                new Text([
-                    new Leaf("I'd like to introduce "),
-                    new Leaf('you', [new Mark('underlined')]),
-                    new Leaf(' to a '),
-                ]),
+                new Text("I'd like to introduce "),
+                new Text('you', [new Mark('underlined')]),
+                new Text(' to a '),
                 new Inline('link', [
-                    new Text([
-                        new Leaf('very important', [new Mark('bold')]),
-                        new Leaf(' person'),
-                    ]),
+                    new Text('very important', [new Mark('bold')]),
+                    new Text(' person'),
                 ], ['href' => 'https://en.wikipedia.org/wiki/Elvis_Presley']),
-                new Text([
-                    new Leaf('!'),
-                ])
-            ])
+                new Text('!'),
+            ]),
         ]);
 
         $this->assertEquals(

@@ -21,7 +21,7 @@ class Text implements Entity
         foreach ($marks as $mark) {
             if (! $mark instanceof Mark) {
                 throw new InvalidArgumentException(sprintf(
-                    'Leaf can only have %s as child marks. %s given.',
+                    'Text can only have %s as child marks. %s given.',
                     Mark::class,
                     is_object($mark) ? get_class($mark) : gettype($mark)
                 ));
