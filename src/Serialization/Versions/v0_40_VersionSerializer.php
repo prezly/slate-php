@@ -6,7 +6,6 @@ use Prezly\Slate\Model\Block;
 use Prezly\Slate\Model\Document;
 use Prezly\Slate\Model\Entity;
 use Prezly\Slate\Model\Inline;
-use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Mark;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
@@ -25,6 +24,11 @@ use stdClass;
  */
 class v0_40_VersionSerializer implements VersionSerializer
 {
+    /**
+     * @deprecated A preserved Leaf object class name constant
+     */
+    private const LEGACY_LEAF = 'leaf';
+
     /**
      * @param \Prezly\Slate\Model\Value $value
      * @return \stdClass
@@ -50,8 +54,21 @@ class v0_40_VersionSerializer implements VersionSerializer
     }
 
     /**
+     * @param \Prezly\Slate\Model\Entity[] $entities
+     * @return \stdClass[]
+     */
+    private function serializeEntities(array $entities): array
+    {
+        $serialized = [];
+        foreach ($entities as $entity) {
+            $serialized[] = $this->serializeEntity($entity);
+        }
+        return $this->collapseTextObjects($serialized);
+    }
+
+    /**
      * @param \Prezly\Slate\Model\Entity $entity
-     * @return \stdClass
+     * @return stdClass
      */
     private function serializeEntity(Entity $entity): stdClass
     {
@@ -70,9 +87,6 @@ class v0_40_VersionSerializer implements VersionSerializer
         if ($entity instanceof Text) {
             return $this->serializeText($entity);
         }
-        if ($entity instanceof Leaf) {
-            return $this->serializeLeaf($entity);
-        }
         if ($entity instanceof Mark) {
             return $this->serializeMark($entity);
         }
@@ -80,36 +94,43 @@ class v0_40_VersionSerializer implements VersionSerializer
     }
 
     /**
-     * @param \stdClass $entity
-     * @return Object|Block|Inline|Text
+     * @param \stdClass[] $objects
+     * @return \Prezly\Slate\Model\Entity[]
      */
-    private function unserializeEntity(stdClass $entity): Entity
+    private function unserializeEntities(array $objects): array
     {
-        $entity = ShapeValidator::validateSlateObject($entity); // generic slate object check
-
-        switch ($entity->object) {
-            case Entity::VALUE:
-                return $this->unserializeValue($entity);
-
-            case Entity::DOCUMENT:
-                return $this->unserializeDocument($entity);
-
-            case Entity::BLOCK:
-                return $this->unserializeBlock($entity);
-
-            case Entity::INLINE:
-                return $this->unserializeInline($entity);
-
-            case Entity::TEXT:
-                return $this->unserializeText($entity);
-
-            case Entity::LEAF:
-                return $this->unserializeLeaf($entity);
-
-            case Entity::MARK:
-                return $this->unserializeMark($entity);
+        $entities = [];
+        foreach ($objects as $object) {
+            foreach ($this->unserializeEntity($object) as $entity) {
+                $entities[] = $entity;
+            }
         }
-        throw new RuntimeException("Unsupported object type: " . $entity->object);
+        return $entities;
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return \Prezly\Slate\Model\Entity[] A serialized node can become multiple unserialized nodes. Thus array.
+     */
+    private function unserializeEntity(stdClass $object): array
+    {
+        $object = ShapeValidator::validateSlateObject($object); // generic slate object check
+        switch ($object->object) {
+            case Entity::VALUE:
+                return [$this->unserializeValue($object)];
+            case Entity::DOCUMENT:
+                return [$this->unserializeDocument($object)];
+            case Entity::BLOCK:
+                return [$this->unserializeBlock($object)];
+            case Entity::INLINE:
+                return [$this->unserializeInline($object)];
+            case Entity::TEXT:
+                return $this->unserializeTextWithLeaves($object);
+            case Entity::MARK:
+                return [$this->unserializeMark($object)];
+            default:
+                throw new RuntimeException("Unsupported object type: {$object->object}");
+        }
     }
 
     /**
@@ -121,9 +142,7 @@ class v0_40_VersionSerializer implements VersionSerializer
         return (object) [
             'object' => Entity::DOCUMENT,
             'data'   => (object) $document->getData(),
-            'nodes'  => array_map(function (Block $block) {
-                return $this->serializeBlock($block);
-            }, $document->getNodes()),
+            'nodes'  => $this->serializeEntities($document->getNodes()),
         ];
     }
 
@@ -139,12 +158,7 @@ class v0_40_VersionSerializer implements VersionSerializer
             'nodes' => 'is_array',
         ]);
 
-        $nodes = [];
-        foreach ($object->nodes as $node) {
-            $nodes[] = $this->unserializeBlock($node);
-        }
-
-        return new Document($nodes, (array) $object->data);
+        return new Document($this->unserializeEntities($object->nodes), (array) $object->data);
     }
 
     /**
@@ -157,9 +171,7 @@ class v0_40_VersionSerializer implements VersionSerializer
             'object' => Entity::BLOCK,
             'type'   => $block->getType(),
             'data'   => (object) $block->getData(),
-            'nodes'  => array_map(function (Entity $node) {
-                return $this->serializeEntity($node);
-            }, $block->getNodes())
+            'nodes'  => $this->serializeEntities($block->getNodes()),
         ];
     }
 
@@ -176,12 +188,7 @@ class v0_40_VersionSerializer implements VersionSerializer
             'nodes' => 'is_array',
         ]);
 
-        $nodes = [];
-        foreach ($object->nodes as $node) {
-            $nodes[] = $this->unserializeEntity($node);
-        }
-
-        return new Block($object->type, $nodes, (array) $object->data);
+        return new Block($object->type, $this->unserializeEntities($object->nodes), (array) $object->data);
     }
 
     /**
@@ -194,31 +201,24 @@ class v0_40_VersionSerializer implements VersionSerializer
             'object' => Entity::INLINE,
             'type'   => $inline->getType(),
             'data'   => (object) $inline->getData(),
-            'nodes'  => array_map(function (Entity $node) {
-                return $this->serializeEntity($node);
-            }, $inline->getNodes())
+            'nodes'  => $this->serializeEntities($inline->getNodes()),
         ];
     }
 
     /**
-     * @param \stdClass $inline
+     * @param \stdClass $object
      * @return \Prezly\Slate\Model\Inline
      * @throws \InvalidArgumentException
      */
-    private function unserializeInline(stdClass $inline): Inline
+    private function unserializeInline(stdClass $object): Inline
     {
-        $inline = ShapeValidator::validateSlateObject($inline, Entity::INLINE, [
+        $object = ShapeValidator::validateSlateObject($object, Entity::INLINE, [
             'type'  => 'is_string',
             'data'  => 'is_object',
             'nodes' => 'is_array',
         ]);
 
-        $nodes = [];
-        foreach ($inline->nodes as $node) {
-            $nodes[] = $this->unserializeEntity($node);
-        }
-
-        return new Inline($inline->type, $nodes, (array) $inline->data);
+        return new Inline($object->type, $this->unserializeEntities($object->nodes), (array) $object->data);
     }
 
     /**
@@ -227,56 +227,59 @@ class v0_40_VersionSerializer implements VersionSerializer
      */
     private function serializeText(Text $text): stdClass
     {
+        if ($text->getMarks() === [] && $text->getText() === '') {
+            return (object) [
+                'object' => Entity::TEXT,
+                'leaves' => [],
+            ];
+        }
+
+        // A modern Text node is translated to legacy Text + 1 Leaf
         return (object) [
             'object' => Entity::TEXT,
-            'leaves' => array_map(function (Leaf $leaf) {
-                return $this->serializeLeaf($leaf);
-            }, $text->getLeaves())
+            'leaves' => [
+                (object) [
+                    'object' => self::LEGACY_LEAF,
+                    'text'   => $text->getText(),
+                    'marks'  => $this->serializeEntities($text->getMarks()),
+                ],
+            ],
         ];
     }
 
     /**
      * @param \stdClass $object
-     * @return \Prezly\Slate\Model\Text
+     * @return \Prezly\Slate\Model\Text[]
      * @throws \InvalidArgumentException
      */
-    private function unserializeText(stdClass $object): Text
+    private function unserializeTextWithLeaves(stdClass $object): array
     {
         ShapeValidator::validateSlateObject($object, Entity::TEXT, [
             'leaves' => 'is_array',
         ]);
 
-        $leaves = [];
-        foreach ($object->leaves as $leaf) {
-            $leaves[] = $this->unserializeLeaf($leaf);
+        if (count($object->leaves) === 0) {
+            return [new Text()];
         }
 
-        return new Text($leaves);
+        $texts = [];
+        foreach ($object->leaves as $leaf) {
+            $texts[] = $this->unserializeLeaf($leaf);
+        }
+
+        return $texts;
     }
 
     /**
-     * @param \Prezly\Slate\Model\Leaf $leaf
-     * @return \stdClass
-     */
-    private function serializeLeaf(Leaf $leaf): stdClass
-    {
-        return (object) [
-            'object' => Entity::LEAF,
-            'text'   => $leaf->getText(),
-            'marks'  => array_map(function (Mark $mark) {
-                return $this->serializeMark($mark);
-            }, $leaf->getMarks())
-        ];
-    }
-
-    /**
+     * Unserialize legacy Leaf structure to a modern Text node
+     *
      * @param \stdClass $object
-     * @return \Prezly\Slate\Model\Leaf
+     * @return \Prezly\Slate\Model\Text
      * @throws \InvalidArgumentException
      */
-    private function unserializeLeaf(stdClass $object): Leaf
+    private function unserializeLeaf(stdClass $object): Text
     {
-        $object = ShapeValidator::validateSlateObject($object, Entity::LEAF, [
+        $object = ShapeValidator::validateSlateObject($object, self::LEGACY_LEAF, [
             'text'  => 'is_string',
             'marks' => 'is_array',
         ]);
@@ -286,7 +289,7 @@ class v0_40_VersionSerializer implements VersionSerializer
             $marks[] = $this->unserializeMark($mark);
         }
 
-        return new Leaf($object->text, $marks);
+        return new Text($object->text, $marks);
     }
 
     /**
@@ -314,5 +317,45 @@ class v0_40_VersionSerializer implements VersionSerializer
             'data' => 'is_object',
         ]);
         return new Mark($object->type, (array) $object->data);
+    }
+
+    /**
+     * Combine sequential Text objects into a single Text with all the Leaves merged.
+     *
+     * @param \stdClass[] $objects
+     * @return \stdClass[]
+     */
+    private function collapseTextObjects(array $objects): array
+    {
+        if (count($objects) <= 1) {
+            // nothing to do
+            return $objects;
+        }
+
+        $collapsed = [];
+        do {
+            $prev = array_pop($collapsed);
+            $curr = array_shift($objects);
+
+            if ($prev === null) {
+                $collapsed[] = $curr;
+                continue;
+            }
+
+            if ($prev->object === Entity::TEXT && $curr->object === Entity::TEXT) {
+                // Combine two Text nodes and push them to the list
+                $collapsed[] = (object) [
+                    'object' => Entity::TEXT,
+                    'leaves' => array_merge($prev->leaves, $curr->leaves),
+                ];
+                continue;
+            }
+
+            $collapsed[] = $prev; // Push prev back to the list
+            $collapsed[] = $curr; // Push curr to the list
+
+        } while (count($objects) > 0);
+
+        return $collapsed;
     }
 }
