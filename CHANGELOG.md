@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0
+
+5 Jul 2019
+
+- Drop `Leaf` model class, merge its properties into `Text`.
+  This bump model to [Slate v0.46](https://github.com/ianstormtaylor/slate/blob/master/packages/slate/Changelog.md#0460--may-1-2019).
+  ([#25](https://github.com/prezly/slate-php/pull/25))
+
 ## 4.0.4
 
 25 Jun 2019
