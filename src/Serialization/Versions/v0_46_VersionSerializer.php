@@ -14,7 +14,7 @@ use RuntimeException;
 use stdClass;
 
 /**
- * Slate model serializer for Slate v0.40
+ * Slate model serializer for Slate v0.46
  *
  * @see https://github.com/ianstormtaylor/slate/blob/master/packages/slate/Changelog.md#0460--may-1-2019
  *
