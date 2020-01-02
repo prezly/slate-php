@@ -16,7 +16,7 @@ use stdClass;
 /**
  * Slate model serializer for Slate v0.27
  *
- * @see https://github.com/ianstormtaylor/slate/blob/master/packages/slate/Changelog.md#0270--october-14-2017
+ * @see https://github.com/ianstormtaylor/slate/blob/master/Changelog.md#0270--october-14-2017
  *
  * @internal Please do not use this class outside of this package.
  *           It's considered internal API and thus is not a subject for semantic versioning.
