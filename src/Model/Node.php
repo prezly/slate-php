@@ -3,9 +3,19 @@
 namespace Prezly\Slate\Model;
 
 use InvalidArgumentException;
+use LogicException;
 
 abstract class Node
 {
+    protected function __construct()
+    {
+        if (! $this instanceof Text && ! $this instanceof Element) {
+            throw new LogicException(
+                'It is not allowed to extend Node class directly. Every node class is required to extend either of Element or Text classes.',
+            );
+        }
+    }
+
     /**
      * Get the concatenated text string of a node's content.
      *

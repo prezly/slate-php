@@ -8,6 +8,8 @@ abstract class Text extends Node
 
     public function __construct(string $text)
     {
+        parent::__construct();
+
         $this->text = $text;
     }
 

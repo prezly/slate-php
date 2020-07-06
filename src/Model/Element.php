@@ -12,6 +12,8 @@ abstract class Element extends Node
      */
     public function __construct(array $children)
     {
+        parent::__construct();
+
         $this->initChildren($children);
     }
 
