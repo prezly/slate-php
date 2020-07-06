@@ -1,21 +1,14 @@
 <?php
 
-namespace Prezly\Slate\Model;
+namespace Prezly\Slate\Helpers;
 
 use InvalidArgumentException;
-use LogicException;
+use Prezly\Slate\Element;
+use Prezly\Slate\Node;
+use Prezly\Slate\Text;
 
-abstract class Node
+final class Nodes
 {
-    protected function __construct()
-    {
-        if (! $this instanceof Text && ! $this instanceof Element) {
-            throw new LogicException(
-                'It is not allowed to extend Node class directly. Every node class is required to extend either of Element or Text classes.',
-            );
-        }
-    }
-
     /**
      * Get the concatenated text string of a node's content.
      *
@@ -31,13 +24,20 @@ abstract class Node
         if ($root instanceof Text) {
             return $root->getText();
         }
+
         if ($root instanceof Element) {
             $strings = array_map([Node::class, 'string'], $root->getChildren());
             return implode('', $strings);
         }
+
         throw new InvalidArgumentException(sprintf(
             'Unsupported Node subclass encountered (`%s`). Every node is required to implement either of Text or Element interfaces.',
             get_class($root),
         ));
+    }
+
+    private function __construct()
+    {
+        // Disallow instantiating it
     }
 }
