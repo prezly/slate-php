@@ -2,67 +2,25 @@
 
 namespace Prezly\Slate\Model;
 
-use InvalidArgumentException;
-
-class Text implements Entity
+abstract class Text extends Node
 {
-    /** @var string */
-    private $text;
+    private string $text;
 
-    /** @var Mark[] */
-    private $marks = [];
-
-    /**
-     * @param string $text
-     * @param Mark[] $marks
-     */
-    public function __construct(string $text = '', array $marks = [])
+    public function __construct(string $text)
     {
-        foreach ($marks as $mark) {
-            if (! $mark instanceof Mark) {
-                throw new InvalidArgumentException(sprintf(
-                    'Text can only have %s as child marks. %s given.',
-                    Mark::class,
-                    is_object($mark) ? get_class($mark) : gettype($mark)
-                ));
-            }
-        }
-
         $this->text = $text;
-        $this->marks = array_values($marks);
     }
 
-    /**
-     * @return string
-     */
     public function getText(): string
     {
         return $this->text;
     }
 
-    /**
-     * @return Mark[]
-     */
-    public function getMarks(): array
+    public function withText(string $text): string
     {
-        return $this->marks;
-    }
+        $that = clone $this;
+        $that->text = $text;
 
-    /**
-     * @param string $text
-     * @return Text New instance
-     */
-    public function withText(string $text): Text
-    {
-        return new self($text, $this->marks);
-    }
-
-    /**
-     * @param Mark[] $marks
-     * @return Text New instance
-     */
-    public function withMarks(array $marks): Text
-    {
-        return new self($this->text, $marks);
+        return $that;
     }
 }
